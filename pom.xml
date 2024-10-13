@@ -17,6 +17,7 @@
 
 		<bootstrap.version>5.3.3</bootstrap.version>
 		<quarkus.platform.version>3.15.1</quarkus.platform.version>
+		<quarkus.web-bundler.version>1.7.3</quarkus.web-bundler.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
 		<surefire-plugin.version>3.3.1</surefire-plugin.version>
@@ -43,11 +44,11 @@
 
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-rest</artifactId>
+			<artifactId>quarkus-arc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-rest-client-jackson</artifactId>
+			<artifactId>quarkus-hibernate-validator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkiverse.qute.web</groupId>
@@ -55,15 +56,11 @@
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-rest-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-qute</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-rest-qute</artifactId>
+			<artifactId>quarkus-rest</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -71,20 +68,16 @@
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-webjars-locator</artifactId>
+			<artifactId>quarkus-rest-qute</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkiverse.web-bundler</groupId>
 			<artifactId>quarkus-web-bundler</artifactId>
-			<version>1.7.3</version>
+			<version>${quarkus.web-bundler.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-arc</artifactId>
+			<artifactId>quarkus-webjars-locator</artifactId>
 		</dependency>
 
 		<dependency>
