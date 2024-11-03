@@ -24,10 +24,12 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<bootstrap.version>5.3.3</bootstrap.version>
+		<lombok.version>1.18.34</lombok.version>
 		<quarkus.platform.version>3.15.1</quarkus.platform.version>
 		<quarkus.web-bundler.version>1.7.3</quarkus.web-bundler.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
+		<jandex-plugin.version>3.2.3</jandex-plugin.version>
 		<surefire-plugin.version>3.3.1</surefire-plugin.version>
 
 		<skipITs>true</skipITs>
@@ -48,6 +50,16 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<dependencies>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+
+	</dependencies>
+
 	<build>
 		<plugins>
 
@@ -63,6 +75,20 @@
 							<goal>generate-code</goal>
 							<goal>generate-code-tests</goal>
 							<goal>native-image-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>io.smallrye</groupId>
+				<artifactId>jandex-maven-plugin</artifactId>
+				<version>${jandex-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>make-index</id>
+						<goals>
+							<goal>jandex</goal>
 						</goals>
 					</execution>
 				</executions>
