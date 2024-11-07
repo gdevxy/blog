@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-center">
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4 rounded-1" style="align-content: center; text-align: center">
+                <img src="{profile.avatarUrl}" class="rounded-left" alt="{profile.displayName}" style="height: 100%; max-width: 100%; object-fit: cover">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body bg-body-tertiary">
+                    <h4 class="card-title">{profile.displayName}</h4>
+                    <p class="card-text fw-lighter">
+                        {profile.job}<br>
+                        {profile.location}
+                    </p>
+                    <p class="card-text">{profile.description}</p>
+                    {#for account in profile.accounts}
+                        <a class="text-decoration-none px-1" href="{profile.profileUrl}" target="_blank" data-service-name="{account.type}">
+                            <img class="bg-primary rounded-1" src="{account.icon}" width="32" height="32" alt="{account.type}">
+                        </a>
+                    {/for}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
