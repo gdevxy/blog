@@ -1,7 +1,5 @@
 package com.gdevxy.blog.component;
 
-import com.gdevxy.blog.model.Profile;
-import com.gdevxy.blog.service.profile.ProfileService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.common.annotation.Blocking;
@@ -14,24 +12,22 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Blocking
-@Path("/contact")
+@Path("/blog")
 @RequiredArgsConstructor
-public class ContactResource {
-
-	private final ProfileService profileService;
+public class BlogResource {
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance contact() {
+	public TemplateInstance blog() {
 
-		return Templates.contact(profileService.findProfile());
+		return Templates.blog();
 	}
 
 	@CheckedTemplate
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class Templates {
 
-		public static native TemplateInstance contact(Profile profile);
+		public static native TemplateInstance blog();
 
 	}
 

@@ -25,7 +25,8 @@
 
 		<bootstrap.version>5.3.3</bootstrap.version>
 		<lombok.version>1.18.34</lombok.version>
-		<quarkus.platform.version>3.15.1</quarkus.platform.version>
+		<quarkus.platform.version>3.16.3</quarkus.platform.version>
+		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
 		<quarkus.web-bundler.version>1.7.3</quarkus.web-bundler.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
