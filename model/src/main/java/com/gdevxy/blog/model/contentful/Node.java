@@ -28,6 +28,7 @@ public enum Node {
 	EMBEDDED_ENTRY("embedded-entry-block"),
 	EMBEDDED_ASSET("embedded-asset-block"),
 	EMBEDDED_RESOURCE("embedded-resource-block"),
+	TEXT("text"),
 	TABLE("table"),
 	TABLE_ROW("table-row"),
 	TABLE_CELL("table-cell"),

@@ -1,11 +1,13 @@
 package com.gdevxy.blog.service.contentful;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public abstract class ContentfulServiceSupport {
 
-	private final ContentfulClient contentfulClient;
-	private final ContentfulClient contentfulPreviewClient;
+	private ContentfulClient contentfulClient;
+	private ContentfulClient contentfulPreviewClient;
 
 	protected ContentfulServiceSupport(ContentfulClient contentfulClient, ContentfulClient previewClient) {
 		this.contentfulClient = contentfulClient;

@@ -20,8 +20,8 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 
 	private final GraphQlQueryLoader queryLoader;
 
-	public DefaultContentfulClient(@GraphQLClient("contentful") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader, ObjectMapper objectMapper) {
-		super(client, objectMapper);
+	public DefaultContentfulClient(@GraphQLClient("contentful") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader) {
+		super(client);
 		this.queryLoader = queryLoader;
 	}
 

@@ -1,6 +1,5 @@
 package com.gdevxy.blog.client.contentful;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdevxy.blog.client.GraphQlQueryLoader;
 import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
@@ -19,8 +18,8 @@ public class PreviewContentfulClient extends ContentfulClientSupport implements 
 
 	private final GraphQlQueryLoader queryLoader;
 
-	public PreviewContentfulClient(@GraphQLClient("contentful-preview") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader, ObjectMapper objectMapper) {
-		super(client, objectMapper);
+	public PreviewContentfulClient(@GraphQLClient("contentful-preview") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader) {
+		super(client);
 		this.queryLoader = queryLoader;
 	}
 

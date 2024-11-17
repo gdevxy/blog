@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -13,7 +14,10 @@ import java.util.List;
 @ToString
 public class PageBlogPostCollection extends ContentfulCollection {
 
-	@Builder.Default
-	private List<PageBlogPost> items = List.of();
+	private List<PageBlogPost> items;
+
+	public List<PageBlogPost> getItems() {
+		return Optional.ofNullable(items).orElse(List.of());
+	}
 
 }

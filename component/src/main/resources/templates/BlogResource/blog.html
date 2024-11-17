@@ -1,14 +1,19 @@
+{@java.util.List<com.gdevxy.blog.model.BlogPost> blogPosts}
+
 {#include base}
 
 {#pageTitle}gdevxy: blog{/pageTitle}
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
-    {#include blog-card}
-        {#cardTitle}Project gdevxy{/}
-        {#cardBody}Project Body{/}
-        {#cardUrl}blog-posts/projectxy.html{/}
-        {#cardTimestamp}2024-11-16 19:27{/}
-    {/include}
+    {#for post in blogPosts}
+        {#include blog-card}
+            {#cardTitle}{post.title}{/}
+            {#cardBody}{post.description}{/}
+            {#cardUrl}blog-posts/{post.slug}{/}
+            {#cardImage}{post.image.url}{/}
+            {#cardTimestamp}{post.publishedDate.formatted}{/}
+        {/include}
+    {/}
 </div>
 
 {/include}

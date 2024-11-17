@@ -1,6 +1,5 @@
 package com.gdevxy.blog.client.contentful;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.smallrye.graphql.client.Response;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.function.Supplier;
 abstract class ContentfulClientSupport {
 
 	private DynamicGraphQLClient client;
-	private ObjectMapper objectMapper;
 
 	@SneakyThrows
 	Response executeQuery(Supplier<String> querySupplier) {

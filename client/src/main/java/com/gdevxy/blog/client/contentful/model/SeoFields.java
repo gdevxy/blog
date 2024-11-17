@@ -2,6 +2,8 @@ package com.gdevxy.blog.client.contentful.model;
 
 import lombok.*;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @Builder
@@ -13,9 +15,15 @@ public class SeoFields {
 	private Sys sys;
 	private String pageTitle;
 	private String pageDescription;
-	@Builder.Default
-	private Boolean nofollow = false;
-	@Builder.Default
-	private Boolean noindex = false;
+	private Boolean nofollow;
+	private Boolean noindex;
+
+	public Boolean getNofollow() {
+		return Optional.ofNullable(nofollow).orElse(false);
+	}
+
+	public Boolean getNoindex() {
+		return Optional.ofNullable(noindex).orElse(false);
+	}
 
 }
