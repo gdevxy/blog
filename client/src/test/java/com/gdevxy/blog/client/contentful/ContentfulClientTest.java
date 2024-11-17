@@ -22,6 +22,34 @@ class ContentfulClientTest {
 	private ContentfulClient client;
 
 	@Test
+	void findBlogPost() {
+		// given
+		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
+				.withRequestBody(containing("query findBlogPost($limit: Int = 1, $slug: String!, $locale: String = \\\"en\\\", $preview: Boolean = false)"))
+				.willReturn(ok().withBodyFile("find-blog-posts.json")));
+
+		// when
+		var actual = client.findBlogPost("slug");
+
+		// then
+		assertThat(actual).isPresent();
+	}
+
+	@Test
+	void findBlogPost_NotFound() {
+		// given
+		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
+				.withRequestBody(containing("query findBlogPost($limit: Int = 1, $slug: String!, $locale: String = \\\"en\\\", $preview: Boolean = false)"))
+				.willReturn(ok().withBodyFile("find-blog-posts-not-found.json")));
+
+		// when
+		var actual = client.findBlogPost("slug");
+
+		// then
+		assertThat(actual).isEmpty();
+	}
+
+	@Test
 	void findBlogPosts() {
 		// given
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))

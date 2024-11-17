@@ -1,0 +1,10 @@
+{
+  "data": {
+    "pageBlogPostCollection": {
+      "__typename": "PageBlogPostCollection",
+      "total": 0,
+      "limit": 1,
+      "items":  []
+    }
+  }
+}

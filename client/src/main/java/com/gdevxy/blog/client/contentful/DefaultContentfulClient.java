@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdevxy.blog.client.GraphQlQueryLoader;
 import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
+import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
 import io.smallrye.graphql.client.GraphQLClient;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
@@ -23,6 +24,14 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	public DefaultContentfulClient(@GraphQLClient("contentful") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader) {
 		super(client);
 		this.queryLoader = queryLoader;
+	}
+
+	@Override
+	public Optional<PageBlogPost> findBlogPost(String slug) {
+
+		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-post"), Map.of("slug", slug));
+
+		return asClass(response, PageBlogPostCollection.class).getItems().stream().findAny();
 	}
 
 	@Override

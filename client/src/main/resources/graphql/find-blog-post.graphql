@@ -1,5 +1,5 @@
-query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $preview: Boolean = false) {
-    pageBlogPostCollection(limit: $limit, skip: $skip, locale: $locale, preview: $preview) {
+query findBlogPost($limit: Int = 1, $slug: String!, $locale: String = "en", $preview: Boolean = false) {
+    pageBlogPostCollection(limit: $limit, locale: $locale, preview: $preview, where: { slug: $slug }) {
         total
         limit
         items {

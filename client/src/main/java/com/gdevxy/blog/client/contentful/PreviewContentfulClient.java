@@ -3,6 +3,7 @@ package com.gdevxy.blog.client.contentful;
 import com.gdevxy.blog.client.GraphQlQueryLoader;
 import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
+import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
 import io.smallrye.graphql.client.GraphQLClient;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
@@ -21,6 +22,15 @@ public class PreviewContentfulClient extends ContentfulClientSupport implements 
 	public PreviewContentfulClient(@GraphQLClient("contentful-preview") DynamicGraphQLClient client, GraphQlQueryLoader queryLoader) {
 		super(client);
 		this.queryLoader = queryLoader;
+	}
+
+	@Override
+	public Optional<PageBlogPost> findBlogPost(String slug) {
+
+		var params = Map.<String, Object>of("preview", true, "slug", slug);
+		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-post"), params);
+
+		return asClass(response, PageBlogPostCollection.class).getItems().stream().findAny();
 	}
 
 	@SneakyThrows
