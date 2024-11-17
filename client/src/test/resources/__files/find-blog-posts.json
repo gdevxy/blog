@@ -1,0 +1,149 @@
+{
+  "data": {
+    "pageBlogPostCollection": {
+      "__typename": "PageBlogPostCollection",
+      "total": 7,
+      "limit": 1,
+      "items": [
+        {
+          "sys": {
+            "id": "5Ffob3XoJGrQuKE5uRUugR"
+          },
+          "content": {
+            "json": {
+              "nodeType": "document",
+              "data": {},
+              "content": [
+                {
+                  "nodeType": "paragraph",
+                  "data": {},
+                  "content": [
+                    {
+                      "nodeType": "text",
+                      "value": "One of the most ",
+                      "marks": [],
+                      "data": {}
+                    },
+                    {
+                      "nodeType": "text",
+                      "value": "obvious",
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "data": {}
+                    },
+                    {
+                      "nodeType": "text",
+                      "value": " ways that AR will change our lives is by enhancing the way we communicate. Today, we already use video calls and other forms of digital communication to connect with people who are far away. In the future, AR will take this to the next level by allowing us to see and interact with virtual representations of people in real time. This will make it feel like we're actually in the same room together, even if we're on opposite sides of the world.",
+                      "marks": [],
+                      "data": {}
+                    }
+                  ]
+                },
+                {
+                  "nodeType": "embedded-entry-block",
+                  "data": {
+                    "target": {
+                      "sys": {
+                        "id": "5MQ6wEY5qAZgGo2XtDpcnS",
+                        "type": "Link",
+                        "linkType": "Entry"
+                      }
+                    }
+                  },
+                  "content": []
+                },
+                {
+                  "nodeType": "paragraph",
+                  "data": {},
+                  "content": [
+                    {
+                      "nodeType": "text",
+                      "value": "Another way that AR will change our lives is by providing us with instant access to information. Imagine being able to point your phone at a building and immediately see information about its history and architectural significance. Or being able to scan an object and see a detailed description of its features and functions. With AR, all of this will be possible, giving us access to a wealth of knowledge at our fingertips.\nAR will also change the way we shop. Today, online shopping allows us to browse and purchase items from the comfort of our own homes. In the future, AR will make this experience even more immersive by allowing us to see how items look and fit in our own space before we make a purchase. This will make shopping faster, easier, and more convenient than ever before.",
+                      "marks": [],
+                      "data": {}
+                    }
+                  ]
+                },
+                {
+                  "nodeType": "embedded-entry-block",
+                  "data": {
+                    "target": {
+                      "sys": {
+                        "id": "2xCfDCfrQzCzzCtL0CfMZd",
+                        "type": "Link",
+                        "linkType": "Entry"
+                      }
+                    }
+                  },
+                  "content": []
+                },
+                {
+                  "nodeType": "paragraph",
+                  "data": {},
+                  "content": [
+                    {
+                      "nodeType": "text",
+                      "value": "Finally, AR has the potential to revolutionize the way we learn. Today, we often rely on books, lectures, and other static forms of education to gain knowledge. In the future, AR will make learning more interactive and engaging. For example, students could use AR to explore virtual environments and learn about different subjects in a hands-on way. This could make learning more fun and effective, and could even help to break down barriers to education for people who face challenges in a traditional learning environment.\nOverall, the future is looking bright for AR technology. By 2050, it's likely to be a pervasive part of our daily lives, enhancing the way we communicate, access information, shop, and learn. It's an exciting time to be alive, and we can't wait to see what the future holds for AR and other cutting-edge technologies.",
+                      "marks": [],
+                      "data": {}
+                    }
+                  ]
+                },
+                {
+                  "nodeType": "embedded-entry-block",
+                  "data": {
+                    "target": {
+                      "sys": {
+                        "id": "2HkPQmxT6XQvzkW82KvoPL",
+                        "type": "Link",
+                        "linkType": "Entry"
+                      }
+                    }
+                  },
+                  "content": []
+                },
+                {
+                  "nodeType": "paragraph",
+                  "data": {},
+                  "content": [
+                    {
+                      "nodeType": "text",
+                      "value": "",
+                      "marks": [],
+                      "data": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "slug": "how-ar-will-transform-our-lives-in-2050",
+          "internalName": "How AR will transform our lives in 2050",
+          "title": "How AR will transform our lives in 2050",
+          "shortDescription": "Augmented Reality set to revolutionize daily life in 2050",
+          "publishedDate": "2022-12-04T00:00:00.000Z",
+          "featuredImage": {
+            "sys": {
+              "id": "4lqxYpPLHdzfy0f8hONbGq"
+            },
+            "title": "Augment Reality (AR)",
+            "description": "",
+            "url": "https://images.ctfassets.net/r9z7bjp5iedy/4lqxYpPLHdzfy0f8hONbGq/da63fc8ec24c9d1d9d3e99a1d02d1509/ameer-basheer-2r5adxul49E-unsplash__1_.jpg",
+            "width": 721,
+            "height": 590,
+            "contentType": "image/jpeg"
+          },
+          "seoFields": {
+            "pageTitle": "How AR will transform our lives in 2050",
+            "pageDescription": "Augmented Reality set to revolutionize daily life in 2050",
+            "nofollow": false,
+            "noindex": false
+          }
+        }
+      ]
+    }
+  }
+}

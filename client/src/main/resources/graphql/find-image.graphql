@@ -1,0 +1,11 @@
+query findImage($id: String!){
+    componentRichImage(id: $id) {
+        image {
+            title
+            description
+            width
+            height
+            url
+        }
+    }
+}

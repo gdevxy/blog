@@ -1,0 +1,37 @@
+query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $preview: Boolean = false) {
+    pageBlogPostCollection(limit: $limit, skip: $skip, locale: $locale, preview: $preview) {
+        __typename
+        total
+        limit
+        items {
+            sys {
+                id
+            }
+            slug
+            internalName
+            featuredImage {
+                sys {
+                    id
+                }
+                title
+                description
+                url
+                width
+                height
+                contentType
+            }
+            title
+            shortDescription
+            publishedDate
+            seoFields {
+                pageTitle
+                pageDescription
+                nofollow
+                noindex
+            }
+            content {
+                json
+            }
+        }
+    }
+}
