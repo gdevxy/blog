@@ -40,11 +40,12 @@ public class BlogPost {
 	@ToString
 	public static class ContentBlock {
 
-		private final Node type;
+		private final Node node;
 		private final String value;
 		private final Set<Mark> marks;
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
+		private final Image image;
 
 	}
 

@@ -24,6 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<bootstrap.version>5.3.3</bootstrap.version>
+		<highlightjs.version>11.10.0</highlightjs.version>
 		<lombok.version>1.18.34</lombok.version>
 		<quarkus.platform.version>3.16.3</quarkus.platform.version>
 		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>

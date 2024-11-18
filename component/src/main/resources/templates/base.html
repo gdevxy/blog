@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" class="h-100">
 <head>
-    <title>{#insert pageTitle}gdevxy: home{/insert}</title>
+    <title>{#insert pageTitle}gdevxy: home{/}</title>
     <meta charset="utf-8"/>
+    <meta name="robots" content="{#insert pageRobots}{/}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    {#insert extraCss}{/}
+    {#insert extraJs}{/}
     {#bundle /}
 </head>
 <body class="d-flex flex-column h-100">

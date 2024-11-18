@@ -1,0 +1,20 @@
+{#if marks}
+    {#for mark in marks}
+        {#when mark}
+            {#is BOLD}
+                <span class="fw-bold">{value}</span>
+            {#is ITALIC}
+                <span class="fst-italic">{value}</span>
+            {#is UNDERLINE}
+                <span class="text-decoration-underline">{value}</span>
+            {#is CODE}
+                <pre>
+                <code class="language-java">{value}</code>
+            </pre>
+        {#else}
+            {value}
+        {/when}
+    {/for}
+{#else}
+    {value}
+{/if}

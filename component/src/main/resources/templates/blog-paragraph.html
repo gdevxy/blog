@@ -1,0 +1,10 @@
+<p>
+    {#for block in blocks}
+        {#when block.node}
+            {#is TEXT}
+                {#include blog-marks marks=block.marks value=block.value}{/}
+            {#else}
+                {block.value}
+        {/when}
+    {/for}
+</p>

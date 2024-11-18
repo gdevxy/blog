@@ -1,0 +1,26 @@
+{@com.gdevxy.blog.model.BlogPost blogPost}
+
+{#include base}
+
+    {#pageTitle}{blogPost.seo.title}{/}
+    {#pageRobots}{blogPost.seo.robotHint}{/}
+    {#extraJs}
+        <!--<link rel="stylesheet" href="/webjars/highlightjs/styles/default.min.css"/>-->
+        <link rel="stylesheet" href="/webjars/highlightjs/styles/stackoverflow-dark.min.css"/>
+        <script src="/webjars/highlightjs/highlight.min.js"></script>
+        <script src="/webjars/highlightjs/languages/java.min.js"></script>
+        <script src="/webjars/highlightjs/languages/json.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    {/}
+
+    {#for block in blogPost.blocks}
+        {#when block.node}
+            {#is PARAGRAPH}
+                {#include blog-paragraph blocks=block.blocks /}
+            {#is EMBEDDED_ENTRY}
+                {#include blog-image image=block.image /}
+            {#else}
+        {/}
+    {/}
+
+{/}
