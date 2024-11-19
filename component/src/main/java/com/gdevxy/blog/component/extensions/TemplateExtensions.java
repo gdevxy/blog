@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TemplateExtensions {
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' h:mma");
 
 	@TemplateExtension
 	public static String formatted(ZonedDateTime dateTime) {

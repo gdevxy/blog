@@ -2,15 +2,15 @@
     {#for mark in marks}
         {#when mark}
             {#is BOLD}
-                <span class="fw-bold">{value}</span>
+                <span class="fw-bold text-neon">{value}</span>
             {#is ITALIC}
                 <span class="fst-italic">{value}</span>
             {#is UNDERLINE}
                 <span class="text-decoration-underline">{value}</span>
             {#is CODE}
-                <pre>
+                <pre class="m-0" style="margin-bottom: -1rem">
                 <code class="language-java">{value}</code>
-            </pre>
+                </pre>
         {#else}
             {value}
         {/when}

@@ -6,7 +6,7 @@
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
     {#for post in blogPosts}
-        {#include blog-card}
+        {#include blog/blog-card}
             {#cardTitle}{post.title}{/}
             {#cardBody}{post.description}{/}
             {#cardUrl}blog-posts/{post.slug}{/}

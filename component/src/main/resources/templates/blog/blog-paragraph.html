@@ -1,10 +1,10 @@
-<p>
+<div class="py-3 px-5 fs-5">
     {#for block in blocks}
         {#when block.node}
             {#is TEXT}
-                {#include blog-marks marks=block.marks value=block.value}{/}
+                {#include blog/blog-marks marks=block.marks value=block.value}{/}
             {#else}
                 {block.value}
         {/when}
     {/for}
-</p>
+</div>

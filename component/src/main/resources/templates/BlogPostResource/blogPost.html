@@ -5,7 +5,6 @@
     {#pageTitle}{blogPost.seo.title}{/}
     {#pageRobots}{blogPost.seo.robotHint}{/}
     {#extraJs}
-        <!--<link rel="stylesheet" href="/webjars/highlightjs/styles/default.min.css"/>-->
         <link rel="stylesheet" href="/webjars/highlightjs/styles/stackoverflow-dark.min.css"/>
         <script src="/webjars/highlightjs/highlight.min.js"></script>
         <script src="/webjars/highlightjs/languages/java.min.js"></script>
@@ -13,14 +12,33 @@
         <script>hljs.highlightAll();</script>
     {/}
 
-    {#for block in blogPost.blocks}
-        {#when block.node}
-            {#is PARAGRAPH}
-                {#include blog-paragraph blocks=block.blocks /}
-            {#is EMBEDDED_ENTRY}
-                {#include blog-image image=block.image /}
-            {#else}
-        {/}
-    {/}
+    <div class="mb-3 rounded-top bg-body-tertiary">
+
+        <div class="card mb-4 background-purple rounded-top" style="border: none; border-radius: unset">
+            <div class="row g-0">
+                <div class="col">
+                    <img src="{blogPost.image.url}?w=200" class="img-fluid rounded-top rounded-end-0 fit-all" style="min-height: 200px" alt="{blogPost.image.title}">
+                </div>
+                <div class="col-sm-10">
+                    <div class="card-body">
+                        <h1 class="card-title">{blogPost.title}</h1>
+                        <p class="card-text fs-5">{blogPost.description}.</p>
+                        <p class="card-text position-absolute bottom-0 end-0 p-2"><small class="text-body-secondary">{blogPost.publishedDate.formatted}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {#for block in blogPost.blocks}
+            {#when block.node}
+                {#is PARAGRAPH}
+                    {#include blog/blog-paragraph blocks=block.blocks /}
+                {#is EMBEDDED_ENTRY}
+                    {#include blog/blog-image image=block.image /}
+                {#else}
+            {/when}
+        {/for}
+
+    </div>
 
 {/}
