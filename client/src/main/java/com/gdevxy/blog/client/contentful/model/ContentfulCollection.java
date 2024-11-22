@@ -1,5 +1,6 @@
 package com.gdevxy.blog.client.contentful.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -8,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@RegisterForReflection
 @ToString
 public abstract class ContentfulCollection {
 

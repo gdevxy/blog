@@ -1,5 +1,6 @@
 package com.gdevxy.blog.client.contentful.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.Optional;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@RegisterForReflection
 @ToString
 public class SeoFields {
 
