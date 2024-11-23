@@ -5,13 +5,13 @@
 You can run your application in dev mode that enables live coding using:
 
 ```shell script
-./mvnw compile quarkus:dev
+mvn compile quarkus:dev
 ```
 
 ## Packaging and running the application
 
 ```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+mvn package -Dquarkus.package.jar.type=uber-jar
 ```
 
 The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
@@ -21,11 +21,11 @@ The application, packaged as an _über-jar_, is now runnable using `java -jar ta
 You can create a native executable using:
 
 ```shell script
-./mvnw package -Dnative
+mvn package -Dnative
 ```
 
 Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
 
 ```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+mvn package -Dnative -Dquarkus.native.container-build=true
 ```
