@@ -1,13 +1,13 @@
 package com.gdevxy.blog.client.gravatar.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
-
-import java.util.List;
 
 @Getter
 @Builder

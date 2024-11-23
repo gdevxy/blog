@@ -1,9 +1,10 @@
 package com.gdevxy.blog.service.profile;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import com.gdevxy.blog.client.gravatar.GravatarClient;
 import com.gdevxy.blog.model.Profile;
 import io.quarkus.cache.CacheResult;
-import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
