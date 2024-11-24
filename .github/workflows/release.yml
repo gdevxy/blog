@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    name: Release
+
+    steps:
+
+      - name: Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: GraalVM set up
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm-community'
+          cache: 'maven'
+          native-image-job-reports: 'true'
+          native-image-pr-reports: 'true'
+
+      - name: Certify native
+        run: |
+            mvn -B clean verify -Pnative \
+              -Dquarkus.http.host=0.0.0.0 \
+              -Dquarkus.container-image.build=true \
+              -Dquarkus.native.container-build=true \
+              -Dquarkus.test.arg-line="--add-host host.docker.internal:host-gateway"

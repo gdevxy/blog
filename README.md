@@ -1,31 +1,38 @@
 # blog
 
-## Running the application in dev mode
+Java native based blog powered by Quarkus over Qute templating engine.
 
-You can run your application in dev mode that enables live coding using:
-
-```shell script
-mvn compile quarkus:dev
+```mermaid
+flowchart LR
+    blog(blog):::main--->contentful(contentful):::external
+    blog--->gravatar(gravatar):::external
+    qute:::internal---blog
+    classDef external fill:#480593
+    classDef internal fill:#a256f8
+    classDef main fill:#23123B
 ```
 
-## Packaging and running the application
+## Building guide
 
-```shell script
-mvn package -Dquarkus.package.jar.type=uber-jar
-```
+How the application can be built is to be found [here](./doc/build.md).
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+## Environment variables
 
-## Creating a native executable
+### Contentful
 
-You can create a native executable using:
+Project is based on the default Contentful blog starter [template](https://www.contentful.com/starter-templates/nextjs-blog/).
 
-```shell script
-mvn package -Dnative
-```
+```shell
+# Content Delivery Access Token
+export CONTENTFUL_CDA_TOKEN=...
+# Content Preview Access Token
+export CONTENTFUL_CPA_TOKEN=...
+``` 
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+### Gravatar
 
-```shell script
-mvn package -Dnative -Dquarkus.native.container-build=true
+In order to powered the `/about` page a gravatar API key is required.
+
+```shell
+export GRAVATAR_API_KEY=...
 ```
