@@ -37,8 +37,12 @@ mvn clean package -Dnative -DskipTests \
     -Dquarkus.http.host=0.0.0.0 \
     -Dquarkus.container-image.build=true \
     -Dquarkus.container-image.push=true \
-    -Dquarkus.container-image.tag={TAG_VERSION} \
-    -Dquarkus.container-image.registry={REGISTRY} \
+    -Dquarkus.container-image.group={group} \
+    -Dquarkus.container-image.name={name} \
+    -Dquarkus.container-image.tag={version} \
+    -Dquarkus.container-image.registry={registry} \
     -Dquarkus.docker.dockerfile-jvm-path=src/main/docker/Dockerfile.native \
-    -Dquarkus.docker.buildx.platform=linux/arm64
+    -Dquarkus.docker.buildx.platform=linux/amd64 \
+    -Dquarkus.native.builder-image=graalvm \
+    -Dquarkus.native.container-build=true
 ```
