@@ -1,0 +1,10 @@
+{#for block in blocks}
+	{#when block.node}
+		{#is HYPERLINK}
+			{#include blog/blog-hyperlink hyperlink=block.value value=block.blocks[0].value}{/include}
+        {#is TEXT}
+            {#include blog/blog-marks marks=block.marks value=block.value}{/include}
+		{#else}
+			{block.value}
+	{/when}
+{/for}

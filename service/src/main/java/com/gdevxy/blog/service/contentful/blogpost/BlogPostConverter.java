@@ -69,18 +69,28 @@ public class BlogPostConverter {
 
 	private BlogPost.ContentBlock toContent(@Nullable ContentfulClient client, RichContent content) {
 
+		var nodeType = Node.of(content.getNodeType());
+
 		return BlogPost.ContentBlock.builder()
-				.node(Node.of(content.getNodeType()))
-				.value(content.getValue())
+				.node(nodeType)
+				.value(toValue(nodeType, content))
 				.marks(content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet()))
 				.blocks(toContentBlocks(client, content.getContent()))
-				.image(toImage(client, content.getData()).orElse(null))
+				.image(toImage(client, nodeType, content.getData()).orElse(null))
 				.build();
 	}
 
-	private Optional<Image> toImage(@Nullable ContentfulClient client, Data embeddedEntry) {
+	private String toValue(Node node, RichContent content) {
 
-		if (embeddedEntry.getTarget() == null || client == null) {
+		return switch(node) {
+			case HYPERLINK -> content.getData().getUri();
+			default -> content.getValue();
+		};
+	}
+
+	private Optional<Image> toImage(@Nullable ContentfulClient client, Node nodeType, Data embeddedEntry) {
+
+		if (nodeType != Node.EMBEDDED_ENTRY || client == null) {
 			return Optional.empty();
 		}
 

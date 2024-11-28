@@ -33,6 +33,18 @@
             {#when block.node}
                 {#is EMBEDDED_ENTRY}
                     {#include blog/blog-image image=block.image /}
+                {#is HEADING_1}
+                    {#include blog/blog-header heading=1 value=block.blocks[0].value}{/include}
+                {#is HEADING_2}
+                    {#include blog/blog-header heading=2 value=block.blocks[0].value}{/include}
+                {#is HEADING_3}
+                    {#include blog/blog-header heading=3 value=block.blocks[0].value}{/include}
+                {#is HEADING_4}
+                    {#include blog/blog-header heading=4 value=block.blocks[0].value}{/include}
+                {#is HEADING_5}
+                    {#include blog/blog-header heading=5 value=block.blocks[0].value}{/include}
+                {#is HEADING_6}
+                    {#include blog/blog-header heading=6 value=block.blocks[0].value}{/include}
                 {#is PARAGRAPH}
                     {#include blog/blog-paragraph blocks=block.blocks /}
                 {#is UL_LIST}

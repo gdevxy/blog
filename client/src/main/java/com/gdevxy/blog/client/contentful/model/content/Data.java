@@ -13,6 +13,7 @@ import lombok.*;
 @ToString
 public class Data {
 
+	private String uri;
 	private Target target;
 
 }

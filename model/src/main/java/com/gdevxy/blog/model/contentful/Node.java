@@ -20,6 +20,7 @@ public enum Node {
 	HEADING_4("heading-4"),
 	HEADING_5("heading-5"),
 	HEADING_6("heading-6"),
+	HYPERLINK("hyperlink"),
 	OL_LIST("ordered-list"),
 	UL_LIST("unordered-list"),
 	LIST_ITEM("list-item"),

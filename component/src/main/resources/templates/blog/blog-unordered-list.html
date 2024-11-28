@@ -1,5 +1,5 @@
 <ul class="ms-5 py-3 fs-5">
     {#for block in blocks}
-        {#include blog/blog-list-item item=block.blocks[0].blocks[0] /}
+        {#include blog/blog-list-item blocks=block.blocks[0].blocks}{/include}
     {/for}
 </ul>
