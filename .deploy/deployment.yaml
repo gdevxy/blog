@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-component
+spec:
+  selector:
+    matchLabels:
+      app: blog-component
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: blog-component
+    spec:
+      containers:
+        - name: blog-component
+          image: zrh.ocir.io/zrtzbnanl1kw/gdevxy/blog:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: blog-secrets
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: docker-password

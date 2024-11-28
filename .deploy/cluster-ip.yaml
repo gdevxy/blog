@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-component-svc
+spec:
+  selector:
+    app: blog-component
+  ports:
+    - protocol: TCP
+      port: 8088
+      targetPort: 8080
+  type: ClusterIP
