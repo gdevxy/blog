@@ -2,6 +2,27 @@
     background-color: #23123B
 }
 
+.blog-header{
+    padding-right: 3rem !important;
+    padding-left: 3rem !important;
+}
+
+.blog-paragraph {
+    padding: 1rem 3rem !important;
+    font-size:1.25rem !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .blog-paragraph {
+        padding: 1rem 1rem !important;
+        font-size: 1.25rem !important;
+    }
+    .blog-header{
+        padding-right: 1rem !important;
+        padding-left: 1rem !important;
+    }
+}
+
 .card-with-effect {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background: #fff;
