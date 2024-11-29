@@ -1,4 +1,4 @@
-package com.gdevxy.blog.service.contentful.blogpost;
+package com.gdevxy.blog.service.contentful.blogpost.converter;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
@@ -9,7 +9,7 @@ import com.gdevxy.blog.client.contentful.model.content.RichContent;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.Image;
 import com.gdevxy.blog.model.contentful.Node;
-import com.gdevxy.blog.service.contentful.image.ImageConverter;
+
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 public class BlogPostConverter {
 
 	private final ImageConverter imageConverter;
+	private final RichImageConverter richImageConverter;
 
 	public BlogPost convert(PageBlogPost p) {
 
@@ -94,7 +95,7 @@ public class BlogPostConverter {
 			return Optional.empty();
 		}
 
-		return client.findImage(embeddedEntry.getTarget().getSys().getId()).map(imageConverter);
+		return client.findImage(embeddedEntry.getTarget().getSys().getId()).map(richImageConverter);
 	}
 
 }

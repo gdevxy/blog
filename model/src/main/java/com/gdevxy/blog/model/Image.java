@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @ToString
 public class Image {
 
@@ -15,5 +15,6 @@ public class Image {
 	private final Integer width;
 	private final Integer height;
 	private final String contentType;
+	private final Boolean fullWidth;
 
 }

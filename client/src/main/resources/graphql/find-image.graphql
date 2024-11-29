@@ -7,5 +7,6 @@ query findImage($id: String!){
             height
             url
         }
+        fullWidth
     }
 }

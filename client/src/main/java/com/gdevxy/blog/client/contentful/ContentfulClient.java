@@ -1,5 +1,6 @@
 package com.gdevxy.blog.client.contentful;
 
+import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
@@ -12,6 +13,6 @@ public interface ContentfulClient {
 
 	PageBlogPostCollection findBlogPosts();
 
-	Optional<FeaturedImage> findImage(String id);
+	Optional<ComponentRichImage> findImage(String id);
 
 }

@@ -13,5 +13,6 @@ import lombok.*;
 public class ComponentRichImage {
 
 	private FeaturedImage image;
+	private Boolean fullWidth;
 
 }

@@ -5,6 +5,8 @@ import com.gdevxy.blog.client.contentful.DefaultContentful;
 import com.gdevxy.blog.client.contentful.PreviewContentful;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.service.contentful.ContentfulServiceSupport;
+import com.gdevxy.blog.service.contentful.blogpost.converter.BlogPostConverter;
+
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;

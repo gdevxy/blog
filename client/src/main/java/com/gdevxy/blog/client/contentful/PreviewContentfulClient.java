@@ -43,12 +43,12 @@ public class PreviewContentfulClient extends ContentfulClientSupport implements 
 	}
 
 	@Override
-	public Optional<FeaturedImage> findImage(String id) {
+	public Optional<ComponentRichImage> findImage(String id) {
 
 		var params = Map.<String, Object>of("preview", true, "id", id);
 		var response = executeQuery(() -> queryLoader.loadQuery("find-image"), params);
 
-		return Optional.ofNullable(asClass(response, ComponentRichImage.class)).map(ComponentRichImage::getImage);
+		return Optional.ofNullable(asClass(response, ComponentRichImage.class));
 	}
 
 }
