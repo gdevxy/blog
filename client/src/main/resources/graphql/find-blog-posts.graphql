@@ -1,5 +1,5 @@
-query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $preview: Boolean = false) {
-    pageBlogPostCollection(limit: $limit, skip: $skip, locale: $locale, preview: $preview, order: publishedDate_DESC) {
+query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $tags: [String] = [], $preview: Boolean = false) {
+    pageBlogPostCollection(limit: $limit, skip: $skip, locale: $locale, preview: $preview, where: { tags_contains_all: $tags }, order: publishedDate_DESC) {
         total
         limit
         items {
@@ -31,6 +31,7 @@ query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $
             content {
                 json
             }
+            tags
         }
     }
 }

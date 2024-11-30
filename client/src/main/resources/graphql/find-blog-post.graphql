@@ -31,6 +31,7 @@ query findBlogPost($limit: Int = 1, $slug: String!, $locale: String = "en", $pre
             content {
                 json
             }
+            tags
         }
     }
 }

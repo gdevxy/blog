@@ -5,6 +5,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 import jakarta.json.bind.annotation.JsonbDateFormat;
 
@@ -25,5 +26,6 @@ public class PageBlogPost {
 	private FeaturedImage featuredImage;
 	private SeoFields seoFields;
 	private DynamicContent content;
+	private Set<String> tags;
 
 }

@@ -1,6 +1,8 @@
 package com.gdevxy.blog.client.contentful;
 
+import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
+import com.gdevxy.blog.client.contentful.model.Pagination;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkiverse.wiremock.devservice.ConnectWireMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -9,7 +11,9 @@ import jakarta.ws.rs.core.HttpHeaders;
 import org.junit.jupiter.api.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.Set;
 
 @QuarkusTest
 @ConnectWireMock
@@ -52,15 +56,22 @@ class PreviewContentfulClientTest {
 	@Test
 	void findBlogPosts() {
 		// given
-		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PREVIEW"))
-				.withRequestBody(containing("query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = \\\"en\\\", $preview: Boolean = false, order: publishedDate_DESC)"))
-				.willReturn(ok().withBodyFile("find-blog-posts.json")));
+		var pagination = Pagination.builder().build();
 
 		// when
-		var actual = client.findBlogPosts();
+		var thrown = catchThrowable(() -> client.findBlogPosts(pagination, Set.of()));
 
 		// then
-		assertThat(actual.getItems()).isNotEmpty();
+		assertThat(thrown).isInstanceOf(UnsupportedOperationException.class);
+	}
+
+	@Test
+	void findRecentBlogPosts() {
+		// when
+		var thrown = catchThrowable(() -> client.findRecentBlogPosts());
+
+		// then
+		assertThat(thrown).isInstanceOf(UnsupportedOperationException.class);
 	}
 
 	@Test
@@ -74,11 +85,18 @@ class PreviewContentfulClientTest {
 		var actual = client.findImage("id");
 
 		// then
-		assertThat(actual).isPresent().get().usingRecursiveComparison().isEqualTo(FeaturedImage.builder()
-				.title("Instant Access to Information (Augment Reality)")
-				.width(868)
-				.height(590)
-				.url("https://images.ctfassets.net/r9z7bjp5iedy/7CxNr9Arb299R7KjO103Bt/1d6bd9a06cb4d287ac30b5a626f8ad25/tobias-CyX3ZAti5DA-unsplash__1___1_.jpg")
+		assertThat(actual).isPresent()
+			.get()
+			.usingRecursiveComparison()
+			.isEqualTo(ComponentRichImage.builder()
+				.fullWidth(true)
+				.image(FeaturedImage.builder()
+					.title("Instant Access to Information (Augment Reality)")
+					.width(868)
+					.height(590)
+					.url(
+						"https://images.ctfassets.net/r9z7bjp5iedy/7CxNr9Arb299R7KjO103Bt/1d6bd9a06cb4d287ac30b5a626f8ad25/tobias-CyX3ZAti5DA-unsplash__1___1_.jpg")
+					.build())
 				.build());
 	}
 

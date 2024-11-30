@@ -1,7 +1,7 @@
 {
   "data": {
     "componentRichImage": {
-      "fullWidth": false,
+      "fullWidth": true,
       "image": {
         "title": "Instant Access to Information (Augment Reality)",
         "description": null,

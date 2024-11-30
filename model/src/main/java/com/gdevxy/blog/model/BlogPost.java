@@ -23,6 +23,8 @@ public class BlogPost {
 	private final Seo seo;
 	@Builder.Default
 	private final List<ContentBlock> blocks = List.of();
+	@Builder.Default
+	private final Set<BlogPostTag> tags = Set.of();
 
 	@Getter
 	@Builder

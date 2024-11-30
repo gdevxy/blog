@@ -1,6 +1,7 @@
 package com.gdevxy.blog.client.contentful;
 
 import io.smallrye.graphql.client.Response;
+import io.smallrye.graphql.client.core.Document;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -34,12 +35,6 @@ abstract class ContentfulClientSupport {
 		}
 
 		return response;
-	}
-
-	<T> T asClass(Response response, Class<T> clazz) {
-
-		var root = Character.toLowerCase(clazz.getSimpleName().charAt(0)) + clazz.getSimpleName().substring(1);
-		return response.getObject(clazz, root);
 	}
 
 }

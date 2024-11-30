@@ -1,0 +1,16 @@
+{
+  "data": {
+    "pageBlogPostCollection": {
+      "__typename": "PageBlogPostCollection",
+      "total": 7,
+      "limit": 5,
+      "items": [
+        {
+          "slug": "how-ar-will-transform-our-lives-in-2050",
+          "title": "How AR will transform our lives in 2050",
+          "publishedDate": "2022-12-04T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

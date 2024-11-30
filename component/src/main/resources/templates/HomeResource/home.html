@@ -1,0 +1,57 @@
+{@java.util.List<com.gdevxy.blog.model.RecentBlogPost> recentBlogPosts}
+{@java.util.List<com.gdevxy.blog.model.BlogPost> blogPosts}
+{@java.util.List<com.gdevxy.blog.model.BlogPostTag> filters}
+
+{#include base}
+
+	{#pageTitle}gdevxy: home page{/pageTitle}
+	{#pageDescription}Home page with the latest blog-posts and other important news{/pageDescription}
+
+	<div class="w-100">
+		<div class="row pb-3">
+			<div class="col-12">
+				<img src="app/img/banner_2048x250.jpg" class="w-100 rounded-top-2 img-fluid" alt="home banner">
+			</div>
+		</div>
+		<div class="row gx-3">
+			<div class="col-md-2">
+				<p class="text-start border-bottom">
+					Filters
+				</p>
+				{#for filter in filters}
+					<input type="checkbox" class="btn-check" id="blog-filter-{filter.name}" autocomplete="off" value="{filter.name}" onclick="const tags = checkedInputsAsQueryParams('blog-filter'); refreshFragment('blog-posts-fragment', 'blog_posts', { tags })">
+					<label class="btn btn-sm btn-outline-light m-1" for="blog-filter-{filter.name}">{filter.code}</label>
+				{/for}
+			</div>
+			<div class="col-md-8">
+				<div id="blog_posts" class="mx-auto blog-card">
+					{#fragment id=blog_posts}
+						{#for post in blogPosts}
+							<div class="py-2">
+								{#include blog/blog-card}
+									{#cardTitle}{post.title}{/cardTitle}
+									{#cardBody}{post.description}{/cardBody}
+									{#cardUrl}blog-posts/{post.slug}{/cardUrl}
+									{#cardImage}{post.image.url}{/cardImage}
+									{#cardTimestamp}{post.publishedDate.formatted}{/cardTimestamp}
+								{/include}
+							</div>
+						{/for}
+					{/fragment}
+				</div>
+			</div>
+			<div class="col-md-2 text-end">
+				Recent blog posts
+				<div class="py-2 border-top">
+					{#for post in recentBlogPosts}
+						<p class="text-end">
+							<a href="{post.url}" target="_self">{post.title}</a>
+							<span class="fs-7 fw-lighter d-block">{post.publishedDate.formatted}</span>
+						</p>
+					{/for}
+				</div>
+			</div>
+		</div>
+	</div>
+
+{/include}

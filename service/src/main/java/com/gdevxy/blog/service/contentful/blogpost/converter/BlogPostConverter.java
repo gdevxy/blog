@@ -7,6 +7,7 @@ import com.gdevxy.blog.client.contentful.model.content.Data;
 import com.gdevxy.blog.client.contentful.model.content.Mark;
 import com.gdevxy.blog.client.contentful.model.content.RichContent;
 import com.gdevxy.blog.model.BlogPost;
+import com.gdevxy.blog.model.BlogPostTag;
 import com.gdevxy.blog.model.Image;
 import com.gdevxy.blog.model.contentful.Node;
 
@@ -42,6 +43,7 @@ public class BlogPostConverter {
 				.image(Optional.ofNullable(p.getFeaturedImage()).map(imageConverter).orElse(null))
 				.seo(toSeo(p.getSeoFields()).orElse(null))
 				.blocks(toContentBlocks(client, p.getContent().getJson().getContent()))
+				.tags(p.getTags().stream().map(BlogPostTag::of).collect(Collectors.toUnmodifiableSet()))
 				.build();
 	}
 
@@ -49,14 +51,13 @@ public class BlogPostConverter {
 
 		return Optional.ofNullable(seoFields).map(f -> {
 
-			var noFollow = f.getNofollow() ? "nofollow" : null;
-			var noIndex = f.getNoindex() ? "noindex" : null;
-			var robotHint = Stream.of(noFollow, noIndex).filter(Objects::nonNull).collect(Collectors.joining(", "));
+			var noFollow = f.getNofollow() ? "nofollow" : "follow";
+			var noIndex = f.getNoindex() ? "noindex" : "index";
 
 			return BlogPost.Seo.builder()
 					.title(f.getPageTitle())
 					.description(f.getPageDescription())
-					.robotHint(robotHint)
+					.robotHint(String.join(",", noFollow, noIndex))
 					.build();
 		});
 	}

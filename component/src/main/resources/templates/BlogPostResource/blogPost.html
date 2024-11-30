@@ -2,15 +2,17 @@
 
 {#include base}
 
-    {#pageTitle}{blogPost.seo.title}{/}
-    {#pageRobots}{blogPost.seo.robotHint}{/}
+    {#pageTitle}{blogPost.seo.title}{/pageTitle}
+    {#pageDescription}{blogPost.seo.description}{/pageDescription}
+    {#pageRobots}{blogPost.seo.robotHint}{/pageRobots}
+
     {#extraJs}
         <link rel="stylesheet" href="/webjars/highlightjs/styles/stackoverflow-dark.min.css"/>
         <script src="/webjars/highlightjs/highlight.min.js"></script>
         <script src="/webjars/highlightjs/languages/java.min.js"></script>
         <script src="/webjars/highlightjs/languages/json.min.js"></script>
         <script>hljs.highlightAll();</script>
-    {/}
+    {/extraJs}
 
     <div class="mb-5 pb-5 rounded-top bg-body-tertiary">
 
@@ -55,4 +57,4 @@
 
     </div>
 
-{/}
+{/include}

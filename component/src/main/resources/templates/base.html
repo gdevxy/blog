@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" class="h-100">
 <head>
-    <title>{#insert pageTitle}gdevxy: home{/}</title>
+    <title>{#insert pageTitle}{/insert}</title>
+    <meta name="description" content="{#insert pageDescription}{/insert}" />
     <meta charset="utf-8"/>
-    <meta name="robots" content="{#insert pageRobots}{/}" />
+    <meta name="robots" content="{#insert pageRobots}index,follow{/insert}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     {#if runningInProduction}
         {#include gtag /}
     {/if}
+    <link rel="apple-touch-icon-precomposed" href="app/img/favicon_180x180.jpg">
+    <link rel="icon" href="app/img/favicon_196x196.jpg">
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    {#insert extraCss}{/}
-    {#insert extraJs}{/}
+    {#insert extraCss}{/insert}
+    {#insert extraJs}{/insert}
     {#bundle /}
 </head>
 <body class="d-flex flex-column h-100">
@@ -28,9 +31,6 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/blog">Blog</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
                 </ul>
@@ -38,7 +38,7 @@
         </div>
     </nav>
 
-    <main class="flex-shrink-0">
+    <main class="flex-shrink-0 mb-4">
         <div class="container">
             {#insert}Meesa empty :){/}
         </div>
