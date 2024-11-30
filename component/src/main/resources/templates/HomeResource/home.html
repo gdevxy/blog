@@ -19,8 +19,8 @@
 					Filters
 				</p>
 				{#for filter in filters}
-					<input type="checkbox" class="btn-check" id="blog-filter-{filter.name}" autocomplete="off" value="{filter.name}" onclick="const tags = checkedInputsAsQueryParams('blog-filter'); refreshFragment('blog-posts-fragment', 'blog_posts', { tags })">
-					<label class="btn btn-sm btn-outline-light m-1" for="blog-filter-{filter.name}">{filter.code}</label>
+					<input type="checkbox" class="btn-check" id="blog-filter-{filter}" autocomplete="off" value="{filter}" onclick="const tags = checkedInputsAsQueryParams('blog-filter'); refreshFragment('blog-posts-fragment', 'blog_posts', { tags })">
+					<label class="btn btn-sm btn-outline-light m-1" for="blog-filter-{filter}">{filter.code}</label>
 				{/for}
 			</div>
 			<div class="col-md-8">

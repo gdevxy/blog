@@ -16,4 +16,11 @@
 		<skip.quarkus.build>true</skip.quarkus.build>
 	</properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>io.quarkus.qute</groupId>
+			<artifactId>qute-core</artifactId>
+		</dependency>
+	</dependencies>
+
 </project>

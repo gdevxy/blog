@@ -26,8 +26,8 @@
 		<bootstrap.version>5.3.3</bootstrap.version>
 		<highlightjs.version>11.10.0</highlightjs.version>
 		<jquery.version>3.7.1</jquery.version>
-		<lombok.version>1.18.34</lombok.version>
-		<quarkus.platform.version>3.16.3</quarkus.platform.version>
+		<lombok.version>1.18.36</lombok.version>
+		<quarkus.platform.version>3.17.2</quarkus.platform.version>
 		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
 		<quarkus.web-bundler.version>1.7.3</quarkus.web-bundler.version>
 
@@ -36,7 +36,7 @@
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
 		<jandex-plugin.version>3.2.3</jandex-plugin.version>
-		<surefire-plugin.version>3.3.1</surefire-plugin.version>
+		<surefire-plugin.version>3.5.2</surefire-plugin.version>
 
 		<skipITs>true</skipITs>
 		<skip.quarkus.build>false</skip.quarkus.build>
