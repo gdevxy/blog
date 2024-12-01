@@ -12,10 +12,6 @@
 
 	<artifactId>blog-model</artifactId>
 
-	<properties>
-		<skip.quarkus.build>true</skip.quarkus.build>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>io.quarkus.qute</groupId>
