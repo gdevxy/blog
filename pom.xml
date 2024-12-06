@@ -29,7 +29,7 @@
 		<lombok.version>1.18.36</lombok.version>
 		<quarkus.platform.version>3.17.3</quarkus.platform.version>
 		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
-		<quarkus.web-bundler.version>1.7.3</quarkus.web-bundler.version>
+		<quarkus.web-bundler.version>1.8.0</quarkus.web-bundler.version>
 
 		<assertj.version>3.26.3</assertj.version>
 		<quarkus-wiremock.version>1.4.0</quarkus-wiremock.version>
