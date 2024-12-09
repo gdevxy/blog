@@ -32,6 +32,7 @@
 		<quarkus.web-bundler.version>1.8.0</quarkus.web-bundler.version>
 
 		<assertj.version>3.26.3</assertj.version>
+		<quarkus-playwright.version>2.0.0</quarkus-playwright.version>
 		<quarkus-wiremock.version>1.4.0</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
@@ -63,6 +64,13 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

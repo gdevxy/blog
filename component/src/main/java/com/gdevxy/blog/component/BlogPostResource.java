@@ -12,7 +12,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import com.gdevxy.blog.model.BlogPost;
-import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
+import com.gdevxy.blog.service.contentful.blogpost.IBlogPostService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.common.annotation.Blocking;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BlogPostResource {
 
-	private final BlogPostService blogPostService;
+	private final IBlogPostService blogPostService;
 
 	@GET
 	@Path("/{slug}")
@@ -33,8 +33,8 @@ public class BlogPostResource {
 	public TemplateInstance blogPost(@Valid @Size(max = 255) @PathParam("slug") String slug, @DefaultValue("false") @QueryParam("preview") Boolean preview) {
 
 		return blogPostService.findBlogPost(preview, slug)
-				.map(Templates::blogPost)
-				.orElseThrow(() -> new NotFoundException("BlogPost [%s] not found".formatted(slug)));
+			.map(Templates::blogPost)
+			.orElseThrow(() -> new NotFoundException("BlogPost [%s] not found".formatted(slug)));
 	}
 
 	@CheckedTemplate

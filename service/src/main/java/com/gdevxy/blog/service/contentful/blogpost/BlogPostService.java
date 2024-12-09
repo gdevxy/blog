@@ -19,7 +19,7 @@ import com.gdevxy.blog.service.contentful.blogpost.converter.BlogPostConverter;
 import com.gdevxy.blog.service.contentful.blogpost.converter.RecentBlogPostConverter;
 
 @ApplicationScoped
-public class BlogPostService extends ContentfulServiceSupport {
+public class BlogPostService extends ContentfulServiceSupport implements IBlogPostService {
 
 	private final BlogPostConverter blogPostConverter;
 	private final RecentBlogPostConverter recentBlogPostConverter;
@@ -31,6 +31,7 @@ public class BlogPostService extends ContentfulServiceSupport {
 		this.recentBlogPostConverter = recentBlogPostConverter;
 	}
 
+	@Override
 	public Optional<BlogPost> findBlogPost(Boolean preview, String slug) {
 
 		var client = client(preview);
@@ -38,6 +39,7 @@ public class BlogPostService extends ContentfulServiceSupport {
 		return client.findBlogPost(slug).map(p -> blogPostConverter.convert(client, p));
 	}
 
+	@Override
 	public List<BlogPost> findBlogPosts(Set<BlogPostTag> tags) {
 
 		var pagination = Pagination.builder().build();
@@ -46,6 +48,7 @@ public class BlogPostService extends ContentfulServiceSupport {
 		return client(false).findBlogPosts(pagination, contentfulBlogPostTags).getItems().stream().map(blogPostConverter::convert).toList();
 	}
 
+	@Override
 	public List<RecentBlogPost> findRecentBlogPosts() {
 
 		return client(false).findRecentBlogPosts().getItems().stream().map(recentBlogPostConverter).toList();

@@ -1,14 +1,15 @@
 package com.gdevxy.blog.component;
 
-import com.gdevxy.blog.model.Profile;
-import com.gdevxy.blog.service.profile.ProfileService;
-import io.quarkus.qute.CheckedTemplate;
-import io.quarkus.qute.TemplateInstance;
-import io.smallrye.common.annotation.Blocking;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+
+import com.gdevxy.blog.model.Profile;
+import com.gdevxy.blog.service.profile.IProfileService;
+import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateInstance;
+import io.smallrye.common.annotation.Blocking;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AboutResource {
 
-	private final ProfileService profileService;
+	private final IProfileService profileService;
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)

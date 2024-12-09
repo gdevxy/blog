@@ -8,24 +8,25 @@ import io.quarkus.cache.CacheResult;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
-public class ProfileService {
+public class ProfileService implements IProfileService {
 
-    private static final String GDEVXY_GRAVATAR_PROFILE_ID = "29cef4c32ea83b2f916f735017dbdfe4dfc9a91922ea15c62a787e9938baee4d";
+	private static final String GDEVXY_GRAVATAR_PROFILE_ID = "29cef4c32ea83b2f916f735017dbdfe4dfc9a91922ea15c62a787e9938baee4d";
 
-    private final GravatarClient gravatarClient;
-    private final ProfileConverter profileConverter;
+	private final GravatarClient gravatarClient;
+	private final ProfileConverter profileConverter;
 
-    public ProfileService(@RestClient GravatarClient gravatarClient, ProfileConverter profileConverter) {
-        this.gravatarClient = gravatarClient;
-        this.profileConverter = profileConverter;
-    }
+	public ProfileService(@RestClient GravatarClient gravatarClient, ProfileConverter profileConverter) {
+		this.gravatarClient = gravatarClient;
+		this.profileConverter = profileConverter;
+	}
 
-    @CacheResult(cacheName = "profile")
-    public Profile findProfile() {
+	@Override
+	@CacheResult(cacheName = "profile")
+	public Profile findProfile() {
 
-        var profile = gravatarClient.findById(GDEVXY_GRAVATAR_PROFILE_ID);
+		var profile = gravatarClient.findById(GDEVXY_GRAVATAR_PROFILE_ID);
 
-        return profileConverter.apply(profile);
-    }
+		return profileConverter.apply(profile);
+	}
 
 }
