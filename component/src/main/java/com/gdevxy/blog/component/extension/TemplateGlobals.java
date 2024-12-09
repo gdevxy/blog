@@ -1,4 +1,4 @@
-package com.gdevxy.blog.component.extensions;
+package com.gdevxy.blog.component.extension;
 
 import io.quarkus.qute.TemplateGlobal;
 import io.quarkus.runtime.configuration.ConfigUtils;

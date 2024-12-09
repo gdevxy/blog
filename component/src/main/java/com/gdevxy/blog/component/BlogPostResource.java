@@ -29,7 +29,7 @@ public class BlogPostResource {
 
 		return blogPostService.findBlogPost(preview, slug)
 				.map(Templates::blogPost)
-				.orElseGet(() -> engine.getTemplate("notFound.html").instance());
+				.orElseThrow(() -> new NotFoundException("BlogPost [%s] not found".formatted(slug)));
 	}
 
 	@CheckedTemplate
