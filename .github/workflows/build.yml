@@ -14,6 +14,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      GRAVATAR_API_KEY: ${{ secrets.GRAVATAR_API_KEY }}
+
     strategy:
       fail-fast: true
 
