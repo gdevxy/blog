@@ -47,6 +47,5 @@ jobs:
         run: |
             mvn -B clean verify -Pnative \
               -Dquarkus.http.host=0.0.0.0 \
-              -Dquarkus.container-image.build=true \
               -Dquarkus.native.container-build=true \
               -Dquarkus.test.arg-line="--add-host host.docker.internal:host-gateway"
