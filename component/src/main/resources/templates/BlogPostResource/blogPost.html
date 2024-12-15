@@ -34,7 +34,7 @@
 
         {#for block in blogPost.blocks}
             {#when block.node}
-                {#is EMBEDDED_ENTRY}
+                {#is EMBEDDED_ENTRY_BLOCK}
                     {#include blog/blog-image image=block.image /}
                 {#is HEADING_1}
                     {#include blog/blog-header heading=1 value=block.blocks[0].value}{/include}
@@ -50,7 +50,7 @@
                     {#include blog/blog-header heading=6 value=block.blocks[0].value}{/include}
                 {#is PARAGRAPH}
                     {#include blog/blog-paragraph blocks=block.blocks /}
-                {#is UL_LIST}
+                {#is UNORDERED_LIST}
                     {#include blog/blog-unordered-list blocks=block.blocks /}
                 {#else}
             {/when}

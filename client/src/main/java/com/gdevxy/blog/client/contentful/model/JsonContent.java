@@ -1,5 +1,6 @@
-package com.gdevxy.blog.client.contentful.model.content;
+package com.gdevxy.blog.client.contentful.model;
 
+import com.gdevxy.blog.client.contentful.model.content.Document;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 
@@ -10,8 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @RegisterForReflection
 @ToString
-public class DynamicContent {
+public class JsonContent {
 
-	private RichContent json;
+	private Document json;
 
 }

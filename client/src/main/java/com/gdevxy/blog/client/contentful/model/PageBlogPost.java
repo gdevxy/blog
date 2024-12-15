@@ -1,13 +1,10 @@
 package com.gdevxy.blog.client.contentful.model;
 
-import com.gdevxy.blog.client.contentful.model.content.DynamicContent;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
-
-import jakarta.json.bind.annotation.JsonbDateFormat;
 
 @Getter
 @Setter
@@ -25,7 +22,7 @@ public class PageBlogPost {
 	private ZonedDateTime publishedDate;
 	private FeaturedImage featuredImage;
 	private SeoFields seoFields;
-	private DynamicContent content;
+	private JsonContent content;
 	private Set<String> tags;
 
 }

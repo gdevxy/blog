@@ -2,6 +2,7 @@ package com.gdevxy.blog.service.contentful.blogpost.converter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.Nullable;
@@ -10,12 +11,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.SeoFields;
-import com.gdevxy.blog.client.contentful.model.content.Data;
-import com.gdevxy.blog.client.contentful.model.content.Mark;
-import com.gdevxy.blog.client.contentful.model.content.RichContent;
+import com.gdevxy.blog.client.contentful.model.content.EmbeddedEntryBlock;
+import com.gdevxy.blog.client.contentful.model.content.HyperLink;
+import com.gdevxy.blog.client.contentful.model.content.IContent;
+import com.gdevxy.blog.client.contentful.model.content.Text;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.BlogPostTag;
 import com.gdevxy.blog.model.Image;
+import com.gdevxy.blog.model.contentful.Mark;
 import com.gdevxy.blog.model.contentful.Node;
 import lombok.RequiredArgsConstructor;
 
@@ -66,41 +69,47 @@ public class BlogPostConverter {
 		});
 	}
 
-	private List<BlogPost.ContentBlock> toContentBlocks(List<RichContent> contents, @Nullable String previewToken) {
+	private List<BlogPost.ContentBlock> toContentBlocks(List<IContent> contents, @Nullable String previewToken) {
 
 		return contents.stream()
 				.map(content -> toContent(content, previewToken))
 				.toList();
 	}
 
-	private BlogPost.ContentBlock toContent(RichContent content, @Nullable String previewToken) {
-
-		var nodeType = Node.of(content.getNodeType());
+	private BlogPost.ContentBlock toContent(IContent content, @Nullable String previewToken) {
 
 		return BlogPost.ContentBlock.builder()
-				.node(nodeType)
-				.value(toValue(nodeType, content))
-				.marks(content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet()))
+				.node(Node.valueOf(content.getNode().name()))
+				.value(toValue(content))
+				.marks(toMarks(content))
 				.blocks(toContentBlocks(content.getContent(), previewToken))
-				.image(toImage(nodeType, content.getData()).orElse(null))
+				.image(toImage(content).orElse(null))
 				.build();
 	}
 
-	private String toValue(Node node, RichContent content) {
+	private Set<Mark> toMarks(IContent content) {
 
-		return switch(node) {
-			case HYPERLINK -> content.getData().getUri();
-			default -> content.getValue();
+		return switch(content) {
+			case Text t -> t.getMarks().stream().map(Mark::of).collect(Collectors.toUnmodifiableSet());
+			default -> Set.of();
 		};
 	}
 
-	private Optional<Image> toImage(Node nodeType, Data embeddedEntry) {
+	private String toValue(IContent content) {
 
-		if (nodeType != Node.EMBEDDED_ENTRY) {
-			return Optional.empty();
-		}
+		return switch(content) {
+			case HyperLink l -> l.getData().getUri();
+			case Text t -> t.getValue();
+			default -> null;
+		};
+	}
 
-		return contentfulClient.findImage(embeddedEntry.getTarget().getSys().getId()).map(richImageConverter);
+	private Optional<Image> toImage(IContent content) {
+
+		return switch(content) {
+			case EmbeddedEntryBlock b -> contentfulClient.findImage(b.getData().getTarget().getSys().getId()).map(richImageConverter);
+			default -> Optional.empty();
+		};
 	}
 
 }

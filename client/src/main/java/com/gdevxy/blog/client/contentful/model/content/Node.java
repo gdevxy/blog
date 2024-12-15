@@ -1,4 +1,4 @@
-package com.gdevxy.blog.model.contentful;
+package com.gdevxy.blog.client.contentful.model.content;
 
 public enum Node {
 
