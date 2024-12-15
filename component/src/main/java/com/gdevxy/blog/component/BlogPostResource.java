@@ -2,7 +2,6 @@ package com.gdevxy.blog.component;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
@@ -12,7 +11,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import com.gdevxy.blog.model.BlogPost;
-import com.gdevxy.blog.service.contentful.blogpost.IBlogPostService;
+import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.common.annotation.Blocking;
@@ -25,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BlogPostResource {
 
-	private final IBlogPostService blogPostService;
+	private final BlogPostService blogPostService;
 
 	@GET
 	@Path("/{slug}")
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance blogPost(@Valid @Size(max = 255) @PathParam("slug") String slug, @DefaultValue("false") @QueryParam("preview") Boolean preview) {
+	public TemplateInstance blogPost(@Valid @Size(max = 255) @PathParam("slug") String slug, @QueryParam("previewToken") String previewToken) {
 
-		return blogPostService.findBlogPost(preview, slug)
+		return blogPostService.findBlogPost(previewToken, slug)
 			.map(Templates::blogPost)
 			.orElseThrow(() -> new NotFoundException("BlogPost [%s] not found".formatted(slug)));
 	}

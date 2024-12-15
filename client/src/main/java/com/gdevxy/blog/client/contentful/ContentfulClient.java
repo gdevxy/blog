@@ -13,10 +13,18 @@ public interface ContentfulClient {
 
 	Optional<PageBlogPost> findBlogPost(String slug);
 
+	Optional<PageBlogPost> findBlogPost(String slug, String previewToken);
+
 	PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags);
+
+	PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags, String previewToken);
 
 	RecentPageBlogPostCollection findRecentBlogPosts();
 
+	RecentPageBlogPostCollection findRecentBlogPosts(String previewToken);
+
 	Optional<ComponentRichImage> findImage(String id);
+
+	Optional<ComponentRichImage> findImage(String id, String previewToken);
 
 }

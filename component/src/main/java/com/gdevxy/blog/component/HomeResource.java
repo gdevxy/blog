@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.MediaType;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.BlogPostTag;
 import com.gdevxy.blog.model.RecentBlogPost;
-import com.gdevxy.blog.service.contentful.blogpost.IBlogPostService;
+import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.common.annotation.Blocking;
@@ -26,14 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HomeResource {
 
-	private final IBlogPostService blogPostService;
+	private final BlogPostService blogPostService;
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance home(@QueryParam("tags") Set<BlogPostTag> tags) {
+	public TemplateInstance home(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<BlogPostTag> tags) {
 
-		var recentBlogPosts = blogPostService.findRecentBlogPosts();
-		var blogPosts = blogPostService.findBlogPosts(tags);
+		var recentBlogPosts = blogPostService.findRecentBlogPosts(previewToken);
+		var blogPosts = blogPostService.findBlogPosts(previewToken, tags);
 
 		return Templates.home(recentBlogPosts, blogPosts).data("filters", Arrays.asList(BlogPostTag.values()));
 	}
@@ -41,9 +41,9 @@ public class HomeResource {
 	@GET
 	@Path("/blog-posts-fragment")
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance blogPosts(@QueryParam("tags") Set<BlogPostTag> tags) {
+	public TemplateInstance blogPosts(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<BlogPostTag> tags) {
 
-		return Templates.home$blog_posts(blogPostService.findBlogPosts(tags));
+		return Templates.home$blog_posts(blogPostService.findBlogPosts(previewToken, tags));
 	}
 
 	@CheckedTemplate

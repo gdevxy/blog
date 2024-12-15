@@ -1,31 +1,51 @@
 package com.gdevxy.blog.client.contentful;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
+
+import jakarta.annotation.Nullable;
+import jakarta.ws.rs.core.HttpHeaders;
+
 import io.smallrye.graphql.client.Response;
-import io.smallrye.graphql.client.core.Document;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
-import lombok.AllArgsConstructor;
+import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClientBuilder;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
 @Slf4j
-@AllArgsConstructor
 @NoArgsConstructor
 abstract class ContentfulClientSupport {
 
 	private DynamicGraphQLClient client;
+	private DynamicGraphQLClientBuilder previewClient;
 
-	@SneakyThrows
-	Response executeQuery(Supplier<String> querySupplier) {
-
-		return executeQuery(querySupplier, Map.of());
+	public ContentfulClientSupport(DynamicGraphQLClient client) {
+		this.client = client;
+		this.previewClient = DynamicGraphQLClientBuilder.newBuilder().configKey("contentful");
 	}
 
 	@SneakyThrows
-	Response executeQuery(Supplier<String> querySupplier, Map<String, Object> params) {
+	Response executeQuery(Supplier<String> querySupplier, @Nullable String previewToken) {
+
+		return executeQuery(querySupplier, Map.of(), previewToken);
+	}
+
+	@SneakyThrows
+	Response executeQuery(Supplier<String> querySupplier, Map<String, Object> params, @Nullable String previewToken) {
+
+		if (previewToken == null) {
+			return executeQuery(client, querySupplier, params);
+		}
+
+		try (var client = previewClient.header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(previewToken)).build()) {
+			return executeQuery(client, querySupplier, extendWithPreviewMode(params));
+		}
+	}
+
+	private Response executeQuery(DynamicGraphQLClient client, Supplier<String> querySupplier, Map<String, Object> params) throws ExecutionException, InterruptedException {
 
 		var response = client.executeSync(querySupplier.get(), params);
 
@@ -35,6 +55,13 @@ abstract class ContentfulClientSupport {
 		}
 
 		return response;
+	}
+
+	private Map<String, Object> extendWithPreviewMode(Map<String, Object> params) {
+
+		var p = new HashMap<>(params);
+		p.put("preview", true);
+		return p;
 	}
 
 }

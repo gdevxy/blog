@@ -22,6 +22,7 @@ public enum BlogPostTag {
 	CONTENTFUL("Contentful"),
 	DEBUGGING("Debugging"),
 	GARBAGE_COLLECTOR("Garbage Collector"),
+	KAFKA("Kafka"),
 	JAVA("Java"),
 	JAVA_21("Java 21"),
 	JAVA_23("Java 23"),

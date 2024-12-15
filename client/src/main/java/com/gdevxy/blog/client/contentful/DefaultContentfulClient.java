@@ -17,7 +17,6 @@ import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@DefaultContentful
 @ApplicationScoped
 public class DefaultContentfulClient extends ContentfulClientSupport implements ContentfulClient {
 
@@ -31,7 +30,13 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	@Override
 	public Optional<PageBlogPost> findBlogPost(String slug) {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-post"), Map.of("slug", slug));
+		return findBlogPost(slug, null);
+	}
+
+	@Override
+	public Optional<PageBlogPost> findBlogPost(String slug, String previewToken) {
+
+		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-post"), Map.of("slug", slug), previewToken);
 
 		return response.getObject(PageBlogPostCollection.class, "pageBlogPostCollection").getItems().stream().findAny();
 	}
@@ -39,8 +44,14 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	@Override
 	public PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags) {
 
+		return findBlogPosts(pagination, tags, null);
+	}
+
+	@Override
+	public PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags, String previewToken) {
+
 		var params =  Map.of("limit", pagination.getPageSize(), "skip", pagination.getOffset(), "tags", tags);
-		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-posts"), params);
+		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-posts"), params, previewToken);
 
 		return response.getObject(PageBlogPostCollection.class, "pageBlogPostCollection");
 	}
@@ -48,7 +59,13 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	@Override
 	public RecentPageBlogPostCollection findRecentBlogPosts() {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-recent-blog-posts"));
+		return findRecentBlogPosts(null);
+	}
+
+	@Override
+	public RecentPageBlogPostCollection findRecentBlogPosts(String previewToken) {
+
+		var response = executeQuery(() -> queryLoader.loadQuery("find-recent-blog-posts"), previewToken);
 
 		return response.getObject(RecentPageBlogPostCollection.class, "pageBlogPostCollection");
 	}
@@ -56,7 +73,13 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	@Override
 	public Optional<ComponentRichImage> findImage(String id) {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-image"), Map.of("id", id));
+		return findImage(id, null);
+	}
+
+	@Override
+	public Optional<ComponentRichImage> findImage(String id, String previewToken) {
+
+		var response = executeQuery(() -> queryLoader.loadQuery("find-image"), Map.of("id", id), previewToken);
 
 		return Optional.ofNullable(response.getObject(ComponentRichImage.class, "componentRichImage"));
 	}

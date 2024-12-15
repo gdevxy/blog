@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.gdevxy.blog.mother.BlogPostMother;
 import com.gdevxy.blog.mother.RecentBlogPostMother;
-import com.gdevxy.blog.service.contentful.blogpost.IBlogPostService;
+import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
 import com.microsoft.playwright.BrowserContext;
 import io.quarkiverse.playwright.InjectPlaywright;
 import io.quarkiverse.playwright.WithPlaywright;
@@ -27,7 +27,7 @@ public class HomeResourceTest {
 	BrowserContext context;
 
 	@InjectMock
-	IBlogPostService blogPostService;
+	BlogPostService blogPostService;
 
 	@TestHTTPResource("/")
 	URL home;
@@ -37,8 +37,8 @@ public class HomeResourceTest {
 		// given
 		var page = context.newPage();
 
-		when(blogPostService.findRecentBlogPosts()).thenReturn(List.of(RecentBlogPostMother.basic().build()));
-		when(blogPostService.findBlogPosts(Set.of())).thenReturn(List.of(BlogPostMother.basic().build()));
+		when(blogPostService.findRecentBlogPosts(null)).thenReturn(List.of(RecentBlogPostMother.basic().build()));
+		when(blogPostService.findBlogPosts(null, Set.of())).thenReturn(List.of(BlogPostMother.basic().build()));
 
 		// when
 		var actual = page.navigate(home.toString());

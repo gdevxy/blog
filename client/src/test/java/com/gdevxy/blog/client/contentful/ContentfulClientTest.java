@@ -22,7 +22,6 @@ class ContentfulClientTest {
 	private WireMock wiremock;
 
 	@Inject
-	@DefaultContentful
 	private ContentfulClient client;
 
 	@Test
