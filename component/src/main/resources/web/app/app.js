@@ -38,5 +38,16 @@ function checkedInputsAsQueryParams(idPrefix) {
 		.get();
 }
 
+const page = $('html');
+const progressBar = $('#progress-bar')
+
+$(document).on("scroll", function() {
+	const scroll = page.scrollTop();
+	const height = page.prop('scrollHeight') - page.prop('clientHeight');
+	const percent = (scroll / height) * 100;
+	progressBar.attr('aria-valuenow', percent.toString());
+	progressBar.children().css('width', `${percent}%`);
+});
+
 window.refreshFragment = refreshFragment;
 window.checkedInputsAsQueryParams = checkedInputsAsQueryParams;
