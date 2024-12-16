@@ -25,13 +25,11 @@ Project is based on the default Contentful blog starter [template](https://www.c
 ```shell
 # Content Delivery Access Token
 export CONTENTFUL_CDA_TOKEN=...
-# Content Preview Access Token
-export CONTENTFUL_CPA_TOKEN=...
 ``` 
 
 ### Gravatar
 
-In order to powered the `/about` page a gravatar API key is required.
+For `/about` page a gravatar API key is required.
 
 ```shell
 export GRAVATAR_API_KEY=...

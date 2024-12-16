@@ -33,11 +33,14 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v<VE
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v<VERSION>/cert-manager.yaml
 ```
 
-reverse (public) proxy
-make sure that the [{VERSION}](https://raw.githubusercontent.com/kubernetes/ingress-nginx) is aligned with k8s's version
+## Deploy
 
 ```script
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-{VERSION}/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f ./.deploy/deployment.yaml
+```
+
+```script
+kubectl apply -f ./.deploy/cluster-ip.yaml
 ```
 
 internal ingress
@@ -52,14 +55,24 @@ issue domain certificates
 kubectl apply -f ./.deploy/issuer.yaml
 ```
 
-## Configure Cluster-IP
+reverse (public) proxy
+make sure that the [{VERSION}](https://github.com/kubernetes/ingress-nginx) is aligned with k8s's version, e.g v1.12.0-beta.0 goes with kube 1.31.x
 
 ```script
-kubectl apply -f ./.deploy/cluster-ip.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v{VERSION}/deploy/static/provider/cloud/deploy.yaml
 ```
 
-## Deploy application
+## Verify SSL
 
 ```script
-kubectl apply -f ./.deploy/deployment.yaml
+kubectl get certificate gdevxy-tls -o yaml
+```
+
+if the certificate was not emitted it could be related to the DNS TXT record challenge to update. Check what is wrong and act accordingly.
+
+some debugging actions
+
+```script
+kubectl describe clusterissuer letsencrypt-prod
+kubectl describe ingress gdevxy-ingress
 ```
