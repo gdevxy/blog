@@ -33,7 +33,7 @@
 
 		<assertj.version>3.26.3</assertj.version>
 		<quarkus-playwright.version>2.0.0</quarkus-playwright.version>
-		<quarkus-wiremock.version>1.4.0</quarkus-wiremock.version>
+		<quarkus-wiremock.version>1.4.1</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
 		<jandex-plugin.version>3.2.3</jandex-plugin.version>
