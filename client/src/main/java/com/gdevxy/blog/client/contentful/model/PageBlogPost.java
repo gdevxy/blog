@@ -27,5 +27,6 @@ public class PageBlogPost {
 	private SeoFields seoFields;
 	private DynamicContent content;
 	private Set<String> tags;
+	private PageBlogPostCollection relatedBlogPostsCollection;
 
 }

@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
+import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
 import com.gdevxy.blog.client.contentful.model.SeoFields;
 import com.gdevxy.blog.client.contentful.model.content.Data;
 import com.gdevxy.blog.client.contentful.model.content.Mark;
@@ -48,6 +49,21 @@ public class BlogPostConverter {
 			.seo(toSeo(p.getSeoFields()).orElse(null))
 			.blocks(withContent ? toContentBlocks(p.getContent().getJson().getContent(), previewToken) : List.of())
 			.tags(p.getTags().stream().map(BlogPostTag::of).collect(Collectors.toUnmodifiableSet()))
+			.relatedBlogPosts(Optional.ofNullable(p.getRelatedBlogPostsCollection())
+				.map(PageBlogPostCollection::getItems)
+				.stream()
+				.flatMap(List::stream)
+				.map(this::toRelatedBlogPost)
+				.toList())
+			.build();
+	}
+
+	private BlogPost.RelatedBlogPost toRelatedBlogPost(PageBlogPost p) {
+
+		return BlogPost.RelatedBlogPost.builder()
+			.slug(p.getSlug())
+			.title(p.getTitle())
+			.description(p.getShortDescription())
 			.build();
 	}
 

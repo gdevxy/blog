@@ -32,6 +32,13 @@ query findBlogPost($limit: Int = 1, $slug: String!, $locale: String = "en", $pre
                 json
             }
             tags
+            relatedBlogPostsCollection {
+              items {
+                slug
+                title
+                shortDescription
+              }
+            }
         }
     }
 }

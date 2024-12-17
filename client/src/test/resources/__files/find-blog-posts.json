@@ -1,146 +1,961 @@
 {
   "data": {
     "pageBlogPostCollection": {
-      "__typename": "PageBlogPostCollection",
-      "total": 7,
-      "limit": 1,
+      "total": 1,
+      "limit": 100,
       "items": [
         {
           "sys": {
-            "id": "5Ffob3XoJGrQuKE5uRUugR"
+            "id": "5RN9rQv6gOThq2WoYLIo5C"
           },
           "content": {
             "json": {
-              "nodeType": "document",
               "data": {},
               "content": [
                 {
-                  "nodeType": "paragraph",
                   "data": {},
                   "content": [
                     {
-                      "nodeType": "text",
-                      "value": "One of the most ",
+                      "data": {},
                       "marks": [],
-                      "data": {}
-                    },
+                      "value": "We are live!",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "heading-1"
+                },
+                {
+                  "data": {},
+                  "content": [
                     {
-                      "nodeType": "text",
-                      "value": "obvious",
+                      "data": {},
                       "marks": [
                         {
                           "type": "bold"
                         }
                       ],
-                      "data": {}
+                      "value": "2024-11-28",
+                      "nodeType": "text"
                     },
                     {
-                      "nodeType": "text",
-                      "value": " ways that AR will change our lives is by enhancing the way we communicate. Today, we already use video calls and other forms of digital communication to connect with people who are far away. In the future, AR will take this to the next level by allowing us to see and interact with virtual representations of people in real time. This will make it feel like we're actually in the same room together, even if we're on opposite sides of the world.",
+                      "data": {},
                       "marks": [],
-                      "data": {}
+                      "value": " ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.gdevxy.ch"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "gdevxy.ch",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " domain is now live and operational!",
+                      "nodeType": "text"
                     }
-                  ]
+                  ],
+                  "nodeType": "paragraph"
                 },
                 {
-                  "nodeType": "embedded-entry-block",
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "In this blog post I will unveil the different technologies involved for this project and why I used them. In the end, it's nothing else than a technical blog, so why not going for a WordPress or a static Github page? The answer is in the question, why not 🕺.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Stack",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "heading-1"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "As of the ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {},
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "value": "2024-11-28 ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.gdevxy.ch"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "gdevxy.ch",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " relies on:",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "Quarkus ",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "over GraalVM (native image)",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://www.contentful.com/"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "Contentful ",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "(content management)",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "Oracle Cloud Infrastructure",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": " (OCI) - Kubernetes (OKE)",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    }
+                  ],
+                  "nodeType": "unordered-list"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "In the next sections we will go over the different technologies.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
                   "data": {
                     "target": {
                       "sys": {
-                        "id": "5MQ6wEY5qAZgGo2XtDpcnS",
+                        "id": "1oTk87prhKaUCdhJ7wmspC",
                         "type": "Link",
                         "linkType": "Entry"
                       }
                     }
                   },
-                  "content": []
+                  "content": [],
+                  "nodeType": "embedded-entry-block"
                 },
                 {
-                  "nodeType": "paragraph",
                   "data": {},
                   "content": [
                     {
-                      "nodeType": "text",
-                      "value": "Another way that AR will change our lives is by providing us with instant access to information. Imagine being able to point your phone at a building and immediately see information about its history and architectural significance. Or being able to scan an object and see a detailed description of its features and functions. With AR, all of this will be possible, giving us access to a wealth of knowledge at our fingertips.\nAR will also change the way we shop. Today, online shopping allows us to browse and purchase items from the comfort of our own homes. In the future, AR will make this experience even more immersive by allowing us to see how items look and fit in our own space before we make a purchase. This will make shopping faster, easier, and more convenient than ever before.",
+                      "data": {},
                       "marks": [],
-                      "data": {}
+                      "value": "Quarkus",
+                      "nodeType": "text"
                     }
-                  ]
+                  ],
+                  "nodeType": "heading-1"
                 },
                 {
-                  "nodeType": "embedded-entry-block",
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "\n",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://quarkus.io/"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "Quarkus ",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "is a ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {},
+                      "marks": [
+                        {
+                          "type": "italic"
+                        }
+                      ],
+                      "value": "native",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " alternative to regular JVM applications endorsed by RedHat. Built for Cloud deployments with in mind speed and resource savings 🍃. We all know that the JVM is an absolute wonder, it is blazing fast once it has found its cruising speed but it has a hard time to solve both its high memory footprint and the JVM start up time even if some projects can help in that regards (CRaC).",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "I decided to build this blog in ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {},
+                      "marks": [
+                        {
+                          "type": "bold"
+                        }
+                      ],
+                      "value": "Quarkus",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": ", not because I am a RedHat fanboy, but simply because I had an interest at looking and exploring this technology, so why not go for an actual production-ready project which might give me a better overview than a side PoC?",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Below an non-exhaustive list of the different dependencies used in this project, which will be covered in subsequent blogposts.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "Qute (",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/guides/qute"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "quarkus-qute-web",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": ") SSR templating engine - along side ",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://getbootstrap.com/docs/5.2/getting-started/introduction/"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "bootstrap",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "REST (",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/guides/rest-client"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "quarkus-rest-client-jackson",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": ") ",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "GraphQL (",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/guides/smallrye-graphql-client"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "quarkus-smallrye-graphql-client",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": ")",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "Caffeine (",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/guides/cache"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "quarkus-cache",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": ")",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "Fault Tolerance (",
+                              "nodeType": "text"
+                            },
+                            {
+                              "data": {
+                                "uri": "https://quarkus.io/guides/smallrye-fault-tolerance"
+                              },
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "quarkus-smallrye-fault-tolerance",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "hyperlink"
+                            },
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": ")",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    }
+                  ],
+                  "nodeType": "unordered-list"
+                },
+                {
                   "data": {
                     "target": {
                       "sys": {
-                        "id": "2xCfDCfrQzCzzCtL0CfMZd",
+                        "id": "265k3lXyz5adlAkUSkV12U",
                         "type": "Link",
                         "linkType": "Entry"
                       }
                     }
                   },
-                  "content": []
+                  "content": [],
+                  "nodeType": "embedded-entry-block"
                 },
                 {
-                  "nodeType": "paragraph",
                   "data": {},
                   "content": [
                     {
-                      "nodeType": "text",
-                      "value": "Finally, AR has the potential to revolutionize the way we learn. Today, we often rely on books, lectures, and other static forms of education to gain knowledge. In the future, AR will make learning more interactive and engaging. For example, students could use AR to explore virtual environments and learn about different subjects in a hands-on way. This could make learning more fun and effective, and could even help to break down barriers to education for people who face challenges in a traditional learning environment.\nOverall, the future is looking bright for AR technology. By 2050, it's likely to be a pervasive part of our daily lives, enhancing the way we communicate, access information, shop, and learn. It's an exciting time to be alive, and we can't wait to see what the future holds for AR and other cutting-edge technologies.",
+                      "data": {},
                       "marks": [],
-                      "data": {}
+                      "value": "Contentful",
+                      "nodeType": "text"
                     }
-                  ]
+                  ],
+                  "nodeType": "heading-1"
                 },
                 {
-                  "nodeType": "embedded-entry-block",
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Contentful is a CMS. I surely do not want to bother creating my own, but I am also not willing to spend all my savings either. This is in the end, a non-commercial application.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Interestingly, Contentful offers a ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.contentful.com/help/usage-limits-2024/"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "free tier",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " which comes with:",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "3M API calls / month",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "0.85 TB / month CDN bandwidth",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "list-item"
+                    }
+                  ],
+                  "nodeType": "unordered-list"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "and a nice start-up kit rightly made for a ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.contentful.com/starter-templates/nextjs-blog/"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "blog",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " website.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Will the limitations suffice? Future will tell, but the ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.contentful.com/pricing/"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "LITE ",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "version at 300$ / month is obviously out of reach.",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
                   "data": {
                     "target": {
                       "sys": {
-                        "id": "2HkPQmxT6XQvzkW82KvoPL",
+                        "id": "5zJ4btNKTgNdoXNHV0f5W1",
                         "type": "Link",
                         "linkType": "Entry"
                       }
                     }
                   },
-                  "content": []
+                  "content": [],
+                  "nodeType": "embedded-entry-block"
                 },
                 {
-                  "nodeType": "paragraph",
                   "data": {},
                   "content": [
                     {
-                      "nodeType": "text",
-                      "value": "",
+                      "data": {},
                       "marks": [],
-                      "data": {}
+                      "value": "Oracle Cloud Infrastructure (OCI)",
+                      "nodeType": "text"
                     }
-                  ]
+                  ],
+                  "nodeType": "heading-1"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "In order to deploy the Quarkus application it was necessary to find a provider. To name only a few: Heroku, Azure, Google Cloud, AWS, ... I eventually opted for Oracle Cloud, because they are the only provider with an actual Free Tier and ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "Always Free",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": " resources, which is on paper absolutely insane (4 OCPU, 24 GB of memory!). ",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Unfortunately, this was too good to be true. In my home region (Zurich, Switzerland) it was simply impossible to spawn an A1 Compute instance and the following friendly message: \"out of capacity, try again later\" had reason of me (see more ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://www.reddit.com/r/selfhosted/comments/14n5opq/oracle_cloud_always_free_tier_and_arm_ampere_a1/?rdt=54604"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "Reddit",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": ").",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "I am no platform engineers and had already invested numerous hours in learning the different bricks of OCI, reason why I eventually decided to commit nonetheless to non-Always-Free resources. In the end the cost will be similar to any other providers which should round up to ~30$ per month (OKE Cluster: 2 nodes of 2 CPU and 8GB of memory each).",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "Source code",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "heading-1"
+                },
+                {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": "The source code of this project is publicly available on ",
+                      "nodeType": "text"
+                    },
+                    {
+                      "data": {
+                        "uri": "https://github.com/gdevxy/blog"
+                      },
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "Github",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "hyperlink"
+                    },
+                    {
+                      "data": {},
+                      "marks": [],
+                      "value": ".",
+                      "nodeType": "text"
+                    }
+                  ],
+                  "nodeType": "paragraph"
                 }
-              ]
+              ],
+              "nodeType": "document"
             }
           },
-          "slug": "how-ar-will-transform-our-lives-in-2050",
-          "internalName": "How AR will transform our lives in 2050",
-          "title": "How AR will transform our lives in 2050",
-          "shortDescription": "Augmented Reality set to revolutionize daily life in 2050",
-          "publishedDate": "2022-12-04T00:00:00.000Z",
+          "slug": "gdevxy-live",
+          "internalName": "20241128-gdevxy-live",
+          "title": "gdevxy.ch is live!",
+          "shortDescription": "The behind of the scenes of gdevxy.ch. What technologies were used and why, a small project but with a solid stack!",
+          "publishedDate": "2024-11-29T18:08:00.000Z",
+          "tags": [
+            "Project",
+            "Quarkus",
+            "OCI",
+            "Architecture",
+            "Contentful"
+          ],
           "featuredImage": {
             "sys": {
-              "id": "4lqxYpPLHdzfy0f8hONbGq"
+              "id": "LqFkxvli7MGzqsln9XjrB"
             },
-            "title": "Augment Reality (AR)",
+            "title": "20241128-gdevxy-blog-hosting-banner",
             "description": "",
-            "url": "https://images.ctfassets.net/r9z7bjp5iedy/4lqxYpPLHdzfy0f8hONbGq/da63fc8ec24c9d1d9d3e99a1d02d1509/ameer-basheer-2r5adxul49E-unsplash__1_.jpg",
-            "width": 721,
-            "height": 590,
+            "url": "https://images.ctfassets.net/r9z7bjp5iedy/LqFkxvli7MGzqsln9XjrB/46a045dfecc5b2092bad197701b69c02/8cc9b5e0-1c26-4d94-97a9-5f817653b2b0.jpg",
+            "width": 512,
+            "height": 512,
             "contentType": "image/jpeg"
           },
           "seoFields": {
-            "pageTitle": "How AR will transform our lives in 2050",
-            "pageDescription": "Augmented Reality set to revolutionize daily life in 2050",
+            "pageTitle": "gdevxy.ch is live",
+            "pageDescription": "Blog post about the behind the scene of the conception of the website gdevxy.ch, which technologies is it using and the reasons that led me to use them",
             "nofollow": false,
             "noindex": false
+          },
+          "relatedBlogPostsCollection": {
+            "items": [
+              {
+                "sys": {
+                  "id": "IPZ3pebBsIzYBc05NmqFE"
+                },
+                "title": "Project: gdevxy",
+                "shortDescription": "Presentation of the brand new 'gdevxy' project which is nothing else than my own engineering legendary quest!"
+              }
+            ]
           }
         }
       ]

@@ -25,6 +25,8 @@ public class BlogPost {
 	private final List<ContentBlock> blocks = List.of();
 	@Builder.Default
 	private final Set<BlogPostTag> tags = Set.of();
+	@Builder.Default
+	private final List<RelatedBlogPost> relatedBlogPosts = List.of();
 
 	@Getter
 	@Builder
@@ -48,6 +50,17 @@ public class BlogPost {
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
 		private final Image image;
+
+	}
+
+	@Getter
+	@Builder
+	@ToString
+	public static class RelatedBlogPost {
+
+		private final String slug;
+		private final String title;
+		private final String description;
 
 	}
 
