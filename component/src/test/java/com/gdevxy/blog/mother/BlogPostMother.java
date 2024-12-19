@@ -17,11 +17,10 @@ public class BlogPostMother {
 			.description("description")
 			.slug("slug")
 			.publishedDate(ZonedDateTime.now())
-			.tags(Set.of(BlogPostTag.ARCHITECTURE, BlogPostTag.AGILE))
+			.tags(Set.of(new BlogPostTag("Architecture"), new BlogPostTag("Agile")))
 			.blocks(List.of(ContentBlockMother.h1().build()))
 			.image(ImageMother._404().build())
 			.seo(SeoMother.basic().build());
 	}
-
 
 }

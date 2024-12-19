@@ -1,0 +1,294 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "r9z7bjp5iedy"
+      }
+    },
+    "id": "pageBlogPost",
+    "type": "ContentType",
+    "createdAt": "2024-11-16T20:45:31.682Z",
+    "updatedAt": "2024-12-17T18:22:34.425Z",
+    "environment": {
+      "sys": {
+        "id": "master",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 19,
+    "publishedAt": "2024-12-17T18:22:34.425Z",
+    "firstPublishedAt": "2024-11-16T20:45:32.064Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "446KV4Z4niGpSS4BtGRJP9"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "446KV4Z4niGpSS4BtGRJP9"
+      }
+    },
+    "publishedCounter": 10,
+    "version": 20,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "446KV4Z4niGpSS4BtGRJP9"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/r9z7bjp5iedy/environments/master/content_types/pageBlogPost"
+  },
+  "displayField": "internalName",
+  "name": "📄 page - Blog post",
+  "description": "To create individual blog posts",
+  "fields": [
+    {
+      "id": "internalName",
+      "name": "Internal name",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "unique": true
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "seoFields",
+      "name": "SEO fields",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "linkContentType": [
+            "componentSeo"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    },
+    {
+      "id": "slug",
+      "name": "Slug",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "unique": true
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "publishedDate",
+      "name": "Published date",
+      "type": "Date",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "title",
+      "name": "Title",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "shortDescription",
+      "name": "Subtitle",
+      "type": "Text",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "featuredImage",
+      "name": "Featured image",
+      "type": "Link",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "linkMimetypeGroup": [
+            "image"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Asset"
+    },
+    {
+      "id": "content",
+      "name": "Content",
+      "type": "RichText",
+      "localized": true,
+      "required": true,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code"
+          ],
+          "message": "Only bold, italic, underline, and code marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-1",
+            "heading-2",
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "table",
+            "hyperlink"
+          ],
+          "message": "Only heading 1, heading 2, heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, table, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {
+            "asset-hyperlink": [
+              {
+                "size": {
+                  "max": 10
+                },
+                "message": null
+              }
+            ],
+            "embedded-asset-block": [
+              {
+                "size": {
+                  "max": 10
+                },
+                "message": null
+              }
+            ],
+            "embedded-entry-block": [
+              {
+                "linkContentType": [
+                  "componentRichImage"
+                ],
+                "message": null
+              },
+              {
+                "size": {
+                  "max": 10
+                },
+                "message": null
+              }
+            ],
+            "embedded-entry-inline": [
+              {
+                "linkContentType": [
+                  "componentRichImage"
+                ],
+                "message": null
+              },
+              {
+                "size": {
+                  "max": 10
+                },
+                "message": null
+              }
+            ],
+            "entry-hyperlink": [
+              {
+                "linkContentType": [
+                  "pageBlogPost"
+                ],
+                "message": null
+              },
+              {
+                "size": {
+                  "max": 10
+                },
+                "message": null
+              }
+            ]
+          }
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "relatedBlogPosts",
+      "name": "Related blog posts",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "size": {
+            "max": 5
+          }
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "pageBlogPost"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "tags",
+      "name": "Tags",
+      "type": "Array",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Symbol",
+        "validations": [
+          {
+            "in": [
+              "About Me",
+              "Agile"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

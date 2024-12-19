@@ -48,7 +48,7 @@ public class BlogPostConverter {
 			.image(Optional.ofNullable(p.getFeaturedImage()).map(imageConverter).orElse(null))
 			.seo(toSeo(p.getSeoFields()).orElse(null))
 			.blocks(withContent ? toContentBlocks(p.getContent().getJson().getContent(), previewToken) : List.of())
-			.tags(p.getTags().stream().map(BlogPostTag::of).collect(Collectors.toUnmodifiableSet()))
+			.tags(p.getTags().stream().map(BlogPostTag::new).collect(Collectors.toUnmodifiableSet()))
 			.relatedBlogPosts(Optional.ofNullable(p.getRelatedBlogPostsCollection())
 				.map(PageBlogPostCollection::getItems)
 				.stream()

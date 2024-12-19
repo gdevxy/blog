@@ -1,6 +1,5 @@
 package com.gdevxy.blog.component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -11,8 +10,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import com.gdevxy.blog.model.BlogPost;
-import com.gdevxy.blog.model.BlogPostTag;
 import com.gdevxy.blog.model.RecentBlogPost;
+import com.gdevxy.blog.service.contentful.ContentfulModelService;
 import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
@@ -27,21 +26,23 @@ import lombok.RequiredArgsConstructor;
 public class HomeResource {
 
 	private final BlogPostService blogPostService;
+	private final ContentfulModelService contentfulModelService;
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance home(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<BlogPostTag> tags) {
+	public TemplateInstance home(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> filterTags) {
 
 		var recentBlogPosts = blogPostService.findRecentBlogPosts(previewToken);
-		var blogPosts = blogPostService.findBlogPosts(previewToken, tags);
+		var blogPosts = blogPostService.findBlogPosts(previewToken, filterTags);
+		var tags = contentfulModelService.findBlogPostTags();
 
-		return Templates.home(recentBlogPosts, blogPosts).data("filters", Arrays.asList(BlogPostTag.values()));
+		return Templates.home(recentBlogPosts, blogPosts).data("tags", tags);
 	}
 
 	@GET
 	@Path("/blog-posts-fragment")
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance blogPosts(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<BlogPostTag> tags) {
+	public TemplateInstance blogPosts(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> tags) {
 
 		return Templates.home$blog_posts(blogPostService.findBlogPosts(previewToken, tags));
 	}

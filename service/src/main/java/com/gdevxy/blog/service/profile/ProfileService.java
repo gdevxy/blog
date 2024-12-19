@@ -1,6 +1,7 @@
 package com.gdevxy.blog.service.profile;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import com.gdevxy.blog.client.gravatar.GravatarClient;
 import com.gdevxy.blog.model.Profile;
@@ -12,13 +13,10 @@ public class ProfileService implements IProfileService {
 
 	private static final String GDEVXY_GRAVATAR_PROFILE_ID = "29cef4c32ea83b2f916f735017dbdfe4dfc9a91922ea15c62a787e9938baee4d";
 
-	private final GravatarClient gravatarClient;
-	private final ProfileConverter profileConverter;
-
-	public ProfileService(@RestClient GravatarClient gravatarClient, ProfileConverter profileConverter) {
-		this.gravatarClient = gravatarClient;
-		this.profileConverter = profileConverter;
-	}
+	@RestClient
+	GravatarClient gravatarClient;
+	@Inject
+	ProfileConverter profileConverter;
 
 	@Override
 	@CacheResult(cacheName = "profile")

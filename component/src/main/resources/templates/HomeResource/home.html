@@ -1,6 +1,6 @@
 {@java.util.List<com.gdevxy.blog.model.RecentBlogPost> recentBlogPosts}
 {@java.util.List<com.gdevxy.blog.model.BlogPost> blogPosts}
-{@java.util.List<com.gdevxy.blog.model.BlogPostTag> filters}
+{@java.util.List<com.gdevxy.blog.model.BlogPostTag> tags}
 
 {#include base}
 
@@ -18,9 +18,9 @@
 				<p class="text-start border-bottom">
 					Filters
 				</p>
-				{#for filter in filters}
-					<input type="checkbox" class="btn-check" id="blog-filter-{filter}" autocomplete="off" value="{filter}" onclick="const tags = checkedInputsAsQueryParams('blog-filter'); refreshFragment('blog-posts-fragment', 'blog_posts', { tags })">
-					<label class="btn btn-sm btn-outline-light m-1" for="blog-filter-{filter}">{filter.code}</label>
+				{#for tag in tags}
+					<input type="checkbox" class="btn-check" id="blog-filter-{tag.code}" autocomplete="off" value="{tag.value}" onclick="const tags = checkedInputsAsQueryParams('blog-filter'); refreshFragment('blog-posts-fragment', 'blog_posts', { tags })">
+					<label class="btn btn-sm btn-outline-light m-1" for="blog-filter-{tag.code}">{tag}</label>
 				{/for}
 			</div>
 			<div class="col-md-8">

@@ -22,7 +22,7 @@ class ContentfulClientTest {
 	private WireMock wiremock;
 
 	@Inject
-	private ContentfulClient client;
+	ContentfulClient client;
 
 	@Test
 	void findBlogPost() {
