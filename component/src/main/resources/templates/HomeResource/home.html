@@ -45,7 +45,7 @@
 				<div class="py-2 border-top">
 					{#for post in recentBlogPosts}
 						<p class="text-end">
-							<a href="{post.url}" target="_self">{post.title}</a>
+							<a href="{post.url}" class="fst-italic text-decoration-none link-opacity-75 link-opacity-100-hover" target="_self">{post.title}</a>
 							<span class="fs-7 fw-lighter d-block">{post.publishedDate.formatted}</span>
 						</p>
 					{/for}
