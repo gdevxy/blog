@@ -1,3 +1,10 @@
+:root {
+    --bs-link-color-rgb: 254, 11, 239;
+    --bs-link-color: rgba(var(--bs-link-color-rgb), 0.5);
+    --bs-link-hover-color-rgb: var(--bs-link-color-rgb);
+    --bs-link-hover-color: rgba(var(--bs-link-hover-color-rgb), 1.0);
+}
+
 .background-neon {
     background-color: #FE0BEF
 }
@@ -92,4 +99,8 @@
 
 .text-neon {
     color: #FE0BEF
+}
+
+.text-string {
+    color: #F08D49
 }

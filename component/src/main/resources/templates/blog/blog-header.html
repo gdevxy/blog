@@ -1,1 +1,3 @@
-<p class="h{heading} blog-header">{value}</p>
+<p id="{value.replaceAll('\s','-').toLowerCase()}" class="h{heading} blog-header">
+	<a href="#{value.replaceAll('\s','-').toLowerCase()}" class="text-decoration-none link-opacity-75 link-opacity-100-hover">#</a>&nbsp;{value}
+</p>

@@ -65,7 +65,7 @@
             <span class="fst-italic">Related blog posts</span>
             <hr />
             {#for relatedBlogPost in blogPost.relatedBlogPosts}
-                {#if relatedBlogPost_isFirst}/{/if}&nbsp;<a href="/blog-posts/{relatedBlogPost.slug}">{relatedBlogPost.title}</a>&nbsp;/
+                {#if relatedBlogPost_isFirst}/{/if}&nbsp;<a href="/blog-posts/{relatedBlogPost.slug}" class="fst-italic text-decoration-none link-opacity-75 link-opacity-100-hover">{relatedBlogPost.title}</a>&nbsp;/
             {/for}
         </div>
     {/if}
