@@ -15,8 +15,8 @@
                     </p>
                     <p class="card-text">{profile.description}</p>
                     {#for account in profile.accounts}
-                        <a class="text-decoration-none px-1" href="{profile.profileUrl}" target="_blank" data-service-name="{account.type}">
-                            <img class="bg-primary rounded-1" src="{account.icon}" width="32" height="32" alt="{account.type}">
+                        <a class="text-decoration-none px-1" href="{account.url}" target="_blank" data-service-name="{account.type}">
+                            <img class="background-neon rounded-1" src="{account.icon}" width="32" height="32" alt="{account.type}">
                         </a>
                     {/for}
                 </div>
