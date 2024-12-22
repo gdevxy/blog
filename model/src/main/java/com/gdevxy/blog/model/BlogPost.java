@@ -28,6 +28,10 @@ public class BlogPost {
 	@Builder.Default
 	private final List<RelatedBlogPost> relatedBlogPosts = List.of();
 
+	public boolean withIndexHeading() {
+		return blocks.stream().map(ContentBlock::getNode).anyMatch(Node::indexHeading);
+	}
+
 	@Getter
 	@Builder
 	@ToString
@@ -50,6 +54,10 @@ public class BlogPost {
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
 		private final Image image;
+
+		public String toHtmlIdentifier() {
+			return value.replaceAll("\\s","-").toLowerCase();
+		}
 
 	}
 

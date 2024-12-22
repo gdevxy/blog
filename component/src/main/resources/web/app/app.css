@@ -1,12 +1,16 @@
 :root {
-    --bs-link-color-rgb: 254, 11, 239;
-    --bs-link-color: rgba(var(--bs-link-color-rgb), 0.5);
+    --color-neon: 254, 11, 239;
+    --bs-color-neon: rgb(var(--color-neon));
+    --bs-link-color-rgb: var(--color-neon);
+    --bs-link-color: rgba(var(--color-neon), 1.0);
     --bs-link-hover-color-rgb: var(--bs-link-color-rgb);
-    --bs-link-hover-color: rgba(var(--bs-link-hover-color-rgb), 1.0);
+    --bs-link-hover-color: rgba(var( --bs-link-hover-color-rgb), 0.5);
+    --bs-index-color: rgba(255, 255, 255, 0.75);
+    --bs-index-hover-color: rgba(255, 255, 255, 1.0);
 }
 
 .background-neon {
-    background-color: #FE0BEF
+    background-color: var(--bs-color-neon);
 }
 
 .background-purple {
@@ -97,8 +101,39 @@
     font-size: 0.5rem !important;
 }
 
+.active-index {
+    color: var(--bs-color-neon) !important;
+}
+
+.pb-index a {
+    color: var(--bs-index-color);
+}
+
+.pb-index a:hover {
+    color: var(--bs-index-hover-color);
+}
+
+.pb-index {
+    padding-bottom: 1em;
+}
+
+.ps-index-HEADING_1 {
+    font-size: 1.2rem;
+    padding-left: 1em;
+}
+
+.ps-index-HEADING_2 {
+    font-size: 1rem;
+    padding-left: 2em;
+}
+
+.ps-index-HEADING_3 {
+    font-size: 0.8rem;
+    padding-left: 3em;
+}
+
 .text-neon {
-    color: #FE0BEF
+    color: var(--bs-color-neon);
 }
 
 .text-string {

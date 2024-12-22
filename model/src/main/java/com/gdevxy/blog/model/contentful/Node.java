@@ -1,8 +1,10 @@
 package com.gdevxy.blog.model.contentful;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,6 +12,7 @@ import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
+@RegisterForReflection
 public enum Node {
 
 	DOCUMENT("document"),
@@ -39,6 +42,12 @@ public enum Node {
 
 	private static final Map<String, Node> LOOKUP = Stream.of(Node.values())
 			.collect(Collectors.toUnmodifiableMap(Node::getCode, t -> t));
+
+	private static final EnumSet<Node> HEADERS = EnumSet.of(HEADING_1, HEADING_2, HEADING_3);
+
+	public boolean indexHeading() {
+		return HEADERS.contains(this);
+	}
 
 	public static Node of(String code) {
 

@@ -12,11 +12,11 @@
 
 	<artifactId>blog-model</artifactId>
 
-	<properties>
-		<skip.quarkus.build>true</skip.quarkus.build>
-	</properties>
-
 	<dependencies>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-core</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.quarkus.qute</groupId>
 			<artifactId>qute-core</artifactId>
