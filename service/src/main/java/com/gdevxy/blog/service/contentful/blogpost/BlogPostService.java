@@ -15,6 +15,7 @@ import com.gdevxy.blog.dao.blogpost.BlogPostDao;
 import com.gdevxy.blog.dao.blogpost.BlogPostEntity;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.RecentBlogPost;
+import com.gdevxy.blog.service.captcha.CaptchaService;
 import com.gdevxy.blog.service.contentful.blogpost.converter.BlogPostConverter;
 import com.gdevxy.blog.service.contentful.blogpost.converter.RecentBlogPostConverter;
 import io.smallrye.mutiny.Multi;
@@ -27,6 +28,8 @@ public class BlogPostService {
 	BlogPostDao blogPostDao;
 	@Inject
 	ContentfulClient contentfulClient;
+	@Inject
+	CaptchaService captchaService;
 	@Inject
 	BlogPostConverter blogPostConverter;
 	@Inject
@@ -55,9 +58,10 @@ public class BlogPostService {
 			.map(recentBlogPostConverter);
 	}
 
-	public Uni<Void> rate(String id) {
+	public Uni<Void> rate(String id, String captcha) {
 
-		return blogPostDao.rate(id);
+		return captchaService.verify(captcha)
+			.flatMap(i -> blogPostDao.rate(id));
 	}
 
 	private Function<PageBlogPost, Uni<? extends BlogPost>> toBlogPost() {

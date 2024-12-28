@@ -17,7 +17,6 @@ jobs:
     env:
       CONTENTFUL_CDA_TOKEN: ${{ secrets.CONTENTFUL_CDA_TOKEN }}
       CONTENTFUL_CMA_TOKEN: ${{ secrets.CONTENTFUL_CMA_TOKEN }}
-      CONTENTFUL_CPA_TOKEN: ${{ secrets.CONTENTFUL_CPA_TOKEN }}
       GRAVATAR_API_KEY: ${{ secrets.GRAVATAR_API_KEY }}
 
     strategy:

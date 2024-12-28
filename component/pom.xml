@@ -66,6 +66,7 @@
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>bootstrap-icons</artifactId>
 			<version>${bootstrap-icons.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

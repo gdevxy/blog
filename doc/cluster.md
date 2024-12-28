@@ -18,6 +18,8 @@ kubectl create secret docker-registry docker-password --docker-server={domain} -
 
 ```script
 kubectl create secret generic blog-secrets \
+    --from-literal=GDEVXY_DATABASE_USERNAME=<secret> \
+    --from-literal=GDEVXY_DATABASE_PASSWORD=<secret> \
     --from-literal=GRAVATAR_API_KEY=<secret> \
     --from-literal=CONTENTFUL_CDA_TOKEN=<secret> \
     --from-literal=CONTENTFUL_CMA_TOKEN=<secret> \

@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -15,6 +14,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import com.gdevxy.blog.model.BlogPost;
+import com.gdevxy.blog.model.BlogPostRateReq;
 import com.gdevxy.blog.model.Image;
 import com.gdevxy.blog.model.contentful.Node;
 import com.gdevxy.blog.service.contentful.ContentfulAssetService;
@@ -52,10 +52,10 @@ public class BlogPostResource {
 	}
 
 	@POST
-	@Path("/{id}")
-	public Uni<Void> rate(@Valid @Size(max = 22) @PathParam("id") String id) {
+	@Path("/{id}/rate")
+	public Uni<Void> rate(@Valid @Size(max = 22) @PathParam("id") String id, @Valid BlogPostRateReq req) {
 
-		return blogPostService.rate(id);
+		return blogPostService.rate(id, req.captcha());
 	}
 
 	@CheckedTemplate

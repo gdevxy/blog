@@ -7,13 +7,45 @@
     {#pageDescription}{blogPost.seo.description}{/pageDescription}
     {#pageRobots}{blogPost.seo.robotHint}{/pageRobots}
 
-    {#extraJs}
+    {#extraCss}
         <link rel="stylesheet" href="/webjars/highlightjs/styles/stackoverflow-dark.min.css"/>
+    {/extraCss}
+
+    {#extraJs}
+        <script src="https://www.google.com/recaptcha/api.js?render=6LeWR6gqAAAAAC4uiRPFjYaOaVLrTXh4m94Wbgs0"></script>
         <script src="/webjars/highlightjs/highlight.min.js"></script>
         <script src="/webjars/highlightjs/languages/java.min.js"></script>
         <script src="/webjars/highlightjs/languages/json.min.js"></script>
         <script src="/webjars/highlightjs/languages/xml.min.js"></script>
         <script>hljs.highlightAll();</script>
+        <script src="/_static/jquery/dist/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#btnRate").on('click', function () {
+                    grecaptcha.ready(function () {
+                        grecaptcha
+                            .execute("6LeWR6gqAAAAAC4uiRPFjYaOaVLrTXh4m94Wbgs0", { action: "rate_post" })
+                            .then(function (token) {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: `/blog-posts/{blogPost.id}/rate`,
+                                    dataType: 'json',
+                                    contentType: "application/json",
+                                    data: JSON.stringify({
+                                        captcha: token
+                                    }),
+                                    success: function () {
+                                        $(`#btnRate`).addClass("text-neon").addClass("pulse");
+                                    },
+                                    error: function (err) {
+                                        $(`#btnRate`).addClass("tada");
+                                    }
+                                });
+                            });
+                    });
+                });
+            });
+        </script>
     {/extraJs}
 
     {#extraBundle}
@@ -22,7 +54,7 @@
 
     {#withProgressBar}{/withProgressBar}
 
-    <div class="mb-5 pb-5 rounded-top bg-body-tertiary">
+    <div class="mb-5 rounded-top bg-body-tertiary">
 
         <div class="card background-purple rounded-top" style="border: none; border-radius: unset">
             <div class="row g-0">
@@ -53,46 +85,63 @@
                         {/for}
                     </div>
                 </div>
-                <div class="col col-xl-10">
+                <div class="col-xl-10">
             {#else}
                 <div class="col">
             {/if}
-                    {#for block in blogPost.blocks}
-                        {#when block.node}
-                            {#is EMBEDDED_ENTRY}
-                                {#include blog/blog-image imageId=block.value images=images /}
-                            {#is HEADING_1}
-                                {#include blog/blog-header heading=1 value=block.blocks[0] /}
-                            {#is HEADING_2}
-                                {#include blog/blog-header heading=2 value=block.blocks[0] /}
-                            {#is HEADING_3}
-                                {#include blog/blog-header heading=3 value=block.blocks[0] /}
-                            {#is HEADING_4}
-                                {#include blog/blog-header heading=4 value=block.blocks[0] /}
-                            {#is HEADING_5}
-                                {#include blog/blog-header heading=5 value=block.blocks[0] /}
-                            {#is HEADING_6}
-                                {#include blog/blog-header heading=6 value=block.blocks[0] /}
-                            {#is PARAGRAPH}
-                                {#include blog/blog-paragraph blocks=block.blocks /}
-                            {#is UL_LIST}
-                                {#include blog/blog-unordered-list blocks=block.blocks /}
-                            {#else}
-                        {/when}
-                    {/for}
+                {#for block in blogPost.blocks}
+                    {#when block.node}
+                        {#is EMBEDDED_ENTRY}
+                            {#include blog/blog-image imageId=block.value images=images /}
+                        {#is HEADING_1}
+                            {#include blog/blog-header heading=1 value=block.blocks[0] /}
+                        {#is HEADING_2}
+                            {#include blog/blog-header heading=2 value=block.blocks[0] /}
+                        {#is HEADING_3}
+                            {#include blog/blog-header heading=3 value=block.blocks[0] /}
+                        {#is HEADING_4}
+                            {#include blog/blog-header heading=4 value=block.blocks[0] /}
+                        {#is HEADING_5}
+                            {#include blog/blog-header heading=5 value=block.blocks[0] /}
+                        {#is HEADING_6}
+                            {#include blog/blog-header heading=6 value=block.blocks[0] /}
+                        {#is PARAGRAPH}
+                            {#include blog/blog-paragraph blocks=block.blocks /}
+                        {#is UL_LIST}
+                            {#include blog/blog-unordered-list blocks=block.blocks /}
+                        {#else}
+                    {/when}
+                {/for}
+            </div>
+        </div>
+
+        <div class="row g-0 mt-1 bg-body-secondary">
+            {#if blogPost.withIndexHeading}
+                <div class="col-2 d-none d-xl-flex flex-column">
+                    &nbsp;
+                </div>
+                <div class="col-xl-10 text-end">
+            {#else}
+                <div class="col text-end">
+            {/if}
+                <div class="blog-paragraph">
+                    Leave a thumbs up if you liked this post <span class="ps-2"><button id="btnRate" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill"></button></span>
                 </div>
             </div>
         </div>
-        {#if blogPost.relatedBlogPosts}
-            <div class="row g-0">
-                <div class="col-12">
-                <span class="fst-italic">Related blog posts</span>
-                <hr />
-                {#for relatedBlogPost in blogPost.relatedBlogPosts}
-                    {#if relatedBlogPost_isFirst}/{/if}&nbsp;<a href="/blog-posts/{relatedBlogPost.slug}" class="text-decoration-none link-opacity-100 link-opacity-75-hover">{relatedBlogPost.title}</a>&nbsp;/
-                {/for}
-                </div>
+
+    </div>
+
+    {#if blogPost.relatedBlogPosts}
+        <div class="row g-0">
+            <div class="col-12">
+            <span class="fst-italic">Related blog posts</span>
+            <hr />
+            {#for relatedBlogPost in blogPost.relatedBlogPosts}
+                {#if relatedBlogPost_isFirst}/{/if}&nbsp;<a href="/blog-posts/{relatedBlogPost.slug}" class="text-decoration-none link-opacity-100 link-opacity-75-hover">{relatedBlogPost.title}</a>&nbsp;/
+            {/for}
             </div>
-        {/if}
+        </div>
+    {/if}
 
 {/include}
