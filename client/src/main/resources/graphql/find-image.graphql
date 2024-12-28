@@ -1,5 +1,8 @@
 query findImage($id: String!){
     componentRichImage(id: $id) {
+        sys {
+            id
+        }
         image {
             title
             description

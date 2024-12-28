@@ -3,6 +3,7 @@ package com.gdevxy.blog.client.contentful;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.Duration;
 import java.util.List;
 
 import jakarta.ws.rs.core.HttpHeaders;
@@ -31,7 +32,7 @@ class ContentfulCMAClientTest {
 			.willReturn(ok().withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).withBodyFile("find-page-blog-model.json")));
 
 		// when
-		var actual = client.findPageBlogModel();
+		var actual = client.findPageBlogModel().await().atMost(Duration.ofSeconds(1));
 
 		// then
 		assertThat(actual.getFields()).usingRecursiveFieldByFieldElementComparator()

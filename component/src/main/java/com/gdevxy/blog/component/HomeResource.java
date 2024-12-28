@@ -15,12 +15,11 @@ import com.gdevxy.blog.service.contentful.ContentfulModelService;
 import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Blocking
 @Path("/")
 @RequiredArgsConstructor
 public class HomeResource {
@@ -30,21 +29,22 @@ public class HomeResource {
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance home(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> filterTags) {
+	public Uni<TemplateInstance> home(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> filterTags) {
 
-		var recentBlogPosts = blogPostService.findRecentBlogPosts(previewToken);
-		var blogPosts = blogPostService.findBlogPosts(previewToken, filterTags);
+		var recentBlogPosts = blogPostService.findRecentBlogPosts(previewToken).collect().asList();
+		var blogPosts = blogPostService.findBlogPosts(previewToken, filterTags).collect().asList();
 		var tags = contentfulModelService.findBlogPostTags();
 
-		return Templates.home(recentBlogPosts, blogPosts).data("tags", tags);
+		return Uni.combine().all().unis(recentBlogPosts, blogPosts, tags)
+			.with((rbp, bp, t) -> Templates.home(rbp, bp).data("tags", t));
 	}
 
 	@GET
 	@Path("/blog-posts-fragment")
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance blogPosts(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> tags) {
+	public Uni<TemplateInstance> blogPosts(@QueryParam("previewToken") String previewToken, @QueryParam("tags") Set<String> tags) {
 
-		return Templates.home$blog_posts(blogPostService.findBlogPosts(previewToken, tags));
+		return blogPostService.findBlogPosts(previewToken, tags).collect().asList().map(Templates::home$blog_posts);
 	}
 
 	@CheckedTemplate

@@ -1,7 +1,6 @@
 package com.gdevxy.blog.client.contentful;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,6 +13,8 @@ import com.gdevxy.blog.client.contentful.model.Pagination;
 import com.gdevxy.blog.client.contentful.model.RecentPageBlogPostCollection;
 import io.smallrye.graphql.client.GraphQLClient;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,60 +29,62 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	}
 
 	@Override
-	public Optional<PageBlogPost> findBlogPost(String slug) {
+	public Uni<PageBlogPost> findBlogPost(String slug) {
 
 		return findBlogPost(slug, null);
 	}
 
 	@Override
-	public Optional<PageBlogPost> findBlogPost(String slug, String previewToken) {
+	public Uni<PageBlogPost> findBlogPost(String slug, String previewToken) {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-post"), Map.of("slug", slug), previewToken);
-
-		return response.getObject(PageBlogPostCollection.class, "pageBlogPostCollection").getItems().stream().findAny();
+		return queryLoader.loadQuery("find-blog-post")
+			.flatMap(query -> executeQueryAsync(query, Map.of("slug", slug), previewToken))
+			.onItem().transformToMulti(res -> Multi.createFrom().iterable(res.getObject(PageBlogPostCollection.class, "pageBlogPostCollection").getItems()))
+			.toUni();
 	}
 
 	@Override
-	public PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags) {
+	public Uni<PageBlogPostCollection> findBlogPosts(Pagination pagination, Set<String> tags) {
 
 		return findBlogPosts(pagination, tags, null);
 	}
 
 	@Override
-	public PageBlogPostCollection findBlogPosts(Pagination pagination, Set<String> tags, String previewToken) {
+	public Uni<PageBlogPostCollection> findBlogPosts(Pagination pagination, Set<String> tags, String previewToken) {
 
 		var params =  Map.of("limit", pagination.getPageSize(), "skip", pagination.getOffset(), "tags", tags);
-		var response = executeQuery(() -> queryLoader.loadQuery("find-blog-posts"), params, previewToken);
 
-		return response.getObject(PageBlogPostCollection.class, "pageBlogPostCollection");
+		return queryLoader.loadQuery("find-blog-posts")
+			.flatMap(query -> executeQueryAsync(query, params, previewToken))
+			.map(res -> res.getObject(PageBlogPostCollection.class, "pageBlogPostCollection"));
 	}
 
 	@Override
-	public RecentPageBlogPostCollection findRecentBlogPosts() {
+	public Uni<RecentPageBlogPostCollection> findRecentBlogPosts() {
 
 		return findRecentBlogPosts(null);
 	}
 
 	@Override
-	public RecentPageBlogPostCollection findRecentBlogPosts(String previewToken) {
+	public Uni<RecentPageBlogPostCollection> findRecentBlogPosts(String previewToken) {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-recent-blog-posts"), previewToken);
-
-		return response.getObject(RecentPageBlogPostCollection.class, "pageBlogPostCollection");
+		return queryLoader.loadQuery("find-recent-blog-posts")
+			.flatMap(query -> executeQueryAsync(query, previewToken))
+			.map(res -> res.getObject(RecentPageBlogPostCollection.class, "pageBlogPostCollection"));
 	}
 
 	@Override
-	public Optional<ComponentRichImage> findImage(String id) {
+	public Uni<ComponentRichImage> findImage(String id) {
 
 		return findImage(id, null);
 	}
 
 	@Override
-	public Optional<ComponentRichImage> findImage(String id, String previewToken) {
+	public Uni<ComponentRichImage> findImage(String id, String previewToken) {
 
-		var response = executeQuery(() -> queryLoader.loadQuery("find-image"), Map.of("id", id), previewToken);
-
-		return Optional.ofNullable(response.getObject(ComponentRichImage.class, "componentRichImage"));
+		return queryLoader.loadQuery("find-image")
+			.flatMap(query -> executeQueryAsync(query, Map.of("id", id), previewToken))
+			.map(res -> res.getObject(ComponentRichImage.class, "componentRichImage"));
 	}
 
 }

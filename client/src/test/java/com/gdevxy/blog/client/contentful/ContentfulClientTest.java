@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Duration;
 import java.util.Set;
 
 @QuarkusTest
@@ -32,10 +33,10 @@ class ContentfulClientTest {
 				.willReturn(ok().withBodyFile("find-blog-posts.json")));
 
 		// when
-		var actual = client.findBlogPost("slug");
+		var actual = client.findBlogPost("slug").await().atMost(Duration.ofSeconds(1));
 
 		// then
-		assertThat(actual).isPresent();
+		assertThat(actual).isNotNull();
 	}
 
 	@Test
@@ -46,10 +47,10 @@ class ContentfulClientTest {
 				.willReturn(ok().withBodyFile("find-blog-posts-not-found.json")));
 
 		// when
-		var actual = client.findBlogPost("slug");
+		var actual = client.findBlogPost("slug").await().atMost(Duration.ofSeconds(1));
 
 		// then
-		assertThat(actual).isEmpty();
+		assertThat(actual).isNull();
 	}
 
 	@Test
@@ -64,7 +65,7 @@ class ContentfulClientTest {
 				.willReturn(ok().withBodyFile("find-blog-posts.json")));
 
 		// when
-		var actual = client.findBlogPosts(pagination, tags);
+		var actual = client.findBlogPosts(pagination, tags).await().atMost(Duration.ofSeconds(1));
 
 		// then
 		assertThat(actual.getItems()).isNotEmpty();
@@ -78,7 +79,7 @@ class ContentfulClientTest {
 			.willReturn(ok().withBodyFile("find-recent-blog-posts.json")));
 
 		// when
-		var actual = client.findRecentBlogPosts();
+		var actual = client.findRecentBlogPosts().await().atMost(Duration.ofSeconds(1));
 
 		// then
 		assertThat(actual.getItems()).isNotEmpty();
@@ -92,11 +93,10 @@ class ContentfulClientTest {
 				.willReturn(ok().withBodyFile("find-image.json")));
 
 		// when
-		var actual = client.findImage("id");
+		var actual = client.findImage("id").await().atMost(Duration.ofSeconds(1));
 
 		// then
-		assertThat(actual).isPresent()
-			.get()
+		assertThat(actual)
 			.usingRecursiveComparison()
 			.isEqualTo(ComponentRichImage.builder()
 				.fullWidth(true)
@@ -118,10 +118,10 @@ class ContentfulClientTest {
 				.willReturn(ok().withBodyFile("find-image-not-found.json")));
 
 		// when
-		var actual = client.findImage("id");
+		var actual = client.findImage("id").await().atMost(Duration.ofSeconds(1));
 
 		// then
-		assertThat(actual).isEmpty();
+		assertThat(actual).isNull();
 	}
 
 }

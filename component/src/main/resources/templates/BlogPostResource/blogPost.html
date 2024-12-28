@@ -1,4 +1,5 @@
 {@com.gdevxy.blog.model.BlogPost blogPost}
+{@java.util.Map images}
 
 {#include base}
 
@@ -59,7 +60,7 @@
                     {#for block in blogPost.blocks}
                         {#when block.node}
                             {#is EMBEDDED_ENTRY}
-                                {#include blog/blog-image image=block.image /}
+                                {#include blog/blog-image imageId=block.value images=images /}
                             {#is HEADING_1}
                                 {#include blog/blog-header heading=1 value=block.blocks[0] /}
                             {#is HEADING_2}

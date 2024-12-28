@@ -24,6 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<bootstrap.version>5.3.3</bootstrap.version>
+		<bootstrap-icons.version>1.11.3</bootstrap-icons.version>
 		<highlightjs.version>11.10.0</highlightjs.version>
 		<jquery.version>3.7.1</jquery.version>
 		<lombok.version>1.18.36</lombok.version>

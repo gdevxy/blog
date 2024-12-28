@@ -8,6 +8,8 @@ import com.gdevxy.blog.client.contentful.ContentfulCMAClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogModel;
 import com.gdevxy.blog.model.BlogPostTag;
 import io.quarkus.cache.CacheResult;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
@@ -17,21 +19,18 @@ public class ContentfulModelService {
 	ContentfulCMAClient client;
 
 	@CacheResult(cacheName = "blog-post-tags")
-	public List<BlogPostTag> findBlogPostTags() {
+	public Uni<List<BlogPostTag>> findBlogPostTags() {
 
 		return client.findPageBlogModel()
-			.getFields()
-			.stream()
+			.onItem().transformToMulti(m -> Multi.createFrom().iterable(m.getFields()))
 			.filter(f -> f.getId().equals("tags"))
-			.findAny()
+			.toUni()
 			.map(PageBlogModel.Field::getItems)
-			.map(PageBlogModel.Field.Items::getValidations)
-			.map(List::getFirst)
-			.map(PageBlogModel.Field.Items.Validation::getIn)
-			.orElse(List.of())
-			.stream()
+			.onItem().transformToMulti(i -> Multi.createFrom().iterable(i.getValidations()))
+			.onItem().transformToIterable(PageBlogModel.Field.Items.Validation::getIn)
 			.map(BlogPostTag::new)
-			.toList();
+			.collect()
+			.asList();
 	}
 
 }

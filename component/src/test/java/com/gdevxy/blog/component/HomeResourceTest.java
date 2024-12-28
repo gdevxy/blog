@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.net.URL;
-import java.util.List;
 import java.util.Set;
 
 import com.gdevxy.blog.mother.BlogPostMother;
@@ -16,6 +15,7 @@ import io.quarkiverse.playwright.WithPlaywright;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.smallrye.mutiny.Multi;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +37,8 @@ public class HomeResourceTest {
 		// given
 		var page = context.newPage();
 
-		when(blogPostService.findRecentBlogPosts(null)).thenReturn(List.of(RecentBlogPostMother.basic().build()));
-		when(blogPostService.findBlogPosts(null, Set.of())).thenReturn(List.of(BlogPostMother.basic().build()));
+		when(blogPostService.findRecentBlogPosts(null)).thenReturn(Multi.createFrom().item(RecentBlogPostMother.basic().build()));
+		when(blogPostService.findBlogPosts(null, Set.of())).thenReturn(Multi.createFrom().item(BlogPostMother.basic().build()));
 
 		// when
 		var actual = page.navigate(home.toString());

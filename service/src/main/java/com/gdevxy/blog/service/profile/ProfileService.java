@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import com.gdevxy.blog.client.gravatar.GravatarClient;
 import com.gdevxy.blog.model.Profile;
 import io.quarkus.cache.CacheResult;
+import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
@@ -20,11 +21,9 @@ public class ProfileService implements IProfileService {
 
 	@Override
 	@CacheResult(cacheName = "profile")
-	public Profile findProfile() {
+	public Uni<Profile> findProfile() {
 
-		var profile = gravatarClient.findById(GDEVXY_GRAVATAR_PROFILE_ID);
-
-		return profileConverter.apply(profile);
+		return gravatarClient.findById(GDEVXY_GRAVATAR_PROFILE_ID).map(profileConverter);
 	}
 
 }

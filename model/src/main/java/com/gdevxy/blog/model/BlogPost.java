@@ -15,12 +15,14 @@ import java.util.Set;
 @ToString
 public class BlogPost {
 
+	private final String id;
 	private final String slug;
 	private final String title;
 	private final String description;
 	private final ZonedDateTime publishedDate;
 	private final Image image;
 	private final Seo seo;
+	private final String rating;
 	@Builder.Default
 	private final List<ContentBlock> blocks = List.of();
 	@Builder.Default
@@ -53,7 +55,6 @@ public class BlogPost {
 		private final Set<Mark> marks;
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
-		private final Image image;
 
 		public String toHtmlIdentifier() {
 			return value.replaceAll("\\s","-").toLowerCase();

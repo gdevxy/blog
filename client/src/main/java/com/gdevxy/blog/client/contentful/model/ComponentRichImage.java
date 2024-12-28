@@ -12,6 +12,7 @@ import lombok.*;
 @ToString
 public class ComponentRichImage {
 
+	private Sys sys;
 	private FeaturedImage image;
 	private Boolean fullWidth;
 

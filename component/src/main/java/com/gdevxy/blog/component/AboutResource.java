@@ -9,12 +9,11 @@ import com.gdevxy.blog.model.Profile;
 import com.gdevxy.blog.service.profile.IProfileService;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
-import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Blocking
 @Path("/about")
 @RequiredArgsConstructor
 public class AboutResource {
@@ -23,9 +22,9 @@ public class AboutResource {
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public TemplateInstance contact() {
+	public Uni<TemplateInstance> contact() {
 
-		return Templates.about(profileService.findProfile());
+		return profileService.findProfile().map(Templates::about);
 	}
 
 	@CheckedTemplate

@@ -18,6 +18,7 @@ public class RichImageConverter implements Function<ComponentRichImage, Image> {
 	public Image apply(ComponentRichImage i) {
 
 		return imageConverter.apply(i.getImage()).toBuilder()
+			.id(i.getSys().getId())
 			.fullWidth(i.getFullWidth())
 			.build();
 	}

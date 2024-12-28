@@ -1,5 +1,6 @@
 package com.gdevxy.blog.service.contentful.blogpost.converter;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,16 +8,13 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
 import com.gdevxy.blog.client.contentful.model.SeoFields;
-import com.gdevxy.blog.client.contentful.model.content.Data;
 import com.gdevxy.blog.client.contentful.model.content.Mark;
 import com.gdevxy.blog.client.contentful.model.content.RichContent;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.BlogPostTag;
-import com.gdevxy.blog.model.Image;
 import com.gdevxy.blog.model.contentful.Node;
 import lombok.RequiredArgsConstructor;
 
@@ -24,30 +22,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BlogPostConverter {
 
-	private final ContentfulClient contentfulClient;
 	private final ImageConverter imageConverter;
-	private final RichImageConverter richImageConverter;
 
-	public BlogPost convert(PageBlogPost p, @Nullable String previewToken) {
-
-		return convert(false, p, previewToken);
-	}
-
-	public BlogPost convertWithContent(PageBlogPost p, @Nullable String previewToken) {
-
-		return convert(true, p, previewToken);
-	}
-
-	private  BlogPost convert(boolean withContent, PageBlogPost p, @Nullable String previewToken) {
+	public  BlogPost convert(PageBlogPost p, Integer rating) {
 
 		return BlogPost.builder()
+			.id(p.getSys().getId())
 			.slug(p.getSlug())
 			.title(p.getTitle())
 			.description(p.getShortDescription())
 			.publishedDate(p.getPublishedDate())
+			.rating(NumberFormat.getCompactNumberInstance().format(rating))
 			.image(Optional.ofNullable(p.getFeaturedImage()).map(imageConverter).orElse(null))
 			.seo(toSeo(p.getSeoFields()).orElse(null))
-			.blocks(withContent ? toContentBlocks(p.getContent().getJson().getContent(), previewToken) : List.of())
+			.blocks(toContentBlocks(p.getContent().getJson().getContent()))
 			.tags(p.getTags().stream().map(BlogPostTag::new).collect(Collectors.toUnmodifiableSet()))
 			.relatedBlogPosts(Optional.ofNullable(p.getRelatedBlogPostsCollection())
 				.map(PageBlogPostCollection::getItems)
@@ -82,14 +70,14 @@ public class BlogPostConverter {
 		});
 	}
 
-	private List<BlogPost.ContentBlock> toContentBlocks(List<RichContent> contents, @Nullable String previewToken) {
+	private List<BlogPost.ContentBlock> toContentBlocks(List<RichContent> contents) {
 
 		return contents.stream()
-				.map(content -> toContent(content, previewToken))
+				.map(this::toContent)
 				.toList();
 	}
 
-	private BlogPost.ContentBlock toContent(RichContent content, @Nullable String previewToken) {
+	private BlogPost.ContentBlock toContent(RichContent content) {
 
 		var nodeType = Node.of(content.getNodeType());
 
@@ -97,26 +85,17 @@ public class BlogPostConverter {
 				.node(nodeType)
 				.value(toValue(nodeType, content))
 				.marks(content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet()))
-				.blocks(toContentBlocks(content.getContent(), previewToken))
-				.image(toImage(nodeType, content.getData()).orElse(null))
+				.blocks(toContentBlocks(content.getContent()))
 				.build();
 	}
 
 	private String toValue(Node node, RichContent content) {
 
 		return switch(node) {
+			case EMBEDDED_ENTRY -> content.getData().getTarget().getSys().getId();
 			case HYPERLINK -> content.getData().getUri();
 			default -> content.getValue();
 		};
-	}
-
-	private Optional<Image> toImage(Node nodeType, Data embeddedEntry) {
-
-		if (nodeType != Node.EMBEDDED_ENTRY) {
-			return Optional.empty();
-		}
-
-		return contentfulClient.findImage(embeddedEntry.getTarget().getSys().getId()).map(richImageConverter);
 	}
 
 }

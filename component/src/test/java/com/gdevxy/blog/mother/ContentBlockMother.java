@@ -12,7 +12,7 @@ public class ContentBlockMother {
 
 	public BlogPost.ContentBlock.ContentBlockBuilder h1() {
 
-		return BlogPost.ContentBlock.builder().image(ImageMother._404().build())
+		return BlogPost.ContentBlock.builder()
 			.blocks(List.of())
 			.value("Title")
 			.node(Node.HEADING_1)
