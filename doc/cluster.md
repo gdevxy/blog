@@ -79,3 +79,7 @@ some debugging actions
 kubectl describe clusterissuer letsencrypt-prod
 kubectl describe ingress gdevxy-ingress
 ```
+
+## Database
+
+Add egress rule to load balancer config for port <XXXX>

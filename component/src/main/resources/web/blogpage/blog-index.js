@@ -32,4 +32,48 @@ $(document).ready(function() {
 	});
 
 	checkScrollPosition();
+
+	$("#btnRate").on('click', function (e) {
+
+		const btn = $(e.target);
+
+		if(btn.hasClass("thumbs-up-success")) {
+
+			$.ajax({
+				type: 'POST',
+				url: `/blog-posts/${btn.attr("name")}/thumbs-down`,
+				success: function () {
+					btn.removeClass("thumbs-up-success").removeClass("pulse");
+				},
+				error: function (err) {
+					btn.addClass("tada");
+				}
+			});
+
+		} else {
+
+			grecaptcha.ready(function () {
+				grecaptcha
+					.execute("6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid", { action: "submit" })
+					.then(function (token) {
+						$.ajax({
+							type: 'POST',
+							url: `/blog-posts/${btn.attr("name")}/thumbs-up`,
+							dataType: 'json',
+							contentType: "application/json",
+							data: JSON.stringify({
+								captcha: token
+							}),
+							success: function () {
+								btn.addClass("thumbs-up-success").addClass("pulse");
+							},
+							error: function (err) {
+								btn.addClass("tada");
+							}
+						});
+					});
+			});
+		}
+	});
+
 });
