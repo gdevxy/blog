@@ -40,7 +40,7 @@ public class Cookies {
 			.httpOnly(true)
 			.sameSite(NewCookie.SameSite.STRICT)
 			.maxAge(Integer.MAX_VALUE)
-			.expiry(Date.from(Instant.now().plusSeconds(Integer.MAX_VALUE)))
+			.expiry(Date.from(Instant.now().minusSeconds(1)))
 			.value("goodbye")
 			.path("/")
 			.build();
