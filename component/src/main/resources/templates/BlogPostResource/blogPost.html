@@ -97,7 +97,9 @@
                 <div class="col text-end">
             {/if}
                 <div class="blog-paragraph">
-                    Leave a thumbs up if you liked it <span class="ps-2"><button id="btnRate" name="{blogPost.id}" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill {#if thumbsUpEnabled}thumbs-up-success{/}"></button></span>
+                    <span class="d-inline d-sm-none">Leave a thumbs up</span>
+                    <span class="d-none d-sm-inline">Leave a thumbs up if you liked it</span>
+                    <span class="ps-2"><button id="btnRate" name="{blogPost.id}" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill {#if thumbsUpEnabled}thumbs-up-success{/}"></button></span>
                 </div>
             </div>
         </div>
