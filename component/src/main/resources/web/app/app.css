@@ -137,7 +137,7 @@
 }
 
 .text-neon, .thumbs-up-success {
-    color: var(--bs-color-neon);
+    color: var(--bs-color-neon) !important;
 }
 
 .text-string {
