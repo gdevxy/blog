@@ -12,7 +12,7 @@
     {/extraCss}
 
     {#extraJs}
-        <script src="https://www.google.com/recaptcha/api.js?render=6LeWR6gqAAAAAC4uiRPFjYaOaVLrTXh4m94Wbgs0"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid"></script>
         <script src="/webjars/highlightjs/highlight.min.js"></script>
         <script src="/webjars/highlightjs/languages/java.min.js"></script>
         <script src="/webjars/highlightjs/languages/json.min.js"></script>
@@ -21,28 +21,45 @@
         <script src="/_static/jquery/dist/jquery.min.js"></script>
         <script>
             $(document).ready(function () {
-                $("#btnRate").on('click', function () {
-                    grecaptcha.ready(function () {
-                        grecaptcha
-                            .execute("6LeWR6gqAAAAAC4uiRPFjYaOaVLrTXh4m94Wbgs0", { action: "rate_post" })
-                            .then(function (token) {
-                                $.ajax({
-                                    type: 'POST',
-                                    url: `/blog-posts/{blogPost.id}/rate`,
-                                    dataType: 'json',
-                                    contentType: "application/json",
-                                    data: JSON.stringify({
-                                        captcha: token
-                                    }),
-                                    success: function () {
-                                        $(`#btnRate`).addClass("text-neon").addClass("pulse");
-                                    },
-                                    error: function (err) {
-                                        $(`#btnRate`).addClass("tada");
-                                    }
+                $("#btnRate").on('click', function (e) {
+
+                    if($(e.target).hasClass("thumbs-up-success")) {
+                        
+                        $.ajax({
+                            type: 'POST',
+                            url: `/blog-posts/{blogPost.id}/thumbs-down`,
+                            success: function () {
+                                $(`#btnRate`).removeClass("thumbs-up-success").removeClass("pulse");
+                            },
+                            error: function (err) {
+                                $(`#btnRate`).addClass("tada");
+                            }
+                        });
+                        
+                    } else {
+
+                        grecaptcha.ready(function () {
+                            grecaptcha
+                                .execute("6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid", { action: "submit" })
+                                .then(function (token) {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: `/blog-posts/{blogPost.id}/thumbs-up`,
+                                        dataType: 'json',
+                                        contentType: "application/json",
+                                        data: JSON.stringify({
+                                            captcha: token
+                                        }),
+                                        success: function () {
+                                            $(`#btnRate`).addClass("thumbs-up-success").addClass("pulse");
+                                        },
+                                        error: function (err) {
+                                            $(`#btnRate`).addClass("tada");
+                                        }
+                                    });
                                 });
-                            });
-                    });
+                        });
+                    }
                 });
             });
         </script>
@@ -125,7 +142,7 @@
                 <div class="col text-end">
             {/if}
                 <div class="blog-paragraph">
-                    Leave a thumbs up if you liked this post <span class="ps-2"><button id="btnRate" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill"></button></span>
+                    Leave a thumbs up if you liked it <span class="ps-2"><button id="btnRate" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill {#if thumbsUpEnabled}thumbs-up-success{/}"></button></span>
                 </div>
             </div>
         </div>

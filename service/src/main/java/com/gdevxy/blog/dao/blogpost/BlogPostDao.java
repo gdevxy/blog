@@ -8,7 +8,9 @@ import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.Tuple;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BlogPostDao extends DaoSupport {
@@ -20,18 +22,25 @@ public class BlogPostDao extends DaoSupport {
 		return as(sql.preparedQuery("""
 				select 
 					id,
-					key,
-					rating
-				from blog_post where key = $1
+					key
+				from blog_post
+				where key = $1
 				""")
 			.execute(Tuple.of(key)), BlogPostDao::toBlogPostEntity);
 	}
 
-	public Uni<Void> rate(String key) {
+	public Uni<BlogPostEntity> save(BlogPostEntity entity) {
 
-		return sql.preparedQuery("""
-			update blog_post set rating = coalesce(rating, 0) + 1 where key = $1
-			""").execute(Tuple.of(key)).replaceWithVoid();
+		log.info("Persisting: {}", entity);
+
+		return as(sql.preparedQuery("""
+				insert into blog_post(
+					key
+				) values (
+					$1
+				) returning *
+				""")
+			.execute(Tuple.of(entity.getKey())), row -> entity.toBuilder().id(row.getInteger("id")).build());
 	}
 
 	private static BlogPostEntity toBlogPostEntity(Row row) {
@@ -39,7 +48,6 @@ public class BlogPostDao extends DaoSupport {
 		return BlogPostEntity.builder()
 			.id(row.getInteger("id"))
 			.key(row.getString("key"))
-			.rating(row.getInteger("rating"))
 			.build();
 	}
 

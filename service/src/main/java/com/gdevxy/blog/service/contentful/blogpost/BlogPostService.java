@@ -1,7 +1,6 @@
 package com.gdevxy.blog.service.contentful.blogpost;
 
 import java.util.Set;
-import java.util.function.Function;
 
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,6 +12,7 @@ import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.Pagination;
 import com.gdevxy.blog.dao.blogpost.BlogPostDao;
 import com.gdevxy.blog.dao.blogpost.BlogPostEntity;
+import com.gdevxy.blog.dao.blogpost.BlogPostRatingDao;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.RecentBlogPost;
 import com.gdevxy.blog.service.captcha.CaptchaService;
@@ -27,6 +27,8 @@ public class BlogPostService {
 	@Inject
 	BlogPostDao blogPostDao;
 	@Inject
+	BlogPostRatingDao blogPostRatingDao;
+	@Inject
 	ContentfulClient contentfulClient;
 	@Inject
 	CaptchaService captchaService;
@@ -39,7 +41,7 @@ public class BlogPostService {
 
 		return contentfulClient.findBlogPost(slug, previewToken)
 			.onItem().ifNull().failWith(new NotFoundException("BlogPost [%s] not found".formatted(slug)))
-			.onItem().transformToUni(toBlogPost());
+			.onItem().transformToUni(this::toBlogPost);
 	}
 
 	public Multi<BlogPost> findBlogPosts(@Nullable String previewToken, Set<String> tags) {
@@ -48,7 +50,7 @@ public class BlogPostService {
 
 		return contentfulClient.findBlogPosts(pagination, tags, previewToken)
 			.onItem().transformToMulti(p -> Multi.createFrom().iterable(p.getItems()))
-			.onItem().transformToUniAndConcatenate(toBlogPost());
+			.onItem().transformToUniAndConcatenate(this::toBlogPost);
 	}
 
 	public Multi<RecentBlogPost> findRecentBlogPosts(@Nullable String previewToken) {
@@ -58,17 +60,24 @@ public class BlogPostService {
 			.map(recentBlogPostConverter);
 	}
 
-	public Uni<Void> rate(String id, String captcha) {
+	public Uni<String> thumbsUp(String key, String captcha) {
 
 		return captchaService.verify(captcha)
-			.flatMap(i -> blogPostDao.rate(id));
+			.flatMap(i -> blogPostDao.findByKey(key))
+			.flatMap(e -> blogPostRatingDao.thumbsUp(e.getId()));
 	}
 
-	private Function<PageBlogPost, Uni<? extends BlogPost>> toBlogPost() {
+	public Uni<Void> thumbsDown(String uuid) {
 
-		return p -> blogPostDao.findByKey(p.getSys().getId())
-			.map(BlogPostEntity::getRating)
-			.onFailure(NotFoundException.class).recoverWithItem(0)
+		return blogPostRatingDao.thumbsDown(uuid);
+	}
+
+	private Uni<BlogPost> toBlogPost(PageBlogPost p) {
+
+		return blogPostDao.findByKey(p.getSys().getId())
+			.onFailure(NotFoundException.class).recoverWithUni(() -> blogPostDao.save(BlogPostEntity.builder().key(p.getSys().getId()).build()))
+			.flatMap(bp -> blogPostRatingDao.findRating(bp.getId()))
+			.onFailure(NotFoundException.class).recoverWithItem(0L)
 			.map(rating -> blogPostConverter.convert(p, rating));
 	}
 

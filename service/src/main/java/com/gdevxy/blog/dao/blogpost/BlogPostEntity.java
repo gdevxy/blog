@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @ToString
 public class BlogPostEntity {
 
 	private final Integer id;
 	private final String key;
-	private final Integer rating;
 
 }
