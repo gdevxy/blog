@@ -39,7 +39,7 @@ public class Cookies {
 			.secure(true)
 			.httpOnly(true)
 			.sameSite(NewCookie.SameSite.STRICT)
-			.maxAge(Integer.MAX_VALUE)
+			.maxAge(-1)
 			.expiry(Date.from(Instant.now().minusSeconds(1)))
 			.value("goodbye")
 			.path("/")
