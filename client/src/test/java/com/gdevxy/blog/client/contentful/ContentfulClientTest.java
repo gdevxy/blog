@@ -89,7 +89,7 @@ class ContentfulClientTest {
 	void findImage() {
 		// given
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
-				.withRequestBody(containing("query findImage($id: String!)"))
+				.withRequestBody(containing("query findImage($id: String!, $preview: Boolean = false)"))
 				.willReturn(ok().withBodyFile("find-image.json")));
 
 		// when
@@ -114,7 +114,7 @@ class ContentfulClientTest {
 	void findImage_NotFound() {
 		// given
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
-				.withRequestBody(containing("query findImage($id: String!)"))
+				.withRequestBody(containing("query findImage($id: String!, $preview: Boolean = false)"))
 				.willReturn(ok().withBodyFile("find-image-not-found.json")));
 
 		// when
