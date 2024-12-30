@@ -53,7 +53,7 @@ public class CaptchaService {
 			return false;
 		}
 
-		return response.getHostname().equals(configuration.hostname());
+		return response.getHostname().endsWith(configuration.hostname());
 	}
 
 	@ConfigMapping(prefix = "google.captcha")
