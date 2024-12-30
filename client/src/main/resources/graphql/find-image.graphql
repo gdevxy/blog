@@ -1,5 +1,5 @@
-query findImage($id: String!){
-    componentRichImage(id: $id) {
+query findImage($id: String!, $preview: Boolean = false){
+    componentRichImage(id: $id, preview: $preview) {
         sys {
             id
         }

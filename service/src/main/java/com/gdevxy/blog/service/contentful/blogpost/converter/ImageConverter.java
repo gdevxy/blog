@@ -14,6 +14,8 @@ public class ImageConverter implements Function<FeaturedImage, Image> {
 	public Image apply(FeaturedImage image) {
 
 		return Image.builder()
+			.title(image.getTitle())
+			.description(image.getDescription())
 			.url(image.getUrl())
 			.width(image.getWidth())
 			.height(image.getHeight())

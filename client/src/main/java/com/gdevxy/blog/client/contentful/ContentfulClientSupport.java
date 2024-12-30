@@ -45,7 +45,7 @@ abstract class ContentfulClientSupport {
 			previewClient = previewClientBuilder.header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(previewToken)).build();
 		}
 
-		return client.executeAsync(query, extendWithPreviewMode(params))
+		return previewClient.executeAsync(query, extendWithPreviewMode(params))
 				.map(this::throwErrorOnGraphqlException);
 	}
 
