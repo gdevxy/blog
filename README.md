@@ -7,7 +7,7 @@ flowchart LR
     blog(blog):::main--->contentful(contentful.com):::external
     blog--->gravatar(gravatar.com):::external
     blog--->google(google.com):::external
-    blog--->database[(postgres@aivencloud.com)]:::postgres
+    blog--->database[(postgres at aivencloud.com)]:::postgres
     qute[/qute/]:::internal---blog
     classDef external fill:#480593
     classDef internal fill:#a256f8
