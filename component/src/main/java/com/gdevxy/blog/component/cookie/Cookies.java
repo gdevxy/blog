@@ -1,49 +1,32 @@
 package com.gdevxy.blog.component.cookie;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
-
-import jakarta.ws.rs.core.NewCookie;
+import java.util.UUID;
 
 import io.vertx.core.http.Cookie;
+import io.vertx.core.http.CookieSameSite;
 import io.vertx.core.http.HttpServerRequest;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Cookies {
 
-	private final String BLOG_POST_RATING_COOKIE_NAME = "gdevxy-bpr-%s";
+	private final String SESSION_COOKIE_NAME = "gdevxy-session";
 
-	public Optional<Cookie> findBlogPostRatingCookie(HttpServerRequest req, String id) {
+	public Optional<Cookie> findSessionCookie(HttpServerRequest req) {
 
-		return req.cookies(BLOG_POST_RATING_COOKIE_NAME.formatted(id)).stream().findAny();
+		return req.cookies(SESSION_COOKIE_NAME).stream().findAny();
 	}
 
-	public NewCookie createBlogPostRatingCookie(String id, String uuid) {
+	public Cookie createSessionCookie() {
 
-		return new NewCookie.Builder(BLOG_POST_RATING_COOKIE_NAME.formatted(id))
-			.secure(true)
-			.httpOnly(true)
-			.sameSite(NewCookie.SameSite.STRICT)
-			.maxAge(Integer.MAX_VALUE)
-			.expiry(Date.from(Instant.now().plusSeconds(Integer.MAX_VALUE)))
-			.value(uuid)
-			.path("/")
-			.build();
-	}
-
-	public NewCookie deleteBlogPostRatingCookie(String id) {
-
-		return new NewCookie.Builder(BLOG_POST_RATING_COOKIE_NAME.formatted(id))
-			.secure(true)
-			.httpOnly(true)
-			.sameSite(NewCookie.SameSite.STRICT)
-			.maxAge(-1)
-			.expiry(Date.from(Instant.now().minusSeconds(1)))
-			.value("goodbye")
-			.path("/")
-			.build();
+		var cookie = Cookie.cookie(SESSION_COOKIE_NAME, UUID.randomUUID().toString());
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
+		cookie.setSameSite(CookieSameSite.STRICT);
+		cookie.setMaxAge(Integer.MAX_VALUE);
+		cookie.setPath("/");
+		return cookie;
 	}
 
 }

@@ -24,7 +24,7 @@ public class BlogPostConverter {
 
 	private final ImageConverter imageConverter;
 
-	public  BlogPost convert(PageBlogPost p, Long rating) {
+	public BlogPost.BlogPostBuilder convert(PageBlogPost p, Long rating) {
 
 		return BlogPost.builder()
 			.id(p.getSys().getId())
@@ -42,8 +42,7 @@ public class BlogPostConverter {
 				.stream()
 				.flatMap(List::stream)
 				.map(this::toRelatedBlogPost)
-				.toList())
-			.build();
+				.toList());
 	}
 
 	private BlogPost.RelatedBlogPost toRelatedBlogPost(PageBlogPost p) {

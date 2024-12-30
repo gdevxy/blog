@@ -18,6 +18,8 @@ public class CaptchaVerifyResponse {
 	private final Boolean success = false;
 	@JsonProperty("error-codes")
 	private final List<String> errorCodes;
+	private final Float score;
 	private final String hostname;
+	private final String action;
 
 }

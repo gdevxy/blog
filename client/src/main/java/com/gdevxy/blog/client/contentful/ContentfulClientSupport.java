@@ -19,11 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 abstract class ContentfulClientSupport {
 
 	private DynamicGraphQLClient client;
-	private DynamicGraphQLClientBuilder previewClient;
+	private DynamicGraphQLClientBuilder previewClientBuilder;
+	private DynamicGraphQLClient previewClient;
 
 	public ContentfulClientSupport(DynamicGraphQLClient client) {
 		this.client = client;
-		this.previewClient = DynamicGraphQLClientBuilder.newBuilder().configKey("contentful");
+		this.previewClientBuilder = DynamicGraphQLClientBuilder.newBuilder().configKey("contentful");
 	}
 
 	Uni<Response> executeQueryAsync(String query, @Nullable String previewToken) {
@@ -39,10 +40,13 @@ abstract class ContentfulClientSupport {
 				.map(this::throwErrorOnGraphqlException);
 		}
 
-		try (var client = previewClient.header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(previewToken)).build()) {
-			return client.executeAsync(query, extendWithPreviewMode(params))
-				.map(this::throwErrorOnGraphqlException);
+		// temporary until [https://github.com/smallrye/smallrye-graphql/issues/2241]
+		if (previewClient == null) {
+			previewClient = previewClientBuilder.header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(previewToken)).build();
 		}
+
+		return client.executeAsync(query, extendWithPreviewMode(params))
+				.map(this::throwErrorOnGraphqlException);
 	}
 
 	private Response throwErrorOnGraphqlException(Response response) {

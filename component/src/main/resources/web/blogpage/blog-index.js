@@ -40,7 +40,7 @@ $(document).ready(function() {
 		if(btn.hasClass("thumbs-up-success")) {
 
 			$.ajax({
-				type: 'POST',
+				type: "POST",
 				url: `/blog-posts/${btn.attr("name")}/thumbs-down`,
 				success: function () {
 					btn.removeClass("thumbs-up-success").removeClass("pulse");
@@ -54,15 +54,16 @@ $(document).ready(function() {
 
 			grecaptcha.ready(function () {
 				grecaptcha
-					.execute("6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid", { action: "submit" })
+					.execute("6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid", { action: "thumbs_up" })
 					.then(function (token) {
 						$.ajax({
-							type: 'POST',
+							type: "POST",
 							url: `/blog-posts/${btn.attr("name")}/thumbs-up`,
-							dataType: 'json',
+							dataType: "json",
 							contentType: "application/json",
 							data: JSON.stringify({
-								captcha: token
+								captcha: token,
+								action: "thumbs_up"
 							}),
 							success: function () {
 								btn.addClass("thumbs-up-success").addClass("pulse");

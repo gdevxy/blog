@@ -31,8 +31,6 @@ public class BlogPostDao extends DaoSupport {
 
 	public Uni<BlogPostEntity> save(BlogPostEntity entity) {
 
-		log.info("Persisting: {}", entity);
-
 		return as(sql.preparedQuery("""
 				insert into blog_post(
 					key

@@ -29,6 +29,8 @@ public class BlogPost {
 	private final Set<BlogPostTag> tags = Set.of();
 	@Builder.Default
 	private final List<RelatedBlogPost> relatedBlogPosts = List.of();
+	@Builder.Default
+	private final Boolean liked = false;
 
 	public boolean withIndexHeading() {
 		return blocks.stream().map(ContentBlock::getNode).anyMatch(Node::indexHeading);
