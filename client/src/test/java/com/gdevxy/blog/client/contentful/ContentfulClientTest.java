@@ -75,7 +75,7 @@ class ContentfulClientTest {
 	void findLightBlogPosts() {
 		// given
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
-			.withRequestBody(containing("query findRecentBlogPosts($limit: Int = 5, $skip: Int = 0, $locale: String = \\\"en\\\", $preview: Boolean = false)"))
+			.withRequestBody(containing("query findLightBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = \\\"en\\\", $preview: Boolean = false)"))
 			.willReturn(ok().withBodyFile("find-recent-blog-posts.json")));
 
 		// when
