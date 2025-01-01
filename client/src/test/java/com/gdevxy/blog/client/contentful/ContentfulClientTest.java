@@ -2,7 +2,7 @@ package com.gdevxy.blog.client.contentful;
 
 import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.FeaturedImage;
-import com.gdevxy.blog.client.contentful.model.Pagination;
+import com.gdevxy.blog.client.contentful.model.Page;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import io.quarkiverse.wiremock.devservice.ConnectWireMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -57,7 +57,7 @@ class ContentfulClientTest {
 	void findBlogPosts() {
 		// given
 		var tags = Set.of("tag");
-		var pagination = Pagination.builder().build();
+		var pagination = Page.builder().build();
 
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
 				.withRequestBody(containing("query findBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = \\\"en\\\", $tags: [String] = [], $preview: Boolean = false)")
@@ -72,14 +72,14 @@ class ContentfulClientTest {
 	}
 
 	@Test
-	void findRecentBlogPosts() {
+	void findLightBlogPosts() {
 		// given
 		wiremock.register(post(urlPathEqualTo("/")).withHeader(HttpHeaders.AUTHORIZATION, equalTo("Bearer PUBLISHED"))
 			.withRequestBody(containing("query findRecentBlogPosts($limit: Int = 5, $skip: Int = 0, $locale: String = \\\"en\\\", $preview: Boolean = false)"))
 			.willReturn(ok().withBodyFile("find-recent-blog-posts.json")));
 
 		// when
-		var actual = client.findRecentBlogPosts().await().atMost(Duration.ofSeconds(1));
+		var actual = client.findLightBlogPosts(Page.builder().pageSize(5L).build()).await().atMost(Duration.ofSeconds(1));
 
 		// then
 		assertThat(actual.getItems()).isNotEmpty();

@@ -1,29 +1,27 @@
 package com.gdevxy.blog.client.contentful.model;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @RegisterForReflection
 @ToString
-public class RecentPageBlogPostCollection extends ContentfulCollection {
+public class LightPageBlogPost {
 
-	private List<RecentPageBlogPost> items;
-
-	public List<RecentPageBlogPost> getItems() {
-		return Optional.ofNullable(items).orElse(List.of());
-	}
+	private String slug;
+	private String title;
+	private String shortDescription;
+	private ZonedDateTime publishedDate;
 
 }

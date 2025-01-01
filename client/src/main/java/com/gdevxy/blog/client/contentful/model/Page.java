@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @ToString
-public class Pagination {
+public class Page {
 
 	@Builder.Default
 	private final Long pageSize = 100L;

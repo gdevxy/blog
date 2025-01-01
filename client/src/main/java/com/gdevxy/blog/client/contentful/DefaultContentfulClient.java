@@ -9,8 +9,8 @@ import com.gdevxy.blog.client.GraphQlQueryLoader;
 import com.gdevxy.blog.client.contentful.model.ComponentRichImage;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
-import com.gdevxy.blog.client.contentful.model.Pagination;
-import com.gdevxy.blog.client.contentful.model.RecentPageBlogPostCollection;
+import com.gdevxy.blog.client.contentful.model.Page;
+import com.gdevxy.blog.client.contentful.model.LightPageBlogPostCollection;
 import io.smallrye.graphql.client.GraphQLClient;
 import io.smallrye.graphql.client.dynamic.api.DynamicGraphQLClient;
 import io.smallrye.mutiny.Multi;
@@ -44,13 +44,13 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	}
 
 	@Override
-	public Uni<PageBlogPostCollection> findBlogPosts(Pagination pagination, Set<String> tags) {
+	public Uni<PageBlogPostCollection> findBlogPosts(Page pagination, Set<String> tags) {
 
 		return findBlogPosts(pagination, tags, null);
 	}
 
 	@Override
-	public Uni<PageBlogPostCollection> findBlogPosts(Pagination pagination, Set<String> tags, String previewToken) {
+	public Uni<PageBlogPostCollection> findBlogPosts(Page pagination, Set<String> tags, String previewToken) {
 
 		var params =  Map.of("limit", pagination.getPageSize(), "skip", pagination.getOffset(), "tags", tags);
 
@@ -60,17 +60,19 @@ public class DefaultContentfulClient extends ContentfulClientSupport implements 
 	}
 
 	@Override
-	public Uni<RecentPageBlogPostCollection> findRecentBlogPosts() {
+	public Uni<LightPageBlogPostCollection> findLightBlogPosts(Page pagination) {
 
-		return findRecentBlogPosts(null);
+		return findLightBlogPosts(pagination, null);
 	}
 
 	@Override
-	public Uni<RecentPageBlogPostCollection> findRecentBlogPosts(String previewToken) {
+	public Uni<LightPageBlogPostCollection> findLightBlogPosts(Page pagination, String previewToken) {
 
-		return queryLoader.loadQuery("find-recent-blog-posts")
-			.flatMap(query -> executeQueryAsync(query, previewToken))
-			.map(res -> res.getObject(RecentPageBlogPostCollection.class, "pageBlogPostCollection"));
+		var params = Map.<String, Object>of("limit", pagination.getPageSize(), "skip", pagination.getOffset());
+
+		return queryLoader.loadQuery("find-light-blog-posts")
+			.flatMap(query -> executeQueryAsync(query, params, previewToken))
+			.map(res -> res.getObject(LightPageBlogPostCollection.class, "pageBlogPostCollection"));
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import jakarta.ws.rs.NotFoundException;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
-import com.gdevxy.blog.client.contentful.model.Pagination;
+import com.gdevxy.blog.client.contentful.model.Page;
 import com.gdevxy.blog.dao.blogpost.BlogPostDao;
 import com.gdevxy.blog.dao.blogpost.BlogPostEntity;
 import com.gdevxy.blog.dao.blogpost.BlogPostRatingDao;
@@ -51,7 +51,7 @@ public class BlogPostService {
 
 	public Multi<BlogPost> findBlogPosts(@Nullable String previewToken, Set<String> tags) {
 
-		var pagination = Pagination.builder().build();
+		var pagination = Page.builder().build();
 
 		return contentfulClient.findBlogPosts(pagination, tags, previewToken)
 			.onItem().transformToMulti(p -> Multi.createFrom().iterable(p.getItems()))
@@ -61,7 +61,7 @@ public class BlogPostService {
 
 	public Multi<RecentBlogPost> findRecentBlogPosts(@Nullable String previewToken) {
 
-		return contentfulClient.findRecentBlogPosts(previewToken)
+		return contentfulClient.findLightBlogPosts(Page.builder().pageSize(5L).build(), previewToken)
 			.onItem().transformToMulti(p -> Multi.createFrom().iterable(p.getItems()))
 			.map(recentBlogPostConverter);
 	}

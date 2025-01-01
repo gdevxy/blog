@@ -77,6 +77,8 @@
                             {#include blog/blog-header heading=5 value=block.blocks[0] /}
                         {#is HEADING_6}
                             {#include blog/blog-header heading=6 value=block.blocks[0] /}
+                        {#is OL_LIST}
+                            {#include blog/blog-ordered-list blocks=block.blocks /}
                         {#is PARAGRAPH}
                             {#include blog/blog-paragraph blocks=block.blocks /}
                         {#is UL_LIST}

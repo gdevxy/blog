@@ -1,4 +1,4 @@
-query findRecentBlogPosts($limit: Int = 5, $skip: Int = 0, $locale: String = "en", $preview: Boolean = false) {
+query findLightBlogPosts($limit: Int = 100, $skip: Int = 0, $locale: String = "en", $preview: Boolean = false) {
     pageBlogPostCollection(limit: $limit, skip: $skip, locale: $locale, preview: $preview, order: publishedDate_DESC) {
         total
         limit
@@ -8,6 +8,7 @@ query findRecentBlogPosts($limit: Int = 5, $skip: Int = 0, $locale: String = "en
             }
             slug
             title
+            shortDescription
             publishedDate
         }
     }
