@@ -10,6 +10,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@RegisterForReflection
 @XmlRootElement(name = "rss")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RssFeed {
@@ -33,6 +35,7 @@ public class RssFeed {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@RegisterForReflection
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class Channel {
 
@@ -60,6 +63,7 @@ public class RssFeed {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
+	@RegisterForReflection
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class Item {
 
