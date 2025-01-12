@@ -25,16 +25,21 @@ function checkScrollPosition() {
 	}
 }
 
+function evaluateCommentLength(e) {
+
+	const currentLength = $(this).val().length;
+	const remainingChars = 2000 - currentLength;
+	$('#commentCharCounter').text(remainingChars);
+}
+
 function saveComment(e) {
 
 	e.preventDefault();
 
-	const btn = $(e.target);
+	const btn = $(this).find(':submit');
 	const action = $(this).attr("action");
-	const params = {};
-	$(this).serializeArray().forEach(field => {
-		params[field.name] = field.value;
-	});
+	const author = $(this).find('#commentAuthor');
+	const comment = $(this).find('#commentComment');
 
 	grecaptcha.ready(function () {
 		grecaptcha
@@ -48,15 +53,33 @@ function saveComment(e) {
 					data: JSON.stringify({
 						captcha: token,
 						action: "comment",
-						... params
+						author: author.val(),
+						comment: comment.val()
 					}),
 					success: function () {
 						return refreshFragment(action.replace('/comment', '/blog-post-comments-fragment'), 'blog_post_comments', {})
 							.then(() => renderDataDateDistance())
-							.then(() => $("#formComment").on('submit', saveComment));
+							.then(() => $("#formComment").on('submit', saveComment))
+							.then(() => $("#commentComment").on('input', evaluateCommentLength));
 					},
 					error: function (err) {
 						btn.addClass("tada");
+						$('.has-validation > .is-invalid').each(function() { $(this).removeClass("is-invalid"); });
+						err.responseJSON.violations.forEach(violation => {
+							switch(violation.field) {
+								case "saveComment.action.author":
+									author.addClass("is-invalid");
+									$('#validationCommentAuthorFeedback').text(violation.message);
+									break;
+								case "saveComment.action.comment":
+									comment.addClass("is-invalid");
+									$('#validationCommentCommentFeedback').text(violation.message);
+									break;
+								default:
+									console.log(err)
+									break;
+							}
+						})
 					}
 				});
 			});
@@ -115,6 +138,7 @@ $(document).ready(function() {
 
 	$("#btnRate").on('click', thumbsUpThumbsDown);
 	$("#formComment").on('submit', saveComment);
+	$("#commentComment").on('input', evaluateCommentLength);
 
 	checkScrollPosition();
 });

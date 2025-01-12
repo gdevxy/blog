@@ -11,6 +11,7 @@ import com.gdevxy.blog.dao.blogpost.model.BlogPostCommentReplyEntity;
 import com.gdevxy.blog.model.BlogPostComment;
 import com.gdevxy.blog.model.BlogPostCommentAction;
 import com.gdevxy.blog.model.LikeAction;
+import com.gdevxy.blog.service.Strings;
 import com.gdevxy.blog.service.captcha.CaptchaService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -39,7 +40,7 @@ public class BlogPostCommentService {
 	public Uni<Void> saveBlogPostComment(String userId, Integer blogPostId, BlogPostCommentAction action) {
 
 		return captchaService.verify(action)
-			.map(v -> BlogPostCommentEntity.builder().userId(userId).blogPostId(blogPostId).author(action.getAuthor()).comment(action.getComment()).build())
+			.map(v -> BlogPostCommentEntity.builder().userId(userId).blogPostId(blogPostId).author(Strings.blankToNull(action.getAuthor())).comment(action.getComment()).build())
 			.flatMap(blogPostCommentDao::save)
 			.replaceWithVoid();
 	}
@@ -47,7 +48,7 @@ public class BlogPostCommentService {
 	public Uni<Void> saveBlogPostCommentReply(String userId, Integer blogPostCommentId, BlogPostCommentAction creation, LikeAction action) {
 
 		return captchaService.verify(action)
-			.map(v -> BlogPostCommentReplyEntity.builder().userId(userId).blogPostCommentId(blogPostCommentId).author(creation.getAuthor()).comment(creation.getComment()).build())
+			.map(v -> BlogPostCommentReplyEntity.builder().userId(userId).blogPostCommentId(blogPostCommentId).author(Strings.blankToNull(creation.getAuthor())).comment(creation.getComment()).build())
 			.flatMap(blogPostCommentReplyDao::save)
 			.replaceWithVoid();
 	}

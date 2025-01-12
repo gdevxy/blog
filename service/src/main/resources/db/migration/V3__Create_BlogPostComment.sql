@@ -4,7 +4,7 @@ create table blog_post_comment
 	blog_post_id integer                     not null,
 	user_id      varchar(36)                 not null,
 	author       varchar(25),
-	comment      varchar(400)                not null,
+	comment      varchar(2000)                not null,
 	created_at   timestamp with time zone not null,
 	foreign key (blog_post_id) references blog_post (id) on delete cascade
 );
