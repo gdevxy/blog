@@ -4,7 +4,7 @@
     --bs-link-color-rgb: var(--color-neon);
     --bs-link-color: rgba(var(--color-neon), 1.0);
     --bs-link-hover-color-rgb: var(--bs-link-color-rgb);
-    --bs-link-hover-color: rgba(var( --bs-link-hover-color-rgb), 0.5);
+    --bs-link-hover-color: rgba(var(--bs-link-hover-color-rgb), 0.5);
     --bs-index-color: rgba(255, 255, 255, 0.75);
     --bs-index-hover-color: rgba(255, 255, 255, 1.0);
 }
@@ -33,7 +33,10 @@
 
 @media only screen and (max-width: 1024px) {
     .blog-card {
-        width:100%;
+        width: 100%;
+    }
+    .comment-section {
+        width: 100% !important;
     }
 }
 

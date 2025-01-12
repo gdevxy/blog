@@ -1,11 +1,11 @@
-{@com.gdevxy.blog.model.BlogPost blogPost}
+{@com.gdevxy.blog.model.BlogPostDetail blogPostDetail}
 {@java.util.Map images}
 
 {#include base}
 
-    {#pageTitle}{blogPost.seo.title}{/pageTitle}
-    {#pageDescription}{blogPost.seo.description}{/pageDescription}
-    {#pageRobots}{blogPost.seo.robotHint}{/pageRobots}
+    {#pageTitle}{blogPostDetail.seo.title}{/pageTitle}
+    {#pageDescription}{blogPostDetail.seo.description}{/pageDescription}
+    {#pageRobots}{blogPostDetail.seo.robotHint}{/pageRobots}
 
     {#extraCss}
         <link rel="stylesheet" href="/webjars/highlightjs/styles/stackoverflow-dark.min.css"/>
@@ -26,31 +26,31 @@
 
     {#withProgressBar}{/withProgressBar}
 
-    <div class="mb-5 rounded-top bg-body-tertiary">
+    <div class="rounded-top bg-body-tertiary">
 
         <div class="card background-purple rounded-top" style="border: none; border-radius: unset">
             <div class="row g-0">
                 <div class="col">
-                    <img src="{blogPost.image.url}?w=200" class="img-fluid rounded-top rounded-end-0 fit-all" style="min-height: 200px" alt="{blogPost.image.title}">
+                    <img src="{blogPostDetail.image.url}?w=200" class="img-fluid rounded-top rounded-end-0 fit-all" style="min-height: 200px" alt="{blogPostDetail.image.title}">
                 </div>
                 <div class="col-sm-10">
                     <div class="card-body">
-                        <h1 class="card-title">{blogPost.title}</h1>
-                        <p class="card-text my-2 fs-5">{blogPost.description}</p>
-                        <p class="card-text position-absolute bottom-0 end-0 p-2"><small class="text-body-secondary">{blogPost.publishedDate.formatted}</small></p>
+                        <h1 class="card-title">{blogPostDetail.title}</h1>
+                        <p class="card-text my-2 fs-5">{blogPostDetail.description}</p>
+                        <p class="card-text position-absolute bottom-0 end-0 p-2"><small class="text-body-secondary" data-date="{blogPostDetail.publishedDate}"></small></p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row pt-3 g-0">
-            {#if blogPost.withIndexHeading}
+            {#if blogPostDetail.withIndexHeading}
                 <div class="col-2 d-none d-xl-flex flex-column">
                     <div id="index" class="mt-auto sticky-bottom pb-3">
                         <div class="ps-3">
                             <hr>
                         </div>
-                        {#for block in blogPost.blocks}
+                        {#for block in blogPostDetail.blocks}
                             {#if block.node.indexHeading}
                                 {#include blog/blog-index block=block index=block.blocks[0] /}
                             {/if}
@@ -61,7 +61,7 @@
             {#else}
                 <div class="col">
             {/if}
-                {#for block in blogPost.blocks}
+                {#for block in blogPostDetail.blocks}
                     {#when block.node}
                         {#is EMBEDDED_ENTRY}
                             {#include blog/blog-image imageId=block.value images=images /}
@@ -90,7 +90,7 @@
         </div>
 
         <div class="row g-0 mt-1 bg-body-secondary">
-            {#if blogPost.withIndexHeading}
+            {#if blogPostDetail.withIndexHeading}
                 <div class="col-2 d-none d-xl-flex flex-column">
                     &nbsp;
                 </div>
@@ -101,19 +101,23 @@
                 <div class="blog-paragraph">
                     <span class="d-inline d-sm-none">Leave a thumbs up</span>
                     <span class="d-none d-sm-inline">Leave a thumbs up if you liked it</span>
-                    <span class="ps-2"><button id="btnRate" name="{blogPost.id}" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill {#if blogPost.liked}thumbs-up-success{/}"></button></span>
+                    <span class="ps-2"><button id="btnRate" name="{blogPostDetail.id}" type="button" class="btn btn-dark bi bi-hand-thumbs-up-fill {#if blogPostDetail.liked}thumbs-up-success{/}"></button></span>
                 </div>
             </div>
         </div>
 
     </div>
 
-    {#if blogPost.relatedBlogPosts}
+    {#fragment id=blog_post_comments}
+        {#include blog/blog-comment slug=blogPostDetail.id comments=blogPostDetail.comments /}
+    {/fragment}
+
+    {#if blogPostDetail.relatedBlogPosts}
         <div class="row g-0">
             <div class="col-12">
             <span class="fst-italic">Related blog posts</span>
             <hr />
-            {#for relatedBlogPost in blogPost.relatedBlogPosts}
+            {#for relatedBlogPost in blogPostDetail.relatedBlogPosts}
                 {#if relatedBlogPost_isFirst}/{/if}&nbsp;<a href="/blog-posts/{relatedBlogPost.slug}" class="text-decoration-none link-opacity-100 link-opacity-75-hover">{relatedBlogPost.title}</a>&nbsp;/
             {/for}
             </div>

@@ -75,6 +75,11 @@
 			<artifactId>bootstrap-icons</artifactId>
 			<version>${bootstrap-icons.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>date-fns</artifactId>
+			<version>${date-fns.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.mvnpm</groupId>

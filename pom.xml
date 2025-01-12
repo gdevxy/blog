@@ -25,6 +25,7 @@
 
 		<bootstrap.version>5.3.3</bootstrap.version>
 		<bootstrap-icons.version>1.11.3</bootstrap-icons.version>
+		<date-fns.version>4.1.0</date-fns.version>
 		<highlightjs.version>11.10.0</highlightjs.version>
 		<jquery.version>3.7.1</jquery.version>
 		<lombok.version>1.18.36</lombok.version>

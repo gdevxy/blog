@@ -1,10 +1,7 @@
 import $ from 'jquery';
+import {format, formatDistanceToNow} from 'date-fns';
 
 async function refreshFragment(url, fragmentId, params) {
-
-	if ($.isEmptyObject(params)) {
-		return;
-	}
 
 	const queryString = Object.entries(params)
 		.map(([key, value]) => {
@@ -17,7 +14,7 @@ async function refreshFragment(url, fragmentId, params) {
 		})
 		.join('&');
 
-	$.ajax({
+	return $.ajax({
 		type: 'GET',
 		url: `${url}?${queryString}`,
 		success: function(res) {
@@ -49,5 +46,28 @@ $(document).on("scroll", function() {
 	progressBar.children().css('width', `${percent}%`);
 });
 
-window.refreshFragment = refreshFragment;
+function renderDataDate() {
+	$('[data-date]').each(function () {
+		const isoDate = $(this).data('date');
+		if (isoDate) {
+			$(this).text(format(Date.parse(isoDate), "yyyy-MM-dd 'at' h:mma"));
+		}
+	});
+}
+
+function renderDataDateDistance() {
+	$('[data-date-distance]').each(function () {
+		const isoDate = $(this).data('date-distance');
+		if (isoDate) {
+			$(this).text(`${formatDistanceToNow(Date.parse(isoDate))} ago`);
+		}
+	});
+}
+
 window.checkedInputsAsQueryParams = checkedInputsAsQueryParams;
+window.refreshFragment = refreshFragment;
+window.renderDataDate = renderDataDate;
+window.renderDataDateDistance = renderDataDateDistance;
+
+$(document).ready(renderDataDate);
+$(document).ready(renderDataDateDistance);

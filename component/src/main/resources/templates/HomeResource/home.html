@@ -34,7 +34,7 @@
 									{#cardUrl}blog-posts/{post.slug}{/cardUrl}
 									{#cardImage}{post.image.url}{/cardImage}
 									{#cardRating}{post.rating}{/cardRating}
-									{#cardTimestamp}{post.publishedDate.formatted}{/cardTimestamp}
+									{#cardTimestamp}{post.publishedDate}{/cardTimestamp}
 								{/include}
 							</div>
 						{/for}
@@ -47,7 +47,7 @@
 					{#for post in recentBlogPosts}
 						<p class="text-end">
 							<a href="{post.url}" class="text-decoration-none link-opacity-100 link-opacity-75-hover" target="_self">{post.title}</a>
-							<span class="fs-7 fw-lighter d-block">{post.publishedDate.formatted}</span>
+							<span class="fs-7 fw-lighter d-block" data-date="{post.publishedDate}"></span>
 						</p>
 					{/for}
 				</div>

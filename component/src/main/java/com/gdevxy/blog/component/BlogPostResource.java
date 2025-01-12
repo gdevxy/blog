@@ -14,9 +14,10 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import com.gdevxy.blog.component.cookie.Cookies;
-import com.gdevxy.blog.model.BlogPost;
-import com.gdevxy.blog.model.CaptchaProtectedAction;
+import com.gdevxy.blog.model.BlogPostCommentAction;
+import com.gdevxy.blog.model.BlogPostDetail;
 import com.gdevxy.blog.model.Image;
+import com.gdevxy.blog.model.LikeAction;
 import com.gdevxy.blog.model.contentful.Node;
 import com.gdevxy.blog.service.contentful.ContentfulAssetService;
 import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
@@ -44,20 +45,40 @@ public class BlogPostResource {
 		@QueryParam("previewToken") String previewToken) {
 
 		var userId = Cookies.findSessionCookie(req).map(Cookie::getValue).orElseThrow();
-		var blogPost = blogPostService.findBlogPost(userId, previewToken, slug);
-		var images = blogPost.onItem().transformToMulti(p -> Multi.createFrom().iterable(p.getBlocks()))
+		var blogPostDetail = blogPostService.findBlogPost(userId, previewToken, slug).memoize().indefinitely();
+		var images = blogPostDetail.onItem().transformToMulti(p -> Multi.createFrom().iterable(p.getBlocks()))
 			.filter(b -> b.getNode() == Node.EMBEDDED_ENTRY)
-			.map(BlogPost.ContentBlock::getValue)
+			.map(BlogPostDetail.ContentBlock::getValue)
 			.onItem().transformToUniAndConcatenate(id -> contentfulAssetService.findImage(id, previewToken))
 			.collect()
 			.with(Collectors.toUnmodifiableMap(Image::getId, i -> i));
 
-		return Uni.combine().all().unis(blogPost, images).with(Templates::blogPost);
+		return Uni.combine().all().unis(blogPostDetail, images).with(Templates::blogPostDetail);
+	}
+
+	@GET
+	@Path("/{id}/blog-post-comments-fragment")
+	public Uni<TemplateInstance> findBlogPostCommentsFragment(@Valid @Size(max = 22) @PathParam("id") String key) {
+
+		return blogPostService.findBlogPostComments(key)
+			.collect()
+			.asList()
+			.map(comments -> BlogPostDetail.builder().id(key).comments(comments).build())
+			.map(BlogPostResource.Templates::blogPostDetail$blog_post_comments);
+	}
+
+	@POST
+	@Path("/{id}/comment")
+	public Uni<Void> saveComment(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("id") String key, @Valid BlogPostCommentAction action) {
+
+		var userId = Cookies.findSessionCookie(req).map(Cookie::getValue).orElseThrow();
+
+		return blogPostService.saveComment(userId, key, action);
 	}
 
 	@POST
 	@Path("/{id}/thumbs-up")
-	public Uni<Void> thumbsUp(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("id") String key, @Valid CaptchaProtectedAction action) {
+	public Uni<Void> thumbsUp(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("id") String key, @Valid LikeAction action) {
 
 		var userId = Cookies.findSessionCookie(req).map(Cookie::getValue).orElseThrow();
 
@@ -78,8 +99,9 @@ public class BlogPostResource {
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class Templates {
 
-		public static native TemplateInstance blogPost(BlogPost blogPost, Map<String, Image> images);
+		public static native TemplateInstance blogPostDetail$blog_post_comments(BlogPostDetail blogPostDetail);
 
+		public static native TemplateInstance blogPostDetail(BlogPostDetail blogPostDetail, Map<String, Image> images);
 	}
 
 }

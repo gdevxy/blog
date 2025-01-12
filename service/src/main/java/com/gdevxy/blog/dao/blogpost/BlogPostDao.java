@@ -3,6 +3,7 @@ package com.gdevxy.blog.dao.blogpost;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import com.gdevxy.blog.dao.DaoSupport;
+import com.gdevxy.blog.dao.blogpost.model.BlogPostEntity;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Row;

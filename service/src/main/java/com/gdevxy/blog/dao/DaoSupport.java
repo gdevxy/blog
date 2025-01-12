@@ -1,5 +1,10 @@
 package com.gdevxy.blog.dao;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
 import java.util.function.Function;
 
 import jakarta.ws.rs.NotFoundException;
@@ -21,6 +26,18 @@ public abstract class DaoSupport {
 				}
 				throw new NotFoundException("");
 			}));
+	}
+
+	protected Optional<String> asString(Row row, String column) {
+		return Optional.ofNullable(row.getString(column));
+	}
+
+	protected Instant asRequiredInstant(Row row, String column) {
+		return Instant.from(row.getTemporal(column));
+	}
+
+	protected OffsetDateTime toOffsetDateTimeUTC(Instant instant) {
+		return instant.atOffset(ZoneOffset.UTC);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.gdevxy.blog.dao.blogpost;
+package com.gdevxy.blog.dao.blogpost.model;
 
 import lombok.Builder;
 import lombok.Getter;
