@@ -10,7 +10,6 @@ import com.gdevxy.blog.dao.blogpost.model.BlogPostCommentEntity;
 import com.gdevxy.blog.dao.blogpost.model.BlogPostCommentReplyEntity;
 import com.gdevxy.blog.model.BlogPostComment;
 import com.gdevxy.blog.model.BlogPostCommentAction;
-import com.gdevxy.blog.model.LikeAction;
 import com.gdevxy.blog.service.Strings;
 import com.gdevxy.blog.service.captcha.CaptchaService;
 import io.smallrye.mutiny.Multi;
@@ -25,6 +24,16 @@ public class BlogPostCommentService {
 	private final BlogPostCommentReplyDao blogPostCommentReplyDao;
 	private final CaptchaService captchaService;
 
+	public Uni<BlogPostComment> find(String blogPostKey, Integer id) {
+
+		return blogPostCommentDao.find(blogPostKey, id)
+			.flatMap(p -> blogPostCommentReplyDao.find(p.getId())
+				.map(this::toBlogPostComment)
+				.collect()
+				.asList()
+				.map(replies -> toBlogPostComment(p, replies)));
+	}
+
 	public Multi<BlogPostComment> find(String blogPostKey) {
 
 		return blogPostCommentDao.find(blogPostKey)
@@ -33,8 +42,7 @@ public class BlogPostCommentService {
 				.collect()
 				.asList()
 				.map(replies -> toBlogPostComment(p, replies))
-				.toMulti())
-			.log();
+				.toMulti());
 	}
 
 	public Uni<Void> saveBlogPostComment(String userId, Integer blogPostId, BlogPostCommentAction action) {
@@ -45,10 +53,10 @@ public class BlogPostCommentService {
 			.replaceWithVoid();
 	}
 
-	public Uni<Void> saveBlogPostCommentReply(String userId, Integer blogPostCommentId, BlogPostCommentAction creation, LikeAction action) {
+	public Uni<Void> saveBlogPostCommentReply(String userId, Integer blogPostCommentId, BlogPostCommentAction action) {
 
 		return captchaService.verify(action)
-			.map(v -> BlogPostCommentReplyEntity.builder().userId(userId).blogPostCommentId(blogPostCommentId).author(Strings.blankToNull(creation.getAuthor())).comment(creation.getComment()).build())
+			.map(v -> BlogPostCommentReplyEntity.builder().userId(userId).blogPostCommentId(blogPostCommentId).author(Strings.blankToNull(action.getAuthor())).comment(action.getComment()).build())
 			.flatMap(blogPostCommentReplyDao::save)
 			.replaceWithVoid();
 	}

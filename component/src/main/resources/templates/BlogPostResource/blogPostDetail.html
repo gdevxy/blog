@@ -109,7 +109,7 @@
     </div>
 
     {#fragment id=blog_post_comments}
-        {#include blog/blog-comment slug=blogPostDetail.id comments=blogPostDetail.comments /}
+        {#include blog/blog-comments slug=blogPostDetail.id comments=blogPostDetail.comments /}
     {/fragment}
 
     {#if blogPostDetail.relatedBlogPosts}

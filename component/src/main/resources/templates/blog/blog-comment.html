@@ -1,88 +1,26 @@
 {@java.lang.String slug}
-{@java.util.List<com.gdevxy.blog.model.BlogPostComment> comments}
+{@java.lang.Integer commentId}
+{@java.lang.Boolean show}
 
-<div id="blog_post_comments" class="container mb-5 bg-body-tertiary">
+<form id="formComment{commentId}" data-comment-id="{commentId}" class="collapse {#if show}show{/if}" action="/blog-posts/{slug}/comment{#if commentId}/{commentId}{/if}">
 
-    <div class="w-75 m-auto comment-section pb-4">
-
-        <p class="pt-5 d-inline-flex gap-1">
-            <button class="btn btn-tertiary" type="button" data-bs-toggle="collapse" data-bs-target="#formComment" aria-expanded="false" aria-controls="formComment">
-                <i class="bi bi-pencil-fill pe-2 text-neon"></i>Leave a comment
-            </button>
-        </p>
-
-        <form id="formComment" class="mb-5 collapse {#if comments.empty}show{/if}" action="/blog-posts/{slug}/comment">
-
-            <div class="form-floating has-validation mb-2">
-                <input id="commentAuthor" name="author" type="text" class="form-control" placeholder="Author"/>
-                <label for="commentAuthor">Author</label>
-                <div id="validationCommentAuthorFeedback" class="invalid-feedback"></div>
-            </div>
-
-            <div class="form-floating has-validation mb-1">
-                <textarea id="commentComment" name="comment" class="form-control" placeholder="Write a comment..." style="height: 200px" aria-required="true" maxlength="2000" required></textarea>
-                <label for="commentComment">Leave a comment...</label>
-                <div id="validationCommentCommentFeedback" class="invalid-feedback"></div>
-                <div class="form-text">
-                    Remaining characters: <span id="commentCharCounter">2000</span>
-                </div>
-            </div>
-
-            <div class="text-end">
-                <button type="submit" class="btn btn-dark">Send</button>
-            </div>
-
-        </form>
-
-        {#if comments}
-            <div>
-                {#for comment in comments}
-                    <div class="comment-box bg-body">
-
-                        <div class="d-flex gap-3">
-                            <div class="flex-grow-1">
-
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="mb-0">{comment.author}</h6>
-                                    <span class="comment-time" data-date-distance="{comment.createdAt}"></span>
-                                </div>
-
-                                <p class="mb-2">{comment.comment}</p>
-
-                                <!--<div class="comment-actions">
-                                    Not yet supported <a href="#"><i class="bi bi-heart"></i> Like</a>
-                                    <a href="#" class="text-decoration-none link-opacity-100 link-opacity-75-hover"><i class="bi bi-reply"></i>Reply</a>
-                                </div>-->
-
-                            </div>
-                        </div>
-
-
-                        {#for reply in comment.replies}
-                            <div class="reply-section mt-3">
-                                <div class="comment-box">
-                                    <div class="d-flex gap-3">
-
-                                        <div class="flex-grow-1">
-
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0">{reply.author}</h6>
-                                                <span class="comment-time" data-date-distance="{reply.createdAt}"></span>
-                                            </div>
-
-                                            <p class="mb-2">{reply.comment}</p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        {/for}
-
-                    </div>
-                {/for}
-            </div>
-        {/if}
-
+    <div class="form-floating has-validation mb-2">
+        <input id="commentAuthor{commentId}" name="author" type="text" class="form-control" placeholder="Author"/>
+        <label for="commentAuthor{commentId}">Author</label>
+        <div id="validationCommentAuthorFeedback{commentId}" class="invalid-feedback"></div>
     </div>
 
-</div>
+    <div class="form-floating has-validation mb-1">
+        <textarea id="commentComment{commentId}" name="comment" class="form-control" placeholder="Write a comment..." style="height: 200px" aria-required="true" maxlength="2000" required></textarea>
+        <label for="commentComment{commentId}">Leave a comment...</label>
+        <div id="validationCommentCommentFeedback{commentId}" class="invalid-feedback"></div>
+        <div class="form-text">
+            Remaining characters: <span id="commentCharCounter{commentId}">2000</span>
+        </div>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-dark">Send</button>
+    </div>
+
+</form>

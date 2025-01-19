@@ -25,21 +25,57 @@ function checkScrollPosition() {
 	}
 }
 
-function evaluateCommentLength(e) {
+function evaluateCommentLength(e, commentId) {
 
-	const currentLength = $(this).val().length;
+	const currentLength = $(e.target).val().length;
 	const remainingChars = 2000 - currentLength;
-	$('#commentCharCounter').text(remainingChars);
+	$(`#commentCharCounter${commentId}`).text(remainingChars);
 }
 
-function saveComment(e) {
+function registerThumbsUpThumbsDownEvent() {
+
+	$("#btnRate").on('click', thumbsUpThumbsDown);
+}
+
+function registerCommentEvents() {
+
+	$('[id^="formComment"]').each(function() {
+
+		const el = $(this);
+		const commentId = el.data("comment-id");
+
+		el.on('submit', event => saveComment(event, commentId));
+		el.find(`#commentComment${commentId}`).on('input', event => evaluateCommentLength(event, commentId));
+	});
+}
+
+function registerCommentReplyEvents() {
+
+	$('[id^="btnReply"]').each(function() {
+
+		const el = $(this);
+		const commentId = el.data("comment-id");
+
+		el.on('click', event => showReplySection(event, commentId));
+	});
+}
+
+function showReplySection(e, commentId) {
+
+	const form = $(`#formComment${commentId}`);
+	addOrRemoveClass(form, "show");
+	addOrRemoveClass(form.parent(), "d-none");
+}
+
+function saveComment(e, commentId) {
 
 	e.preventDefault();
 
-	const btn = $(this).find(':submit');
-	const action = $(this).attr("action");
-	const author = $(this).find('#commentAuthor');
-	const comment = $(this).find('#commentComment');
+	const form = $(e.target);
+	const btn = form.find(':submit');
+	const action = form.attr("action");
+	const author = form.find(`#commentAuthor${commentId}`);
+	const comment = form.find(`#commentComment${commentId}`);
 
 	grecaptcha.ready(function () {
 		grecaptcha
@@ -57,12 +93,17 @@ function saveComment(e) {
 						comment: comment.val()
 					}),
 					success: function () {
-						return refreshFragment(action.replace('/comment', '/blog-post-comments-fragment'), 'blog_post_comments', {})
+
+						const url = action.replace(/\/comment.*$/, '/blog-post-comments-fragment');
+						console.log(url);
+
+						return refreshFragment(url, 'blog_post_comments', {})
 							.then(() => renderDataDateDistance())
-							.then(() => $("#formComment").on('submit', saveComment))
-							.then(() => $("#commentComment").on('input', evaluateCommentLength));
+							.then(() => registerCommentEvents())
+							.then(() => registerCommentReplyEvents());
 					},
 					error: function (err) {
+						console.log(err);
 						btn.addClass("tada");
 						$('.has-validation > .is-invalid').each(function() { $(this).removeClass("is-invalid"); });
 						err.responseJSON.violations.forEach(violation => {
@@ -135,10 +176,8 @@ $(window).on('scroll', function() {
 });
 
 $(document).ready(function() {
-
-	$("#btnRate").on('click', thumbsUpThumbsDown);
-	$("#formComment").on('submit', saveComment);
-	$("#commentComment").on('input', evaluateCommentLength);
-
 	checkScrollPosition();
+	registerCommentEvents();
+	registerCommentReplyEvents();
+	registerThumbsUpThumbsDownEvent();
 });

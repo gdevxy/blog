@@ -20,7 +20,7 @@ public class BlogPostDao extends DaoSupport {
 
 	public Uni<BlogPostEntity> findByKey(String key) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				select 
 					id,
 					key
@@ -32,7 +32,7 @@ public class BlogPostDao extends DaoSupport {
 
 	public Uni<BlogPostEntity> save(BlogPostEntity entity) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				insert into blog_post(
 					key
 				) values (

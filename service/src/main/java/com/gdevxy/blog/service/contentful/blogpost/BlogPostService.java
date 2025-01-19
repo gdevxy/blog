@@ -4,6 +4,8 @@ import java.util.Set;
 
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.NotFoundException;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
@@ -78,6 +80,12 @@ public class BlogPostService {
 
 		return blogPostDao.findByKey(key)
 			.flatMap(p -> blogPostCommentService.saveBlogPostComment(userId, p.getId(), action));
+	}
+
+	public Uni<Void> saveCommentReply(String userId, String key, Integer id, BlogPostCommentAction action) {
+
+		return blogPostCommentService.find(key, id)
+			.flatMap(p -> blogPostCommentService.saveBlogPostCommentReply(userId, p.getId(), action));
 	}
 
 	public Uni<Void> thumbsUp(String userId, String key, LikeAction action) {

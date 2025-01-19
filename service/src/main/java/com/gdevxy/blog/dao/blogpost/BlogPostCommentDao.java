@@ -1,7 +1,5 @@
 package com.gdevxy.blog.dao.blogpost;
 
-import java.time.ZoneOffset;
-
 import jakarta.enterprise.context.ApplicationScoped;
 
 import com.gdevxy.blog.dao.DaoSupport;
@@ -22,7 +20,7 @@ public class BlogPostCommentDao extends DaoSupport {
 
 	public Uni<Long> count(Integer blogPostId) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				select
 					count(*) as nb_comments
 				from blog_post_comment
@@ -51,9 +49,27 @@ public class BlogPostCommentDao extends DaoSupport {
 			.map(this::toBlogPostCommentEntity);
 	}
 
+	public Uni<BlogPostCommentEntity> find(String blogPostKey, Integer id) {
+
+		return asUni(sql.preparedQuery("""
+				select
+					pc.id,
+					pc.blog_post_id,
+					pc.user_id,
+					pc.author,
+					pc.comment,
+					pc.created_at
+				from blog_post_comment pc
+				inner join blog_post p on p.id = pc.blog_post_id
+				where p.key = $1 and pc.id = $2
+				order by pc.created_at desc
+				""")
+			.execute(Tuple.of(blogPostKey, id)), this::toBlogPostCommentEntity);
+	}
+
 	public Uni<BlogPostCommentEntity> save(BlogPostCommentEntity e) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				insert into blog_post_comment (
 					blog_post_id,
 					user_id,

@@ -22,5 +22,15 @@ function isBottomPage() {
 	return scrollPosition >= documentHeight - 5;
 }
 
+function addOrRemoveClass(element, className) {
+
+	if (element.hasClass(className)) {
+		element.removeClass(className);
+	} else {
+		element.addClass(className);
+	}
+}
+
+window.addOrRemoveClass = addOrRemoveClass;
 window.isElementInView = isElementInView;
 window.isBottomPage = isBottomPage;

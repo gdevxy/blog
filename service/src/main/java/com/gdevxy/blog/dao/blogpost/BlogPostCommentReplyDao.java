@@ -1,7 +1,5 @@
 package com.gdevxy.blog.dao.blogpost;
 
-import java.time.ZoneOffset;
-
 import jakarta.enterprise.context.ApplicationScoped;
 
 import com.gdevxy.blog.dao.DaoSupport;
@@ -41,14 +39,14 @@ public class BlogPostCommentReplyDao extends DaoSupport {
 
 	public Uni<BlogPostCommentReplyEntity> save(BlogPostCommentReplyEntity e) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				insert into blog_post_comment_reply (
 					blog_post_comment_id,
 					user_id,
 					author,
 					comment,
 					created_at
-				) values ($1, $2, $3, $4)
+				) values ($1, $2, $3, $4, $5) returning *
 				""")
 			.execute(Tuple.of(e.getBlogPostCommentId(), e.getUserId(), e.getAuthor(), e.getComment(), toOffsetDateTimeUTC(e.getCreatedAt()))), r -> e.toBuilder().blogPostCommentId(r.getInteger("id")).build());
 	}

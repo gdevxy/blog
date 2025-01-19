@@ -1,6 +1,5 @@
 package com.gdevxy.blog.dao;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +15,7 @@ import io.vertx.mutiny.sqlclient.RowSet;
 
 public abstract class DaoSupport {
 
-	protected <T> Uni<T> as(Uni<RowSet<Row>> request, Function<Row, T> converter) {
+	protected <T> Uni<T> asUni(Uni<RowSet<Row>> request, Function<Row, T> converter) {
 
 		return request
 			.onItem().transform(RowSet::iterator)

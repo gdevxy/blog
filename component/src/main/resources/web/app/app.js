@@ -3,6 +3,9 @@ import {format, formatDistanceToNow} from 'date-fns';
 
 async function refreshFragment(url, fragmentId, params) {
 
+	console.log("########### kikoo");
+	console.log(url);
+
 	const queryString = Object.entries(params)
 		.map(([key, value]) => {
 

@@ -21,6 +21,7 @@ import com.gdevxy.blog.model.LikeAction;
 import com.gdevxy.blog.model.contentful.Node;
 import com.gdevxy.blog.service.contentful.ContentfulAssetService;
 import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import io.smallrye.mutiny.Multi;
@@ -30,6 +31,8 @@ import io.vertx.core.http.HttpServerRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.ResponseStatus;
+import org.jboss.resteasy.reactive.RestResponse;
 
 @Path("/blog-posts")
 @RequiredArgsConstructor
@@ -57,8 +60,8 @@ public class BlogPostResource {
 	}
 
 	@GET
-	@Path("/{id}/blog-post-comments-fragment")
-	public Uni<TemplateInstance> findBlogPostCommentsFragment(@Valid @Size(max = 22) @PathParam("id") String key) {
+	@Path("/{key}/blog-post-comments-fragment")
+	public Uni<TemplateInstance> findBlogPostCommentsFragment(@Valid @Size(max = 22) @PathParam("key") String key) {
 
 		return blogPostService.findBlogPostComments(key)
 			.collect()
@@ -68,12 +71,24 @@ public class BlogPostResource {
 	}
 
 	@POST
-	@Path("/{id}/comment")
-	public Uni<Void> saveComment(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("id") String key, @Valid BlogPostCommentAction action) {
+	@Path("/{key}/comment")
+	@ResponseStatus(RestResponse.StatusCode.NO_CONTENT)
+	public Uni<Void> saveComment(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("key") String key, @Valid BlogPostCommentAction action) {
 
 		var userId = Cookies.findSessionCookie(req).map(Cookie::getValue).orElseThrow();
 
 		return blogPostService.saveComment(userId, key, action);
+	}
+
+	@POST
+	@Path("/{key}/comment/{id}")
+	@ResponseStatus(RestResponse.StatusCode.NO_CONTENT)
+	public Uni<Void> saveCommentReply(HttpServerRequest req, @Valid @Size(max = 22) @PathParam("key") String key, @PathParam("id") Integer id, @Valid BlogPostCommentAction action) {
+
+		var userId = Cookies.findSessionCookie(req).map(Cookie::getValue).orElseThrow();
+
+		return blogPostService.saveCommentReply(userId, key, id, action)
+			.log();
 	}
 
 	@POST

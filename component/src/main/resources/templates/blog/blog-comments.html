@@ -1,0 +1,75 @@
+{@java.lang.String slug}
+{@java.util.List<com.gdevxy.blog.model.BlogPostComment> comments}
+
+<div id="blog_post_comments" class="container mb-5 bg-body-tertiary">
+
+    <div class="w-75 m-auto comment-section pb-4">
+
+        <p class="pt-5 d-inline-flex gap-1">
+            <button class="btn btn-tertiary" type="button" data-bs-toggle="collapse" data-bs-target="#formComment" aria-expanded="true" aria-controls="formComment">
+                <i class="bi bi-pencil-fill pe-2 text-neon"></i>Leave a comment
+            </button>
+        </p>
+
+        <div class="mb-5">
+            {#include blog/blog-comment slug=slug show=true commentId=null /}
+        </div>
+
+        {#if comments}
+            <div>
+                {#for comment in comments}
+                    <div class="comment-box bg-body">
+
+                        <div class="d-flex gap-3">
+                            <div class="flex-grow-1">
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">{comment.author}</h6>
+                                    <span class="comment-time" data-date-distance="{comment.createdAt}"></span>
+                                </div>
+
+                                <p class="mb-2">{comment.comment}</p>
+
+                                <div class="comment-actions text-end">
+                                    <!--Not yet supported <a href="#"><i class="bi bi-heart"></i> Like</a>-->
+                                    <button id="btnReply{comment.id}" data-comment-id="{comment.id}" class="btn btn-tertiary" type="button">
+                                        <i class="bi bi-reply pe-2 text-neon"></i>Reply
+                                    </button>
+                                </div>
+
+                                <div class="container bg-body-tertiary mt-2 p-3 rounded-1 d-none">
+                                {#include blog/blog-comment slug=slug show=false commentId=comment.id /}
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        {#for reply in comment.replies}
+                            <div class="reply-section mt-3">
+                                <div class="comment-box">
+                                    <div class="d-flex gap-3">
+
+                                        <div class="flex-grow-1">
+
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0">{reply.author}</h6>
+                                                <span class="comment-time" data-date-distance="{reply.createdAt}"></span>
+                                            </div>
+
+                                            <p class="mb-2">{reply.comment}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {/for}
+
+                    </div>
+                {/for}
+            </div>
+        {/if}
+
+    </div>
+
+</div>

@@ -1,12 +1,10 @@
 package com.gdevxy.blog.dao.blogpost;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 
 import com.gdevxy.blog.dao.DaoSupport;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
-import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.Tuple;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +29,7 @@ public class BlogPostRatingDao extends DaoSupport {
 
 	public Uni<Long> countRating(Integer id) {
 
-		return as(sql.preparedQuery("""
+		return asUni(sql.preparedQuery("""
 				select 
 					count(*) as rating
 				from blog_post_rating
