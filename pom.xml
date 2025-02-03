@@ -34,7 +34,7 @@
 		<quarkus.web-bundler.version>1.8.1</quarkus.web-bundler.version>
 
 		<assertj.version>3.27.3</assertj.version>
-		<quarkus-playwright.version>2.0.0</quarkus-playwright.version>
+		<quarkus-playwright.version>2.1.0</quarkus-playwright.version>
 		<quarkus-wiremock.version>1.4.1</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
