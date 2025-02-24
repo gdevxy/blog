@@ -37,7 +37,7 @@
 		<quarkus-playwright.version>2.1.1</quarkus-playwright.version>
 		<quarkus-wiremock.version>1.4.1</quarkus-wiremock.version>
 
-		<compiler-plugin.version>3.13.0</compiler-plugin.version>
+		<compiler-plugin.version>3.14.0</compiler-plugin.version>
 		<jandex-plugin.version>3.2.7</jandex-plugin.version>
 		<surefire-plugin.version>3.5.2</surefire-plugin.version>
 
