@@ -2,7 +2,9 @@ package com.gdevxy.blog.model;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.gdevxy.blog.model.contentful.Mark;
 import com.gdevxy.blog.model.contentful.Node;
@@ -56,12 +58,24 @@ public class BlogPostDetail {
 
 		private final Node node;
 		private final String value;
-		private final Set<Mark> marks;
+		private final TextMark marks;
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
 
 		public String toHtmlIdentifier() {
 			return value.replaceAll("\\s","-").toLowerCase();
+		}
+
+		public record TextMark(Set<Mark> marks) {
+
+			public boolean code() {
+				return marks.contains(Mark.CODE);
+			}
+
+			public String styling() {
+				return marks.stream().map(Mark::getStyling).filter(Objects::nonNull).collect(Collectors.joining(" "));
+			}
+
 		}
 
 	}

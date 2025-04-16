@@ -12,14 +12,15 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public enum Mark {
 
-	BOLD("bold"),
-	ITALIC("italic"),
-	UNDERLINE("underline"),
-	CODE("code"),
-	SUPERSCRIPT("superscript"),
-	SUBSCRIPT("subscript");
+	BOLD("bold", "fw-bold text-string"),
+	ITALIC("italic", "fst-italic"),
+	UNDERLINE("underline", "text-decoration-underline"),
+	CODE("code", null),
+	SUPERSCRIPT("superscript", null),
+	SUBSCRIPT("subscript", null);
 
 	private final String code;
+	private final String styling;
 
 	private static final Map<String, Mark> LOOKUP = Stream.of(Mark.values())
 			.collect(Collectors.toUnmodifiableMap(Mark::getCode, t -> t));

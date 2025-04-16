@@ -1,20 +1,7 @@
-{#if marks}
-    {#for mark in marks}
-        {#when mark}
-            {#is BOLD}
-                <span class="fw-bold text-string">{value}</span>
-            {#is ITALIC}
-                <span class="fst-italic">{value}</span>
-            {#is UNDERLINE}
-                <span class="text-decoration-underline">{value}</span>
-            {#is CODE}
-                <pre style="margin-bottom: -2rem !important;">
-                    <code style="margin: -2rem 0 !important">{value}</code>
-                </pre>
-            {#else}
-                {value}
-        {/when}
-    {/for}
+{#if marks.code}
+    <pre style="margin-bottom: -2rem !important;">
+        <code style="margin: -2rem 0 !important">{value}</code>
+    </pre>
 {#else}
-    {value}
+    <span class="{marks.styling}">{value}</span>
 {/if}

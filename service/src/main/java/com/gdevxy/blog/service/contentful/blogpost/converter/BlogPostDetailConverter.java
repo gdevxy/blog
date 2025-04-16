@@ -81,11 +81,12 @@ public class BlogPostDetailConverter {
 	private BlogPostDetail.ContentBlock toContent(RichContent content) {
 
 		var nodeType = Node.of(content.getNodeType());
+		var marks = content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet());
 
 		return BlogPostDetail.ContentBlock.builder()
 				.node(nodeType)
 				.value(toValue(nodeType, content))
-				.marks(content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet()))
+				.marks(new BlogPostDetail.ContentBlock.TextMark(marks))
 				.blocks(toContentBlocks(content.getContent()))
 				.build();
 	}
