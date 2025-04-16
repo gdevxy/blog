@@ -8,11 +8,11 @@
             {#is UNDERLINE}
                 <span class="text-decoration-underline">{value}</span>
             {#is CODE}
-                <pre class="m-0" style="margin-bottom: -1rem">
-                <code>{value}</code>
+                <pre style="margin-bottom: -2rem !important;">
+                    <code style="margin: -2rem 0 !important">{value}</code>
                 </pre>
-        {#else}
-            {value}
+            {#else}
+                {value}
         {/when}
     {/for}
 {#else}
