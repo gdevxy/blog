@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.gdevxy.blog.model.contentful.Mark;
 import com.gdevxy.blog.model.contentful.Node;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -66,9 +67,15 @@ public class BlogPostDetail {
 			return value.replaceAll("\\s","-").toLowerCase();
 		}
 
-		public record TextMark(Set<Mark> marks) {
+		@Getter
+		@Builder
+		@ToString
+		@RegisterForReflection
+		public static class TextMark {
 
-			public boolean code() {
+			private final Set<Mark> marks;
+
+			public Boolean code() {
 				return marks.contains(Mark.CODE);
 			}
 

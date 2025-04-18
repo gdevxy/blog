@@ -86,7 +86,7 @@ public class BlogPostDetailConverter {
 		return BlogPostDetail.ContentBlock.builder()
 				.node(nodeType)
 				.value(toValue(nodeType, content))
-				.marks(new BlogPostDetail.ContentBlock.TextMark(marks))
+				.marks(BlogPostDetail.ContentBlock.TextMark.builder().marks(marks).build())
 				.blocks(toContentBlocks(content.getContent()))
 				.build();
 	}
