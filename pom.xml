@@ -23,7 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<bootstrap.version>5.3.6</bootstrap.version>
+		<bootstrap.version>5.3.7</bootstrap.version>
 		<bootstrap-icons.version>1.13.1</bootstrap-icons.version>
 		<date-fns.version>4.1.0</date-fns.version>
 		<highlightjs.version>11.11.1</highlightjs.version>
