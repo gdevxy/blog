@@ -39,7 +39,7 @@
 
 		<compiler-plugin.version>3.14.0</compiler-plugin.version>
 		<jandex-plugin.version>3.4.0</jandex-plugin.version>
-		<surefire-plugin.version>3.5.3</surefire-plugin.version>
+		<surefire-plugin.version>3.5.4</surefire-plugin.version>
 
 		<skipITs>true</skipITs>
 		<skip.quarkus.build>false</skip.quarkus.build>
