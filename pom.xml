@@ -38,7 +38,7 @@
 		<quarkus-wiremock.version>1.5.1</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.14.0</compiler-plugin.version>
-		<jandex-plugin.version>3.4.0</jandex-plugin.version>
+		<jandex-plugin.version>3.5.0</jandex-plugin.version>
 		<surefire-plugin.version>3.5.4</surefire-plugin.version>
 
 		<skipITs>true</skipITs>
