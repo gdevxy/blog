@@ -29,7 +29,7 @@
 		<highlightjs.version>11.11.1</highlightjs.version>
 		<jquery.version>3.7.1</jquery.version>
 		<lombok.version>1.18.40</lombok.version>
-		<quarkus.platform.version>3.26.3</quarkus.platform.version>
+		<quarkus.platform.version>3.26.4</quarkus.platform.version>
 		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
 		<quarkus.web-bundler.version>1.9.2</quarkus.web-bundler.version>
 
