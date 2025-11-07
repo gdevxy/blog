@@ -233,6 +233,8 @@ GitHub Actions workflows in `.github/workflows/`:
 
 ### Kubernetes
 
+Deployed on OCI infrastructure on a Oracle Linux 8.10
+
 Manifests in `.deploy/`:
 - `deployment.yaml` - 2-replica pod deployment
 - `service.yaml` - ClusterIP service
