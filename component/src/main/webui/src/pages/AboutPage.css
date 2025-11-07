@@ -1,0 +1,148 @@
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.loading,
+.error,
+.no-profile {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.profile-header {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #646cff;
+  flex-shrink: 0;
+}
+
+.profile-info h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #646cff;
+}
+
+.job-title {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.location {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.email a {
+  color: #646cff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.email a:hover {
+  color: #535bf2;
+}
+
+.description {
+  background-color: rgba(100, 108, 255, 0.05);
+  padding: 2rem;
+  border-left: 4px solid #646cff;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.description p {
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.accounts h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(100, 108, 255, 0.1);
+  border: 2px solid rgba(100, 108, 255, 0.3);
+  border-radius: 8px;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: #646cff;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.social-link:hover {
+  background-color: #646cff;
+  color: white;
+  border-color: #646cff;
+  transform: translateY(-2px);
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .about-page {
+    padding: 1rem 0;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  .profile-info h1 {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    padding: 1.5rem;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}

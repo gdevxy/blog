@@ -1,0 +1,165 @@
+.blog-list-page {
+  padding: 2rem 0;
+}
+
+.blog-list-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #646cff;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.loading,
+.error,
+.no-posts {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.posts-list {
+  margin-bottom: 2rem;
+}
+
+.post-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s;
+}
+
+.post-item:hover {
+  background-color: rgba(100, 108, 255, 0.05);
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-content {
+  flex: 1;
+}
+
+.post-item h2 {
+  font-size: 1.4rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.post-item h2 a {
+  color: #646cff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.post-item h2 a:hover {
+  color: #535bf2;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0.5rem 0 1rem 0;
+  font-size: 0.95rem;
+}
+
+.post-footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.date {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-block;
+  color: #646cff;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+}
+
+.read-link {
+  font-size: 1.5rem;
+  color: #646cff;
+  text-decoration: none;
+  margin-left: 1rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.read-link:hover {
+  color: #535bf2;
+  transform: translateX(4px);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.btn-nav {
+  padding: 0.6rem 1.2rem;
+  background-color: #646cff;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.btn-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .blog-list-page h1 {
+    font-size: 1.8rem;
+  }
+
+  .post-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .read-link {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .post-footer {
+    width: 100%;
+  }
+}
