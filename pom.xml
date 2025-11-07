@@ -19,7 +19,7 @@
 
 	<properties>
 
-		<maven.compiler.release>21</maven.compiler.release>
+		<maven.compiler.release>25</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -29,7 +29,7 @@
 		<highlightjs.version>11.11.1</highlightjs.version>
 		<jquery.version>3.7.1</jquery.version>
 		<lombok.version>1.18.42</lombok.version>
-		<quarkus.platform.version>3.29.1</quarkus.platform.version>
+		<quarkus.version>3.29.1</quarkus.version>
 		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
 		<quarkus.web-bundler.version>1.9.3</quarkus.web-bundler.version>
 
@@ -52,7 +52,7 @@
 			<dependency>
 				<groupId>io.quarkus.platform</groupId>
 				<artifactId>quarkus-bom</artifactId>
-				<version>${quarkus.platform.version}</version>
+				<version>${quarkus.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -83,7 +83,7 @@
 			<plugin>
 				<groupId>io.quarkus.platform</groupId>
 				<artifactId>quarkus-maven-plugin</artifactId>
-				<version>${quarkus.platform.version}</version>
+				<version>${quarkus.version}</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -119,6 +119,18 @@
 				<version>${compiler-plugin.version}</version>
 				<configuration>
 					<parameters>true</parameters>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+                        <path>
+                            <groupId>io.quarkus</groupId>
+                            <artifactId>quarkus-extension-processor</artifactId>
+                            <version>${quarkus.version}</version>
+                        </path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 

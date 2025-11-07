@@ -3,7 +3,7 @@
 GraalVM JDK must be installed. Any env manager do fine, I personally tend to rely on [sdkman](https://sdkman.io/).
 
 ```
-sdk install java 21.0.2-graalce
+sdk install java 25-graalce
 ```
 
 ## Running the application in dev mode
