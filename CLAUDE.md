@@ -278,7 +278,7 @@ Build and deploy to Oracle Cloud Registry via Maven (see native image command ab
 
 ### Native Image Build Fails
 
-- Ensure GraalVM JDK 21 is installed: `java -version`
+- Ensure GraalVM JDK 25 is installed: `java -version`
 - Check `client/reflection/ThirdPartyReflectionConfiguration.java` for missing reflection configs
 - Rebuild index: `mvn clean install -Dmaven.wagon.http.retryHandler.count=3`
 
