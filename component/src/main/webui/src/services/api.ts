@@ -1,12 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
 import {
-  BlogPostsResponseDto,
-  BlogPostDetailDto,
-  BlogPostSummaryDto,
-  BlogPostCommentsResponseDto,
-  BlogPostCommentDto,
+  BlogPost,
+  BlogPostDetail,
+  BlogPostComment,
+  BlogPostCommentAction,
+  Page,
   ProfileDto,
-  AddCommentRequest,
   ErrorResponse,
 } from '@types/api';
 
@@ -41,85 +40,99 @@ class BlogApiClient {
 
   /**
    * Get paginated list of blog posts
-   * @param page Page number (0-indexed)
-   * @param limit Number of posts per page
-   * @param tag Optional tag filter (comma-separated)
+   * @param previewToken Optional preview token
+   * @param tags Optional tags to filter
+   * @param pageSize Page size for pagination (default: 10)
    */
   async getBlogPosts(
-    page: number = 0,
-    limit: number = 10,
-    tag?: string
-  ): Promise<BlogPostsResponseDto> {
-    const params: Record<string, any> = { page, limit };
-    if (tag) {
-      params.tag = tag;
+    previewToken?: string,
+    tags?: Set<string>,
+    pageSize: number = 10
+  ): Promise<Page<BlogPost>> {
+    const params: Record<string, any> = {};
+    if (previewToken) {
+      params.previewToken = previewToken;
     }
-    const response = await this.client.get('/blog-posts', { params });
+    if (tags && tags.size > 0) {
+      params.tags = Array.from(tags);
+    }
+    const headers: Record<string, any> = {
+      'X-Page-Size': pageSize.toString(),
+    };
+    const response = await this.client.get('/blog-posts', { params, headers });
     return response.data;
   }
 
-  /**
-   * Get recent blog posts (for home page hero)
-   */
-  async getRecentBlogPosts(): Promise<BlogPostSummaryDto[]> {
-    const response = await this.client.get('/blog-posts/recent');
-    return response.data;
-  }
 
   /**
    * Get detailed blog post by slug
    * @param slug Blog post slug
-   * @param preview Include preview content (requires preview token)
-   * @param userId Optional user ID from cookie
+   * @param previewToken Optional preview token
    */
   async getBlogPost(
     slug: string,
-    preview: boolean = false,
-    userId?: string
-  ): Promise<BlogPostDetailDto> {
-    const params: Record<string, any> = { preview };
-    const headers: Record<string, string> = {};
+    previewToken?: string
+  ): Promise<BlogPostDetail> {
+    const params: Record<string, any> = {};
 
-    if (userId) {
-      headers['Cookie'] = `userId=${userId}`;
+    if (previewToken) {
+      params.previewToken = previewToken;
     }
 
-    const response = await this.client.get(`/blog-posts/${slug}`, {
-      params,
-      headers,
-    });
+    const response = await this.client.get(`/blog-posts/${slug}`, { params });
     return response.data;
   }
 
   /**
    * Get all comments for a blog post
-   * @param slug Blog post slug
+   * @param contentfulId Contentful blog post ID
    */
-  async getComments(slug: string): Promise<BlogPostCommentsResponseDto> {
-    const response = await this.client.get(`/blog-posts/${slug}/comments`);
+  async getComments(contentfulId: string): Promise<BlogPostComment[]> {
+    const response = await this.client.get(`/blog-posts/${contentfulId}/comments`);
     return response.data;
   }
 
   /**
    * Add a comment to a blog post
-   * @param slug Blog post slug
-   * @param comment Comment data
-   * @param userId Optional user ID from cookie
+   * @param contentfulId Contentful blog post ID
+   * @param commentAction Comment action data
    */
   async addComment(
-    slug: string,
-    comment: AddCommentRequest,
-    userId?: string
+    contentfulId: string,
+    commentAction: BlogPostCommentAction
   ): Promise<void> {
-    const headers: Record<string, string> = {};
+    await this.client.post(`/blog-posts/${contentfulId}/comments`, commentAction);
+  }
 
-    if (userId) {
-      headers['Cookie'] = `userId=${userId}`;
-    }
+  /**
+   * Add a reply to a comment
+   * @param contentfulId Contentful blog post ID
+   * @param commentId Comment ID to reply to
+   * @param replyAction Reply action data
+   */
+  async addCommentReply(
+    contentfulId: string,
+    commentId: number,
+    replyAction: BlogPostCommentAction
+  ): Promise<void> {
+    await this.client.post(`/blog-posts/${contentfulId}/comments/${commentId}/reply`, replyAction);
+  }
 
-    await this.client.post(`/blog-posts/${slug}/comments`, comment, {
-      headers,
-    });
+  /**
+   * Mark a blog post as liked with thumbs up
+   * @param contentfulId Contentful blog post ID
+   * @param likeAction Like action data with captcha verification
+   */
+  async thumbsUp(contentfulId: string, likeAction: any): Promise<void> {
+    await this.client.post(`/blog-posts/${contentfulId}/rating/thumbs-up`, likeAction);
+  }
+
+  /**
+   * Mark a blog post as disliked with thumbs down
+   * @param contentfulId Contentful blog post ID
+   */
+  async thumbsDown(contentfulId: string): Promise<void> {
+    await this.client.post(`/blog-posts/${contentfulId}/rating/thumbs-down`, {});
   }
 
   /**

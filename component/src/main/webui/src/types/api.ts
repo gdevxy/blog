@@ -13,7 +13,7 @@ export interface Image {
   height?: number;
 }
 
-export interface BlogPostSummaryDto {
+export interface BlogPost {
   id?: string;
   slug: string;
   title: string;
@@ -21,13 +21,13 @@ export interface BlogPostSummaryDto {
   publishedDate: string;
   image?: Image;
   tags?: BlogPostTag[];
+  rating?: string;
 }
 
-export interface BlogPostsResponseDto {
-  posts: BlogPostSummaryDto[];
-  currentPage: number;
+export interface Page<T> {
+  elements: T[];
+  offset: number;
   pageSize: number;
-  hasNextPage: boolean;
   totalCount: number;
 }
 
@@ -54,7 +54,7 @@ export interface RelatedBlogPost {
   title: string;
 }
 
-export interface BlogPostDetailDto {
+export interface BlogPostDetail {
   id: string;
   slug: string;
   title: string;
@@ -68,7 +68,7 @@ export interface BlogPostDetailDto {
   relatedBlogPosts: RelatedBlogPost[];
   liked?: boolean;
   comments: BlogPostComment[];
-  withIndexHeading: boolean;
+  withIndexHeading?: boolean;
 }
 
 export interface BlogPostComment {
@@ -79,17 +79,9 @@ export interface BlogPostComment {
   replies: BlogPostComment[];
 }
 
-export interface BlogPostCommentsResponseDto {
-  comments: BlogPostComment[];
-  totalCount: number;
-}
-
-export interface BlogPostCommentDto {
-  id?: number;
+export interface BlogPostCommentAction {
   author: string;
   comment: string;
-  createdAt?: string;
-  replies?: BlogPostCommentDto[];
 }
 
 // Profile/About types

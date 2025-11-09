@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { blogApi } from '@services/api';
-import { BlogPostsResponseDto, BlogPostSummaryDto } from '@types/api';
+import { BlogPost, Page } from '@types/api';
 
 interface UseBlogPostsResult {
-  posts: BlogPostSummaryDto[];
+  posts: BlogPost[];
   loading: boolean;
   error: Error | null;
   currentPage: number;
@@ -17,18 +17,18 @@ interface UseBlogPostsResult {
 }
 
 export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): UseBlogPostsResult {
-  const [data, setData] = useState<BlogPostsResponseDto | null>(null);
+  const [data, setData] = useState<Page<BlogPost> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [currentTag, setCurrentTag] = useState<string | undefined>();
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
   const fetchPosts = useCallback(
-    async (page: number, tag?: string) => {
+    async (page: number, tags?: Set<string>) => {
       try {
         setLoading(true);
         setError(null);
-        const result = await blogApi.getBlogPosts(page, pageSize, tag);
+        const result = await blogApi.getBlogPosts(undefined, tags, pageSize);
         setData(result);
         setCurrentPage(page);
       } catch (err) {
@@ -43,8 +43,8 @@ export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): Us
   );
 
   useEffect(() => {
-    fetchPosts(currentPage, currentTag);
-  }, [currentPage, currentTag, fetchPosts]);
+    fetchPosts(currentPage, selectedTags);
+  }, [currentPage, selectedTags, fetchPosts]);
 
   const goToPage = useCallback(
     async (page: number) => {
@@ -54,10 +54,10 @@ export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): Us
   );
 
   const nextPage = useCallback(async () => {
-    if (data?.hasNextPage) {
+    if (data && data.offset + data.pageSize < data.totalCount) {
       setCurrentPage((prev) => prev + 1);
     }
-  }, [data?.hasNextPage]);
+  }, [data]);
 
   const previousPage = useCallback(async () => {
     if (currentPage > 0) {
@@ -66,17 +66,23 @@ export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): Us
   }, [currentPage]);
 
   const filterByTag = useCallback(async (tag: string) => {
-    setCurrentTag(tag || undefined);
+    if (tag) {
+      setSelectedTags(new Set([tag]));
+    } else {
+      setSelectedTags(new Set());
+    }
     setCurrentPage(0);
   }, []);
 
+  const hasNextPage = data ? data.offset + data.pageSize < data.totalCount : false;
+
   return {
-    posts: data?.posts || [],
+    posts: data?.elements || [],
     loading,
     error,
-    currentPage: data?.currentPage || 0,
+    currentPage,
     pageSize: data?.pageSize || pageSize,
-    hasNextPage: data?.hasNextPage || false,
+    hasNextPage,
     totalCount: data?.totalCount || 0,
     goToPage,
     nextPage,

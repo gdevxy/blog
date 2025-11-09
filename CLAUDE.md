@@ -205,13 +205,43 @@ The application uses **Flyway** for database migrations. All schemas are auto-cr
 
 ### REST Endpoints
 
-All REST endpoints are in the `component` module as Resource classes:
-- `HomeResource.java` - GET / (blog listing)
-- `BlogPostResource.java` - GET /blog/{slug} (detail page)
-- `AboutResource.java` - GET /about
-- `RssFeedResource.java` - GET /feed.xml
+**Resource classes are thin adapters that:**
+- Accept requests and extract parameters
+- Delegate to service layer for business logic
+- Return domain models directly (not `Response` objects)
+- Never include error handling or manual HTTP status codes
 
-Return responses wrapped in appropriate models from `model` module.
+**Return types:**
+- Return domain models directly: `Uni<BlogPostDetail>`, `Uni<Page<BlogPost>>`, etc.
+- Let `GlobalExceptionMapper` handle all exceptions
+- Empty/null results are automatically interpreted as 404 by the framework
+
+**Example pattern:**
+```java
+@GET
+@Path("/{slug}")
+public Uni<BlogPostDetail> findBlogPost(
+    @PathParam("slug") String slug,
+    @QueryParam("previewToken") String previewToken,
+    @CookieParam("userId") String userId) {
+
+    return blogPostService.findBlogPost(userId, previewToken, slug);
+}
+```
+
+**All REST endpoints are in the `component` module as Resource classes:**
+- `BlogPostsResource.java` - Blog post endpoints (`/api/v1/blog-posts`)
+- Other resources follow the same pattern
+
+**Error Handling:**
+- Services throw specific exceptions (`NotFoundException`, validation errors, etc.)
+- `GlobalExceptionMapper` catches all exceptions and returns appropriate HTTP responses
+- Never use `Response.status()`, `onFailure()`, or manual error recovery in Resources
+
+**Logging:**
+- Minimize logging in Resource classes; it's not necessary for every endpoint
+- Add logging only when debugging complex flows or tracking business-critical events
+- Avoid verbose logging statements; let the application run silently unless there's a problem
 
 ### Templates & Frontend
 
@@ -311,8 +341,127 @@ Build and deploy to Oracle Cloud Registry via Maven (see native image command ab
 
 ## Code Style & Conventions
 
-- **Java Version**: Java 25 (use modern features where applicable)
+### Core Principles
+
+**No Comments Allowed** - Code must be self-explanatory through clear naming, small focused methods, and established design patterns. If you feel the need to write a comment, refactor the code instead.
+
+**Domain-Driven Design (DDD)** - Organize code around business capabilities and domains:
+- Package structure reflects business domains, not layers (e.g., `contentful.blogpost`, not `contentful.service`)
+- Use ubiquitous language from domain experts in class and method names
+- Place domain logic in domain objects, not anemic DTOs
+- Separations of concerns: converters transform between domains, services orchestrate domain logic
+
+**Clean Code Principles**:
+- Single Responsibility Principle (SRP) - Each class and method has one reason to change
+- Methods should be small (typically < 15 lines)
+- Return early to reduce nesting depth
+- Extract meaningful methods rather than reusing generic helper methods
+- Use proper abstractions that reflect business intent
+
+### Java & Language Standards
+
+- **Java Version**: Java 25 (use modern features: records, sealed classes, pattern matching where applicable)
+- **Naming**: Full words, avoid abbreviations except for universally understood ones (e.g., `id`, `url`)
+  - Methods: Verb-noun pattern (`extractPaginationHeaders`, `parseHeader`, `validateOffset`)
+  - Variables: Descriptive and domain-aware (`pageOffset` not `pOffset`, `blogPost` not `bp`)
+  - Constants: UPPER_SNAKE_CASE (`MAX_SIZE`, `DEFAULT_PAGE_OFFSET`)
+  - Classes: PascalCase, noun-based reflecting what they are (`PaginationFilter`, `BlogPostService`)
+  - Booleans: Prefix with `is`, `has`, `can`, `should` (`isValid`, `hasContent`, `shouldRetry`)
+
 - **Build Tool**: Maven (all build operations via Maven, not IDE shortcuts)
-- **Dependency Injection**: Quarkus ARC - use `@Inject` for dependencies
-- **Database**: JPA entities with Hibernate; use DAOs for access
+- **Dependency Injection**: Quarkus ARC - use `@Inject` for dependencies; prefer constructor injection for clarity
+- **Database**: JPA entities with Hibernate; use DAOs for all data access; no raw SQL in service layer
 - **Testing**: JUnit 5, AssertJ for assertions, Mockito for mocking
+
+### Code Organization
+
+**Method Organization Within a Class**:
+1. Static fields and constants
+2. Instance fields
+3. Constructors
+4. Public methods (in logical grouping)
+5. Private/helper methods
+
+**Package Naming Conventions**:
+- Domain packages: `com.gdevxy.blog.{module}.{domain}`
+  - Example: `service.contentful.blogpost` for blog post domain logic
+  - Example: `component.pagination` for pagination cross-cutting concern
+- Service classes: `{DomainName}Service` (e.g., `BlogPostService`, `CaptchaService`)
+- Data access: `{DomainName}Dao` (e.g., `BlogPostDao`, `CommentDao`)
+- Converters: `{SourceName}To{TargetName}Converter` or package in `converter` subdirectory
+- DTOs and models: `model` or `dto` subdirectories with clear purpose names
+
+### Method Design Patterns
+
+**Keep Methods Focused**:
+```
+✓ extractPaginationHeaders(RoutingContext) - Single responsibility
+✗ processRequest(RoutingContext) - Too broad, multiple concerns
+```
+
+**Use Meaningful Variable Names**:
+```
+✓ int pageOffset = parseHeader(ctx, "X-Page-Offset", DEFAULT_PAGE_OFFSET)
+✗ int p = parseHeader(ctx, "X-Page-Offset", DEFAULT_PAGE_OFFSET)
+```
+
+**Extract Complex Logic**:
+```
+✓ if (pageSize > MAX_SIZE) pageSize = MAX_SIZE;  // Self-explanatory
+✓ PaginationContext.set(pagination);  // Clear intent via method name
+✗ ctx.put("pagination", new Pagination(o, s));  // Generic, unclear purpose
+```
+
+**Return Early, Avoid Deep Nesting**:
+```
+✓ if (headerValue == null || headerValue.isBlank()) return defaultValue;
+  return Integer.parseInt(headerValue);
+
+✗ if (headerValue != null && !headerValue.isBlank()) {
+    try {
+      return Integer.parseInt(headerValue);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  } else {
+    return defaultValue;
+  }
+```
+
+### Handling ThreadLocal and Resources
+
+**Always Clean Up ThreadLocal**:
+- When using `ThreadLocal` (e.g., `PaginationContext`), provide cleanup mechanisms
+- Call `clear()` methods in filters or handlers after processing
+- For Quarkus filters, use try-finally or response end handlers to guarantee cleanup
+- This prevents memory leaks and context bleeding in thread pools and virtual threads
+
+**Example Pattern**:
+```java
+ctx.addEndHandler(routingContext -> PaginationContext.clear());
+```
+
+### Exception Handling
+
+- Use specific exception types; avoid generic `Exception`
+- Fail fast and validate input at entry points
+- Use meaningful exception messages that indicate what went wrong and context
+- Re-throw with context preservation when appropriate
+- Handle framework-level exceptions (e.g., NumberFormatException) gracefully with sensible defaults
+
+### Immutability & Data Objects
+
+- Use records for immutable DTOs and domain objects when possible (Java 25+)
+- Use Lombok `@Getter` and `@Builder` for clarity when records aren't suitable
+- Avoid mutable fields in DTOs; prefer builder pattern for construction
+- Domain objects should enforce business rules in constructors/factory methods
+
+### Testing Standards
+
+- **Unit Tests**: Test one behavior per test; use descriptive test names (`testExtractPaginationHeadersWithValidOffset`)
+- **Integration Tests**: End-to-end flows; suffix with `IT`
+- **Test Naming**: Follow pattern `test{MethodName}{Scenario}{Expected}`
+- **Test Data Builders**: Use "Mother" pattern classes (e.g., `BlogPostMother`, `ImageMother`) for consistent test fixtures
+- **Assertions**: Use AssertJ for fluent, readable assertions
+- **Mocking**: Use Mockito for external dependencies (Contentful API, Google API)
+- **No Test Comments**: Test code should also be self-explanatory; test name and assertions should make intent clear

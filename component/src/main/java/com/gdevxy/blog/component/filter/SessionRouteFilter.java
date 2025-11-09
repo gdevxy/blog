@@ -4,6 +4,7 @@ import com.gdevxy.blog.component.cookie.Cookies;
 import io.quarkus.vertx.web.RouteFilter;
 import io.vertx.ext.web.RoutingContext;
 
+@SuppressWarnings("unused")
 public class SessionRouteFilter {
 
 	@RouteFilter(100)

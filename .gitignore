@@ -47,3 +47,8 @@ nb-configuration.xml
 
 # Web Bundler
 node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+.auth/
