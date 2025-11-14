@@ -81,7 +81,7 @@ function BlogListPage() {
                             ))}
                         </div>
                       )}
-                      <Link to={`/blog/${post.slug}`} className="text-primary fw-bold stretched-link">
+                      <Link to={`/blog/${post.slug}`} className="text-primary fw-bold d-inline-block">
                         Read More →
                       </Link>
                     </div>
