@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import ThemeToggle from './ThemeToggle';
 import './Layout.css';
 
 interface LayoutProps {
@@ -9,33 +11,43 @@ interface LayoutProps {
 function Layout({ children }: LayoutProps) {
   return (
     <div className="layout">
-      <header className="header">
-        <nav className="navbar">
-          <Link to="/" className="logo">
+      <Navbar sticky="top" className="navbar-custom">
+        <Container>
+          <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
             gdevxy
-          </Link>
-          <ul className="nav-links">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/blog">Blog</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto align-items-center gap-3">
+              <Nav.Link as={Link} to="/" className="nav-link-custom">
+                Home
+              </Nav.Link>
+              <Nav.Link as={Link} to="/blog" className="nav-link-custom">
+                Blog
+              </Nav.Link>
+              <Nav.Link as={Link} to="/about" className="nav-link-custom">
+                About
+              </Nav.Link>
+              <div className="ms-2">
+                <ThemeToggle />
+              </div>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
-      <main className="main-content">{children}</main>
+      <main className="main-content">
+        <Container>{children}</Container>
+      </main>
 
       <footer className="footer">
-        <p>&copy; 2024 gdevxy. All rights reserved.</p>
-        <p>
-          Built with <a href="https://quarkus.io">Quarkus</a> and{' '}
-          <a href="https://react.dev">React</a>
-        </p>
+        <Container>
+          <p>&copy; 2024 gdevxy. All rights reserved.</p>
+          <p>
+            Built with <a href="https://quarkus.io">Quarkus</a> and{' '}
+            <a href="https://react.dev">React</a>
+          </p>
+        </Container>
       </footer>
     </div>
   );

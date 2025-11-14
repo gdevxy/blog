@@ -9,10 +9,11 @@ This is a cloud-native Java blog application built on **Quarkus** with a headles
 **Tech Stack:**
 - Language: Java 25
 - Framework: Quarkus (cloud-native, containerized)
-- Frontend: Qute templates, Bootstrap 5, vanilla JS
+- Frontend: React 18 (SPA), Bootstrap 5, TypeScript, Vite
+- Frontend Dependencies: React Router, Axios, date-fns, highlight.js
 - Database: PostgreSQL (Aiven Cloud)
 - CMS: Contentful (GraphQL API)
-- Build: Apache Maven 3
+- Build: Apache Maven 3 (backend), Vite (frontend)
 - External APIs: Google reCAPTCHA, Gravatar
 
 ## Architecture
@@ -114,6 +115,89 @@ mvn clean package -Dnative -DskipTests \
     -Dquarkus.native.container-build=true
 ```
 
+## Frontend Development (React/Vite)
+
+The frontend is a React SPA located in `component/src/main/webui/`. Node.js and npm are **required for local development**.
+
+### Frontend Setup
+
+**Important**: Node.js and npm are installed in `./component/.quinoa/node/` directory. This is a local installation managed by the build system.
+
+To run frontend commands, add the .quinoa node directory to your PATH and use npm as usual:
+
+```bash
+# Add to PATH (from the project root directory)
+export PATH="$PWD/component/.quinoa/node:$PATH"
+
+# Then use npm normally
+npm run dev
+```
+
+### Frontend Commands
+
+Run these commands from `component/src/main/webui/` directory (after adding .quinoa/node to PATH):
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start Vite dev server (HMR enabled, runs on port 5173) |
+| `npm run build` | Build optimized production bundle |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint on TypeScript files |
+| `npm run test:e2e` | Run Playwright E2E tests (requires backend Quarkus server on 9000) |
+| `npm run test:e2e:ui` | Run Playwright tests with UI (requires backend Quarkus server on 9000) |
+
+**E2E Testing Prerequisites:**
+- Backend Quarkus server must be running on `http://localhost:9000`
+- Run `mvn compile quarkus:dev` from project root in a separate terminal
+- Then run E2E tests from `component/src/main/webui/` directory
+- The Playwright config will automatically detect the running backend and use it for tests
+- In CI/CD environments, the config will start its own dev server
+
+### Frontend Architecture
+
+**Key Frontend Technologies:**
+- **React 18**: UI library
+- **Vite**: Fast bundler and dev server
+- **TypeScript**: Static typing for React components
+- **React Router**: Client-side routing (pages: HomePage, BlogListPage, BlogDetailPage, AboutPage)
+- **React Bootstrap**: UI components (Cards, Spinners, Alerts, Pagination, Navbar)
+- **date-fns**: Date formatting and manipulation
+- **Axios**: HTTP client for API requests
+
+**Frontend Pages:**
+- `src/pages/HomePage.tsx` - Hero section with horizontal scrolling cards
+- `src/pages/BlogListPage.tsx` - Grid layout (3 columns) with blog posts and horizontal scrollable tags
+- `src/pages/BlogDetailPage.tsx` - Full blog post detail with content blocks
+- `src/pages/AboutPage.tsx` - About page information
+
+**Custom Hooks:**
+- `src/hooks/useBlogPosts.ts` - Fetch and paginate blog posts from API
+- `src/hooks/useBlogPost.ts` - Fetch single blog post by slug
+
+**Styling:**
+- Global theme: `src/index.css` (CSS variables for dark/light mode)
+- Layout: `src/components/Layout.tsx` with Bootstrap Navbar
+- Bootstrap 5 imported in `src/main.tsx` AFTER custom CSS to allow theme variable overrides
+- Page-specific CSS files alongside components
+
+**Important E2E Tests:**
+- `e2e/blog-list-tags-scroll.spec.ts` - Tests horizontal scroll on overflowing tag badges in blog list cards
+
+### Frontend Component Refactoring
+
+All frontend components have been refactored to use **Bootstrap 5 components** for consistency:
+- **Layout**: Bootstrap Navbar with responsive navigation
+- **HomePage**: Bootstrap Cards with horizontal scroll slider
+- **BlogListPage**: Bootstrap Cards in responsive grid (3 columns on desktop), horizontal scrollable tags with wheel event support
+- **BlogDetailPage**: Blockquote for description, Bootstrap badges for tags
+- **AboutPage**: Bootstrap Row/Col for responsive layout
+
+**Tags Horizontal Scroll Feature:**
+The tags container on BlogListPage cards supports mouse wheel scrolling:
+- When hovering over a tags container with overflowing badges, scrolling the mouse wheel will scroll the tags horizontally
+- Implementation: Wheel event listener converts vertical scroll (deltaY) to horizontal scroll (scrollLeft)
+- Prevents default page scroll when mouse is over the tags container
+
 ## Required Environment Variables
 
 Set these before running the application:
@@ -131,11 +215,20 @@ CONTENTFUL_CMA_TOKEN=<contentful-content-management-api>
 
 ```
 blog/
-├── component/                 # REST endpoints, templates, static assets
+├── component/                 # REST endpoints and React SPA
 │   ├── src/main/java/...     # HomeResource, BlogPostResource, etc.
-│   ├── src/main/resources/
-│   │   ├── templates/        # Qute HTML templates (base.html, blog pages)
-│   │   └── web/              # Static assets (CSS, JS, images, fonts)
+│   ├── src/main/resources/web/   # Static assets (CSS, JS, images, fonts)
+│   ├── src/main/webui/       # React SPA (Single Page Application)
+│   │   ├── src/
+│   │   │   ├── pages/        # Page components (BlogDetailPage, HomePage, etc.)
+│   │   │   ├── components/   # Reusable components (ContentBlockRenderer, ThemeToggle, etc.)
+│   │   │   ├── hooks/        # Custom React hooks (useBlogPost, etc.)
+│   │   │   ├── types/        # TypeScript interfaces (api.ts - BlogPost, BlogPostDetail, etc.)
+│   │   │   ├── App.tsx       # Root React component
+│   │   │   ├── main.tsx      # React entry point (imports Bootstrap CSS)
+│   │   │   └── index.css     # Global styles (dark/light theme)
+│   │   ├── package.json      # Frontend dependencies (React, Bootstrap, date-fns, etc.)
+│   │   └── vite.config.ts    # Vite bundler configuration
 │   └── src/test/             # Unit and integration tests
 │
 ├── service/                   # Business logic & data access
@@ -243,13 +336,73 @@ public Uni<BlogPostDetail> findBlogPost(
 - Add logging only when debugging complex flows or tracking business-critical events
 - Avoid verbose logging statements; let the application run silently unless there's a problem
 
-### Templates & Frontend
+### React SPA Frontend
 
-- **Base template**: `component/src/main/resources/templates/base.html`
-- **Page templates**: Located in resource-specific directories
-- **Static assets**: `component/src/main/resources/web/app/`
-- **CSS**: Custom fonts (Lora, Open Sans) and Bootstrap 5
-- **JS bundling**: Configured in parent pom.xml (bundles utils and blog-page modules)
+Located in `component/src/main/webui/src/`:
+
+**Key Files & Directories:**
+- **`pages/`** - Top-level page components:
+  - `BlogDetailPage.tsx` - Blog post detail view with comments, tags (Bootstrap badges), and formatted dates
+  - `HomePage.tsx` - Blog listing page
+  - Other page components for different routes
+
+- **`components/`** - Reusable UI components:
+  - `ContentBlockRenderer.tsx` - Renders rich text blocks from Contentful
+  - `ThemeToggle.tsx` - Light/dark theme toggle
+  - Layout and other shared components
+
+- **`hooks/`** - Custom React hooks:
+  - `useBlogPost()` - Fetch individual blog post with comments
+  - Other data-fetching hooks
+
+- **`types/api.ts`** - TypeScript interfaces for API responses:
+  - `BlogPost` - Summary view of blog post
+  - `BlogPostDetail` - Full blog post with content blocks and comments
+  - `BlogPostTag` - Tag structure (`value`, `code`) - displayed as Bootstrap badges
+  - `BlogPostComment` - Comment structure with nested replies
+
+- **`index.css`** - Global styles:
+  - Dark and light theme definitions using CSS variables
+  - Supports system preference detection and manual `data-theme` attribute
+
+**Frontend Dependencies:**
+- **React 18** - UI library
+- **React Router** - Client-side routing
+- **React Bootstrap** - Bootstrap 5 components as React components (Card, Navbar, Pagination, Alert, Spinner, Row, Col, Container)
+- **Bootstrap 5** - CSS framework (imported in `main.tsx` before custom CSS)
+- **date-fns** - Date formatting (e.g., `format(date, 'yyyy-MM-dd \'at\' h:mm a')`)
+- **highlight.js** - Code syntax highlighting
+- **Axios** - HTTP client for API calls
+- **Vite** - Build tool and dev server
+
+**Frontend Development:**
+```bash
+cd component/src/main/webui
+npm install          # Install dependencies
+npm run dev          # Start Vite dev server (typically http://localhost:5173)
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run test:e2e     # Run Playwright E2E tests
+```
+
+**Bootstrap Component Usage:**
+- **Layout (Navbar)**: Uses `react-bootstrap` `Navbar`, `Nav`, `Container` components with custom styling
+- **BlogListPage**: Uses `Card`, `Pagination`, `Alert`, `Spinner` components; dates formatted with date-fns
+- **AboutPage**: Uses `Row`, `Col`, `Alert`, `Spinner` for responsive layout; blockquote for description
+- **BlogDetailPage**: Blockquote styling for post description with custom CSS override
+- All cards use theme-aware custom CSS (background: `var(--bg-secondary)`, border: `var(--border-color)`)
+- Tags/Badges: `className="badge text-bg-primary"` (Bootstrap 5 convention)
+
+**Important Implementation Notes:**
+- API calls use `/api/v1/*` endpoints (backend REST API)
+- TypeScript interfaces in `types/api.ts` must match backend API response structure
+- Tags structure: `{value: string, code: string}` (display as Bootstrap badges with `text-bg-primary`)
+- Dates are ISO 8601 strings from backend, formatted client-side using date-fns
+- Filter tags by `tag.value` to avoid rendering empty tags
+- Use `key={tag.code}` for React list keys
+- Bootstrap CSS utilities: `text-center`, `py-5`, `mt-2`, `ms-auto`, `gap-3`, `d-flex`, `justify-content-between`, etc.
+- Custom CSS import order: `index.css` then `bootstrap.min.css` so custom theme variables override Bootstrap defaults
+- Use CSS variables for all colors: `var(--bg-primary)`, `var(--text-primary)`, `var(--accent-primary)`, `var(--border-color)`
 
 ## CI/CD Pipeline
 

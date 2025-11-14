@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { useProfile } from '@hooks';
 import './AboutPage.css';
 
@@ -7,20 +8,34 @@ function AboutPage() {
 
   return (
     <div className="about-page">
-      {loading && <p className="loading">Loading profile...</p>}
-      {error && <p className="error">Failed to load profile: {error.message}</p>}
+      {loading && (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+          <p className="mt-2">Loading profile...</p>
+        </div>
+      )}
+
+      {error && <Alert variant="danger">Failed to load profile: {error.message}</Alert>}
 
       {profile && (
         <>
-          <div className="profile-header">
+          <Row className="profile-header mb-5">
             {profile.avatarUrl && (
-              <img src={profile.avatarUrl} alt={profile.displayName} className="avatar" />
+              <Col md={3} className="text-center mb-4 mb-md-0">
+                <img
+                  src={profile.avatarUrl}
+                  alt={profile.displayName}
+                  className="avatar rounded-circle img-fluid"
+                />
+              </Col>
             )}
-            <div className="profile-info">
-              <h1>{profile.displayName}</h1>
+            <Col md={profile.avatarUrl ? 9 : 12} className="profile-info">
+              <h1 className="mb-3">{profile.displayName}</h1>
               {profile.jobTitle && profile.company && (
                 <p className="job-title">
-                  {profile.jobTitle} at {profile.company}
+                  <strong>{profile.jobTitle}</strong> at <strong>{profile.company}</strong>
                 </p>
               )}
               {profile.location && <p className="location">📍 {profile.location}</p>}
@@ -29,18 +44,20 @@ function AboutPage() {
                   <a href={`mailto:${profile.email}`}>{profile.email}</a>
                 </p>
               )}
-            </div>
-          </div>
+            </Col>
+          </Row>
 
           {profile.description && (
-            <section className="description">
-              <p>{profile.description}</p>
+            <section className="description mb-5">
+              <blockquote className="blockquote">
+                <p>{profile.description}</p>
+              </blockquote>
             </section>
           )}
 
           {profile.accounts && profile.accounts.length > 0 && (
             <section className="accounts">
-              <h2>Follow Me</h2>
+              <h2 className="mb-4">Follow Me</h2>
               <div className="social-links">
                 {profile.accounts.map((account, index) => (
                   <a
@@ -65,7 +82,7 @@ function AboutPage() {
       )}
 
       {!loading && !profile && (
-        <p className="no-profile">Profile information not available</p>
+        <Alert variant="info">Profile information not available</Alert>
       )}
     </div>
   );

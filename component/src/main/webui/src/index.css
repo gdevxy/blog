@@ -1,7 +1,20 @@
 :root {
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+
+  /* Dark theme - neon/violet palette */
+  --bg-primary: #0f0f1e;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #242438;
+  --text-primary: #e8e8f0;
+  --text-secondary: rgba(232, 232, 240, 0.7);
+  --text-tertiary: rgba(232, 232, 240, 0.5);
+  --accent-primary: #a855f7;
+  --accent-secondary: #ec4899;
+  --accent-light: #d946ef;
+  --border-color: rgba(168, 85, 247, 0.2);
+
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -18,11 +31,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--accent-light);
 }
 
 button {
@@ -32,29 +45,66 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--bg-secondary);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-primary);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Light theme - via data-theme attribute OR system preference */
+:root[data-theme="light"],
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  :root:not([data-theme="dark"]) {
+    /* Light theme */
+    --bg-primary: #f8f7ff;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f3f0ff;
+    --text-primary: #1a1a2e;
+    --text-secondary: rgba(26, 26, 46, 0.7);
+    --text-tertiary: rgba(26, 26, 46, 0.5);
+    --accent-primary: #a855f7;
+    --accent-secondary: #ec4899;
+    --accent-light: #d946ef;
+    --border-color: rgba(168, 85, 247, 0.15);
+
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+:root[data-theme="light"] {
+  /* Light theme */
+  --bg-primary: #f8f7ff;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f3f0ff;
+  --text-primary: #1a1a2e;
+  --text-secondary: rgba(26, 26, 46, 0.7);
+  --text-tertiary: rgba(26, 26, 46, 0.5);
+  --accent-primary: #a855f7;
+  --accent-secondary: #ec4899;
+  --accent-light: #d946ef;
+  --border-color: rgba(168, 85, 247, 0.15);
+
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+:root[data-theme="light"] a {
+  color: var(--accent-primary);
+}
+
+:root[data-theme="light"] a:hover {
+  color: var(--accent-light);
+}
+
+:root[data-theme="light"] button {
+  background-color: var(--bg-tertiary);
 }
 
 * {
@@ -66,10 +116,37 @@ button:focus-visible {
 html,
 body {
   height: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 #root {
   width: 100%;
   margin: 0 auto;
   text-align: center;
+}
+
+/* Override Bootstrap defaults to respect custom theme */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] .btn-primary {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+:root[data-theme="dark"] .btn-primary:hover {
+  background-color: var(--accent-light);
+  border-color: var(--accent-light);
+}
+
+:root[data-theme="light"] .btn-primary {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+:root[data-theme="light"] .btn-primary:hover {
+  background-color: var(--accent-light);
+  border-color: var(--accent-light);
 }

@@ -1,12 +1,5 @@
 package com.gdevxy.blog.service.contentful.blogpost.converter;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import jakarta.annotation.Nullable;
-import jakarta.enterprise.context.ApplicationScoped;
-
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
 import com.gdevxy.blog.client.contentful.model.SeoFields;
@@ -15,8 +8,13 @@ import com.gdevxy.blog.client.contentful.model.content.RichContent;
 import com.gdevxy.blog.model.BlogPostComment;
 import com.gdevxy.blog.model.BlogPostDetail;
 import com.gdevxy.blog.model.BlogPostTag;
-import com.gdevxy.blog.model.contentful.Node;
+import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -80,22 +78,24 @@ public class BlogPostDetailConverter {
 
 	private BlogPostDetail.ContentBlock toContent(RichContent content) {
 
-		var nodeType = Node.of(content.getNodeType());
-		var marks = content.getMarks().stream().map(Mark::getType).map(com.gdevxy.blog.model.contentful.Mark::of).collect(Collectors.toUnmodifiableSet());
+		var marks = content.getMarks()
+				.stream()
+				.map(Mark::getType)
+				.collect(Collectors.toUnmodifiableSet());
 
 		return BlogPostDetail.ContentBlock.builder()
-				.node(nodeType)
-				.value(toValue(nodeType, content))
-				.marks(BlogPostDetail.ContentBlock.TextMark.builder().marks(marks).build())
+				.node(content.getNodeType())
+				.value(toValue(content.getNodeType(), content))
+				.marks(marks)
 				.blocks(toContentBlocks(content.getContent()))
 				.build();
 	}
 
-	private String toValue(Node node, RichContent content) {
+	private String toValue(String node, RichContent content) {
 
 		return switch(node) {
-			case EMBEDDED_ENTRY -> content.getData().getTarget().getSys().getId();
-			case HYPERLINK -> content.getData().getUri();
+			case "embedded-entry-block" -> content.getData().getTarget().getSys().getId();
+			case "hyperlink" -> content.getData().getUri();
 			default -> content.getValue();
 		};
 	}

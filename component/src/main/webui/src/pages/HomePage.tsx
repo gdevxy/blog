@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Card, Spinner } from 'react-bootstrap';
+import { format } from 'date-fns';
 import { useBlogPosts } from '@hooks';
 import './HomePage.css';
 
@@ -63,8 +65,15 @@ function HomePage() {
 
       <section className="latest-posts">
         <h2>Latest Articles</h2>
-        {loading && <p className="loading-text">Loading articles...</p>}
-        {error && <p className="error">Failed to load articles: {error.message}</p>}
+        {loading && (
+          <div className="text-center py-5">
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            <p className="mt-2 text-secondary">Loading articles...</p>
+          </div>
+        )}
+        {error && <div className="alert alert-danger">Failed to load articles: {error.message}</div>}
         {posts.length > 0 && (
           <div className="slider-container">
             {canScrollLeft && (
@@ -78,22 +87,28 @@ function HomePage() {
             )}
             <div className="posts-slider" ref={sliderRef} onScroll={checkScroll}>
               {posts.map((post) => (
-                <Link key={post.slug} to={`/blog/${post.slug}`} className="post-card post-card-link">
-                  {post.image && (
-                    <img src={post.image.url} alt={post.title} className="post-image" />
-                  )}
-                  <h3>{post.title}</h3>
-                  {post.description && <p>{post.description}</p>}
-                  <div className="post-meta">
-                    <span className="date">
-                      {new Date(post.publishedDate).toLocaleDateString()}
-                    </span>
-                    {post.rating && (
-                      <span className="likes">
-                        👍 {post.rating}
-                      </span>
+                <Link key={post.slug} to={`/blog/${post.slug}`} className="post-card-wrapper">
+                  <Card className="post-card h-100">
+                    {post.image && (
+                      <Card.Img variant="top" src={post.image.url} alt={post.title} />
                     )}
-                  </div>
+                    <Card.Body className="d-flex flex-column">
+                      <Card.Title>{post.title}</Card.Title>
+                      {post.description && (
+                        <Card.Text className="text-secondary flex-grow-1">{post.description}</Card.Text>
+                      )}
+                      <div className="post-meta mt-auto">
+                        <small className="text-muted">
+                          {format(new Date(post.publishedDate), 'MMM d, yyyy')}
+                        </small>
+                        {post.rating && (
+                          <span className="likes">
+                            👍 {post.rating}
+                          </span>
+                        )}
+                      </div>
+                    </Card.Body>
+                  </Card>
                 </Link>
               ))}
               {totalCount > posts.length && (

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import { useBlogPost } from '@hooks';
+import { ContentBlockRenderer } from '@components/ContentBlockRenderer';
 import './BlogDetailPage.css';
 
 function BlogDetailPage() {
@@ -43,14 +45,16 @@ function BlogDetailPage() {
         </Link>
         <h1>{post.title}</h1>
         <div className="post-meta">
-          <time>{new Date(post.publishedDate).toLocaleDateString()}</time>
-          {post.tags && post.tags.length > 0 && (
+          <time>{format(new Date(post.publishedDate), 'yyyy-MM-dd \'at\' h:mm a')}</time>
+          {post.tags && post.tags.filter((tag) => tag.value).length > 0 && (
             <div className="tags">
-              {post.tags.map((tag) => (
-                <span key={tag.id} className="tag">
-                  #{tag.name}
-                </span>
-              ))}
+              {post.tags
+                .filter((tag) => tag.value)
+                .map((tag) => (
+                  <span key={tag.code} className="badge text-bg-primary">
+                    {tag.value}
+                  </span>
+                ))}
             </div>
           )}
         </div>
@@ -60,21 +64,12 @@ function BlogDetailPage() {
       </header>
 
       <div className="post-body">
-        {post.description && <p className="description">{post.description}</p>}
+        {post.description && <blockquote className="blockquote">{post.description}</blockquote>}
 
         {post.blocks && post.blocks.length > 0 && (
           <div className="content">
             {post.blocks.map((block, index) => (
-              <div key={index} className={`content-block ${block.node}`}>
-                {block.value && <p>{block.value}</p>}
-                {block.blocks && block.blocks.length > 0 && (
-                  <ul className="nested-list">
-                    {block.blocks.map((nestedBlock, nestedIndex) => (
-                      <li key={nestedIndex}>{nestedBlock.value}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <ContentBlockRenderer key={index} block={block} />
             ))}
           </div>
         )}
@@ -100,14 +95,14 @@ function BlogDetailPage() {
             {post.comments.map((comment) => (
               <div key={comment.id} className="comment">
                 <strong>{comment.author}</strong>
-                <time>{new Date(comment.createdAt).toLocaleDateString()}</time>
+                <time>{format(new Date(comment.createdAt), 'yyyy-MM-dd \'at\' h:mm a')}</time>
                 <p>{comment.comment}</p>
                 {comment.replies && comment.replies.length > 0 && (
                   <ul className="replies">
                     {comment.replies.map((reply) => (
                       <li key={reply.id} className="reply">
                         <strong>{reply.author}</strong>
-                        <time>{new Date(reply.createdAt).toLocaleDateString()}</time>
+                        <time>{format(new Date(reply.createdAt), 'yyyy-MM-dd \'at\' h:mm a')}</time>
                         <p>{reply.comment}</p>
                       </li>
                     ))}

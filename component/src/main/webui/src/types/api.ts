@@ -1,8 +1,8 @@
 // API Response Types
 
 export interface BlogPostTag {
-  id: string;
-  name: string;
+  value: string;
+  code: string;
 }
 
 export interface Image {
@@ -40,12 +40,8 @@ export interface BlogPostSeo {
 export interface ContentBlock {
   node: string;
   value?: string;
-  marks?: TextMark;
+  marks?: string[];
   blocks?: ContentBlock[];
-}
-
-export interface TextMark {
-  marks: string[];
 }
 
 export interface RelatedBlogPost {
