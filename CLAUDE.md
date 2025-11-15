@@ -274,6 +274,21 @@ The application uses **Flyway** for database migrations. All schemas are auto-cr
 - No raw SQL queries in service layer
 - JPA entities (service/model/entity/*.java) define table schemas
 
+**DAO Patterns (Important):**
+- **SELECT queries**: Use `asUni()` helper method which expects rows. Convert rows to domain objects via mapper function.
+  - Returns `Uni<T>` where T is the domain object type
+  - Throws `NotFoundException` if no rows found
+  - Example: `asUni(sql.preparedQuery(...).execute(...), row -> converter.apply(row))`
+
+- **INSERT queries**: Use `RETURNING *` clause with `asUni()` to get generated IDs and return full entity
+  - Example: `insert into table (...) values (...) returning *`
+
+- **UPDATE/DELETE queries**: Do NOT use `asUni()`. Instead, directly handle `RowSet` and check `rowSet.rowCount()`
+  - Returns `Uni<Boolean>` indicating success
+  - Use `.onItem().transform(rowSet -> rowSet.rowCount() > 0)`
+  - Properly checks if any rows were actually modified
+  - Example: `sql.preparedQuery(...).execute(...).onItem().transform(rowSet -> rowSet.rowCount() > 0)`
+
 ## Important Coding Guidelines
 
 ### Adding New Features

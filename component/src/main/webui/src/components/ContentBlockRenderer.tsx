@@ -327,6 +327,50 @@ function renderHyperlink(block: ContentBlock): React.ReactNode {
   );
 }
 
+function renderEmbeddedEntryBlock(block: ContentBlock): React.ReactNode {
+  if (!block.image) {
+    return <div className="embedded-placeholder">[Embedded content - Missing image]</div>;
+  }
+
+  const altText = block.title || block.description || 'Embedded content';
+  const style: React.CSSProperties = {};
+
+  if (block.width !== undefined && block.height !== undefined) {
+    style.width = `${block.width}px`;
+    style.height = `${block.height}px`;
+  } else if (block.width !== undefined) {
+    style.width = `${block.width}px`;
+  } else if (block.height !== undefined) {
+    style.height = `${block.height}px`;
+  }
+
+  if (block.fullWidth) {
+    return (
+      <figure style={{ margin: '1.5rem 0', ...style }}>
+        <img
+          src={block.image.url}
+          alt={altText}
+          title={block.title}
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+        {block.description && <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-tertiary)' }}>{block.description}</figcaption>}
+      </figure>
+    );
+  }
+
+  return (
+    <figure style={{ margin: '1.5rem 0', ...style }}>
+      <img
+        src={block.image.url}
+        alt={altText}
+        title={block.title}
+        style={{ width: '100%', height: 'auto', display: 'block' }}
+      />
+      {block.description && <figcaption style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-tertiary)' }}>{block.description}</figcaption>}
+    </figure>
+  );
+}
+
 function renderNodeContent(block: ContentBlock): React.ReactNode {
   switch (block.node) {
     case 'text':
@@ -373,6 +417,8 @@ function renderNodeContent(block: ContentBlock): React.ReactNode {
       return renderTableCell(block);
 
     case 'embedded-entry-block':
+      return renderEmbeddedEntryBlock(block);
+
     case 'embedded-asset-block':
     case 'embedded-resource-block':
       return <div className="embedded-placeholder">[Embedded content]</div>;

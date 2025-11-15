@@ -1,6 +1,7 @@
 package com.gdevxy.blog.mother;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Set;
 
 import com.gdevxy.blog.model.BlogPost;
@@ -16,7 +17,7 @@ public class BlogPostMother {
 			.description("description")
 			.slug("slug")
 			.publishedDate(ZonedDateTime.now())
-			.tags(Set.of(new BlogPostTag("Architecture"), new BlogPostTag("Agile")))
+			.tags(List.of(new BlogPostTag("Architecture"), new BlogPostTag("Agile")))
 			.image(ImageMother._404().build())
 			.seo(SeoMother.basic().build());
 	}

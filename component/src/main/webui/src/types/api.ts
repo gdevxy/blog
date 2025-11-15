@@ -42,6 +42,12 @@ export interface ContentBlock {
   value?: string;
   marks?: string[];
   blocks?: ContentBlock[];
+  image?: Image;
+  title?: string;
+  description?: string;
+  width?: number;
+  height?: number;
+  fullWidth?: boolean;
 }
 
 export interface RelatedBlogPost {
@@ -73,11 +79,14 @@ export interface BlogPostComment {
   comment: string;
   createdAt: string;
   replies: BlogPostComment[];
+  modifiable?: boolean;
 }
 
 export interface BlogPostCommentAction {
   author: string;
   comment: string;
+  captcha?: string;
+  action?: string;
 }
 
 // Profile/About types

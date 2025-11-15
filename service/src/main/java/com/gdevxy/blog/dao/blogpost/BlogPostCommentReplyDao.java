@@ -51,6 +51,32 @@ public class BlogPostCommentReplyDao extends DaoSupport {
 			.execute(Tuple.of(e.getBlogPostCommentId(), e.getUserId(), e.getAuthor(), e.getComment(), toOffsetDateTimeUTC(e.getCreatedAt()))), r -> e.toBuilder().blogPostCommentId(r.getInteger("id")).build());
 	}
 
+	public Uni<Boolean> update(Integer id, String userId, String author, String comment) {
+
+		return sql.preparedQuery("""
+				update blog_post_comment_reply set
+					author = $1,
+					comment = $2
+				where
+					id = $3
+					and user_id = $4
+				""")
+			.execute(Tuple.of(author, comment, id, userId))
+			.onItem().transform(rowSet -> rowSet.rowCount() > 0);
+	}
+
+	public Uni<Boolean> delete(Integer id, String userId) {
+
+		return sql.preparedQuery("""
+				delete from blog_post_comment_reply
+				where
+					id = $1
+					and user_id = $2
+				""")
+			.execute(Tuple.of(id, userId))
+			.onItem().transform(rowSet -> rowSet.rowCount() > 0);
+	}
+
 	private BlogPostCommentReplyEntity toBlogPostCommentReplyEntity(Row row) {
 
 		return BlogPostCommentReplyEntity.builder()

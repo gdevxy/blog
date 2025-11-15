@@ -1,7 +1,7 @@
 package com.gdevxy.blog.component.api.v1;
 
 import com.gdevxy.blog.model.*;
-import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
+import com.gdevxy.blog.service.blogpost.BlogPostService;
 import com.gdevxy.blog.service.rss.RssFeederService;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ import java.util.Set;
 @Path("/api/v1/blog-posts")
 @RequiredArgsConstructor
 @Produces(MediaType.APPLICATION_JSON)
-public class BlogPostsResource {
+public class BlogPostResource {
 
 	private final BlogPostService blogPostService;
 	private final RssFeederService rssFeederService;
@@ -32,9 +32,9 @@ public class BlogPostsResource {
 	@GET
 	@Path("/{slug}")
 	public Uni<BlogPostDetail> findBlogPost(@PathParam("slug") String slug,
-			@QueryParam("previewToken") String previewToken, @CookieParam("userId") String userId) {
+			@QueryParam("previewToken") String previewToken) {
 
-		return blogPostService.findBlogPost(userId, previewToken, slug);
+		return blogPostService.findBlogPost(previewToken, slug);
 	}
 
 	@GET
@@ -46,33 +46,31 @@ public class BlogPostsResource {
 
 	@POST
 	@Path("/{id}/comments")
-	public Uni<Void> addComment(@PathParam("id") String contentfulId, @Valid BlogPostCommentAction commentAction,
-			@CookieParam("userId") String userId) {
+	public Uni<Void> addComment(@PathParam("id") String contentfulId, @Valid BlogPostCommentAction commentAction) {
 
-		return blogPostService.saveComment(userId, contentfulId, commentAction);
+		return blogPostService.saveComment(contentfulId, commentAction);
 	}
 
 	@POST
 	@Path("/{id}/comments/{commentId}/reply")
 	public Uni<Void> saveCommentReply(@PathParam("id") String contentfulId, @PathParam("commentId") Integer commentId,
-			@Valid BlogPostCommentAction replyAction, @CookieParam("userId") String userId) {
+			@Valid BlogPostCommentAction replyAction) {
 
-		return blogPostService.saveCommentReply(userId, contentfulId, commentId, replyAction);
+		return blogPostService.saveCommentReply(contentfulId, commentId, replyAction);
 	}
 
 	@POST
 	@Path("/{id}/rating/thumbs-up")
-	public Uni<Void> thumbsUp(@PathParam("id") String contentfulId, @Valid LikeAction likeAction,
-			@CookieParam("userId") String userId) {
+	public Uni<Void> thumbsUp(@PathParam("id") String contentfulId, @Valid LikeAction likeAction) {
 
-		return blogPostService.thumbsUp(userId, contentfulId, likeAction);
+		return blogPostService.thumbsUp(contentfulId, likeAction);
 	}
 
 	@POST
 	@Path("/{id}/rating/thumbs-down")
-	public Uni<Void> thumbsDown(@PathParam("id") String contentfulId, @CookieParam("userId") String userId) {
+	public Uni<Void> thumbsDown(@PathParam("id") String contentfulId) {
 
-		return blogPostService.thumbsDown(userId, contentfulId);
+		return blogPostService.thumbsDown(contentfulId);
 	}
 
 	@GET

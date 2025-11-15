@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { format } from 'date-fns';
 import ThemeToggle from './ThemeToggle';
 import './Layout.css';
 
@@ -42,11 +43,7 @@ function Layout({ children }: LayoutProps) {
 
       <footer className="footer">
         <Container>
-          <p>&copy; 2024 gdevxy. All rights reserved.</p>
-          <p>
-            Built with <a href="https://quarkus.io">Quarkus</a> and{' '}
-            <a href="https://react.dev">React</a>
-          </p>
+          <p>&copy; {format(new Date(), 'yyyy')} gdevxy. All rights reserved.</p>
         </Container>
       </footer>
     </div>

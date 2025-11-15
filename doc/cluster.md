@@ -23,7 +23,14 @@ kubectl create secret generic blog-secrets \
     --from-literal=GRAVATAR_API_KEY=<secret> \
     --from-literal=CONTENTFUL_CDA_TOKEN=<secret> \
     --from-literal=CONTENTFUL_CMA_TOKEN=<secret> \
-    --from-literal=CONTENTFUL_CPA_TOKEN=<secret>
+    --from-literal=CONTENTFUL_CPA_TOKEN=<secret> \
+    --from-literal=HMAC_SECRET=<secret>
+```
+
+for editing secrets:
+
+```script
+kubectl edit secret blog-secrets
 ```
 
 ## Configure SSL

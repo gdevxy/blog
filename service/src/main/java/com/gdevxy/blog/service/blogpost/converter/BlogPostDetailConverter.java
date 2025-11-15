@@ -1,4 +1,4 @@
-package com.gdevxy.blog.service.contentful.blogpost.converter;
+package com.gdevxy.blog.service.blogpost.converter;
 
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.PageBlogPostCollection;
@@ -8,11 +8,13 @@ import com.gdevxy.blog.client.contentful.model.content.RichContent;
 import com.gdevxy.blog.model.BlogPostComment;
 import com.gdevxy.blog.model.BlogPostDetail;
 import com.gdevxy.blog.model.BlogPostTag;
+import com.gdevxy.blog.model.Image;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,7 @@ public class BlogPostDetailConverter {
 
 	private final ImageConverter imageConverter;
 
-	public BlogPostDetail convert(PageBlogPost p, Boolean liked, List<BlogPostComment> comments) {
+	public BlogPostDetail convert(PageBlogPost p, Boolean liked, List<BlogPostComment> comments, Map<String, Image> images) {
 
 		return BlogPostDetail.builder()
 			.id(p.getSys().getId())
@@ -32,7 +34,7 @@ public class BlogPostDetailConverter {
 			.publishedDate(p.getPublishedDate())
 			.image(Optional.ofNullable(p.getFeaturedImage()).map(imageConverter).orElse(null))
 			.seo(toSeo(p.getSeoFields()).orElse(null))
-			.blocks(toContentBlocks(p.getContent().getJson().getContent()))
+			.blocks(toContentBlocks(p.getContent().getJson().getContent(), images))
 			.tags(p.getTags().stream().map(BlogPostTag::new).collect(Collectors.toUnmodifiableSet()))
 			.comments(comments)
 			.liked(liked)
@@ -69,35 +71,46 @@ public class BlogPostDetailConverter {
 		});
 	}
 
-	private List<BlogPostDetail.ContentBlock> toContentBlocks(List<RichContent> contents) {
+	private List<BlogPostDetail.ContentBlock> toContentBlocks(List<RichContent> contents, Map<String, Image> images) {
 
 		return contents.stream()
-				.map(this::toContent)
+				.map(c -> toContent(c, images))
 				.toList();
 	}
 
-	private BlogPostDetail.ContentBlock toContent(RichContent content) {
+	private BlogPostDetail.ContentBlock toContent(RichContent content, Map<String, Image> images) {
 
 		var marks = content.getMarks()
 				.stream()
 				.map(Mark::getType)
 				.collect(Collectors.toUnmodifiableSet());
 
+		var value = toValue(content);
 		return BlogPostDetail.ContentBlock.builder()
 				.node(content.getNodeType())
-				.value(toValue(content.getNodeType(), content))
+				.value(value)
+				.image(toImage(value, images))
 				.marks(marks)
-				.blocks(toContentBlocks(content.getContent()))
+				.blocks(toContentBlocks(content.getContent(), images))
 				.build();
 	}
 
-	private String toValue(String node, RichContent content) {
+	private String toValue(RichContent content) {
 
-		return switch(node) {
+		return switch(content.getNodeType()) {
 			case "embedded-entry-block" -> content.getData().getTarget().getSys().getId();
 			case "hyperlink" -> content.getData().getUri();
 			default -> content.getValue();
 		};
+	}
+
+	private Image toImage(@Nullable String assetId, Map<String, Image> images) {
+
+		if (assetId == null) {
+			return null;
+		}
+
+		return images.get(assetId);
 	}
 
 }

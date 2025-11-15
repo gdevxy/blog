@@ -1,24 +1,24 @@
-package com.gdevxy.blog.service.contentful.blogpost;
-
-import java.util.Set;
-
-import com.gdevxy.blog.model.*;
-import com.gdevxy.blog.service.contentful.blogpost.converter.ContentfulPages;
-import jakarta.annotation.Nullable;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
+package com.gdevxy.blog.service.blogpost;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.dao.blogpost.BlogPostDao;
-import com.gdevxy.blog.dao.blogpost.model.BlogPostEntity;
 import com.gdevxy.blog.dao.blogpost.BlogPostRatingDao;
+import com.gdevxy.blog.dao.blogpost.model.BlogPostEntity;
+import com.gdevxy.blog.model.*;
 import com.gdevxy.blog.service.captcha.CaptchaService;
-import com.gdevxy.blog.service.contentful.blogpost.converter.BlogPostConverter;
-import com.gdevxy.blog.service.contentful.blogpost.converter.BlogPostDetailConverter;
+import com.gdevxy.blog.service.blogpost.converter.BlogPostConverter;
+import com.gdevxy.blog.service.blogpost.converter.BlogPostDetailConverter;
+import com.gdevxy.blog.service.blogpost.converter.ContentfulPages;
+import com.gdevxy.blog.service.cookie.SessionService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Set;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -31,18 +31,21 @@ public class BlogPostService {
 
 	private final BlogPostCommentService blogPostCommentService;
 	private final CaptchaService captchaService;
+	private final SessionService sessionService;
 
 	private final BlogPostConverter blogPostConverter;
 	private final BlogPostDetailConverter blogPostDetailConverter;
+	private final BlogPostAssetResolver blogPostAssetResolver;
 
-	public Uni<BlogPostDetail> findBlogPost(String userId, @Nullable String previewToken, String slug) {
+	public Uni<BlogPostDetail> findBlogPost(@Nullable String previewToken, String slug) {
 
 		return contentfulClient.findBlogPost(slug, previewToken)
 			.onItem().ifNull().failWith(new NotFoundException("BlogPost [%s] not found".formatted(slug)))
 			.onItem().transformToUni(p -> {
-				var liked = blogPostRatingDao.liked(p.getSys().getId(), userId);
+				var liked = blogPostRatingDao.liked(p.getSys().getId(), sessionService.requestUserId().orElseThrow());
 				var comments = blogPostCommentService.find(p.getSys().getId()).collect().asList();
-				return Uni.combine().all().unis(liked, comments).with((l, c) -> blogPostDetailConverter.convert(p, l, c));
+				var assets = blogPostAssetResolver.resolve(p, previewToken);
+				return Uni.combine().all().unis(liked, comments, assets).with((l, c, a) -> blogPostDetailConverter.convert(p, l, c, a));
 			});
 	}
 
@@ -62,35 +65,34 @@ public class BlogPostService {
 				);
 	}
 
-
 	public Multi<BlogPostComment> findBlogPostComments(String key) {
 
 		return blogPostCommentService.find(key);
 	}
 
-	public Uni<Void> saveComment(String userId, String key, BlogPostCommentAction action) {
+	public Uni<Void> saveComment(String key, BlogPostCommentAction action) {
 
 		return blogPostDao.findByKey(key)
-			.flatMap(p -> blogPostCommentService.saveBlogPostComment(userId, p.getId(), action));
+			.flatMap(p -> blogPostCommentService.saveBlogPostComment(p.getId(), action));
 	}
 
-	public Uni<Void> saveCommentReply(String userId, String key, Integer id, BlogPostCommentAction action) {
+	public Uni<Void> saveCommentReply(String key, Integer id, BlogPostCommentAction action) {
 
 		return blogPostCommentService.find(key, id)
-			.flatMap(p -> blogPostCommentService.saveBlogPostCommentReply(userId, p.getId(), action));
+			.flatMap(p -> blogPostCommentService.saveBlogPostCommentReply(p.getId(), action));
 	}
 
-	public Uni<Void> thumbsUp(String userId, String key, LikeAction action) {
+	public Uni<Void> thumbsUp(String key, LikeAction action) {
 
 		return captchaService.verify(action)
 			.flatMap(i -> blogPostDao.findByKey(key))
-			.flatMap(e -> blogPostRatingDao.thumbsUp(e.getId(), userId));
+			.flatMap(e -> blogPostRatingDao.thumbsUp(e.getId(), sessionService.requestUserId().orElseThrow()));
 	}
 
-	public Uni<Void> thumbsDown(String userId, String key) {
+	public Uni<Void> thumbsDown(String key) {
 
 		return blogPostDao.findByKey(key)
-			.flatMap(b -> blogPostRatingDao.thumbsDown(b.getId(), userId));
+			.flatMap(b -> blogPostRatingDao.thumbsDown(b.getId(), sessionService.requestUserId().orElseThrow()));
 	}
 
 	private Uni<BlogPost> toBlogPost(PageBlogPost p) {

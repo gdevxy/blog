@@ -1,0 +1,25 @@
+.scroll-progress-container {
+	position: fixed;
+	top: 63px;
+	left: 0;
+	width: 100%;
+	z-index: 999;
+	background: none;
+}
+
+.scroll-progress-bar {
+	background-color: transparent !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.scroll-progress-bar .progress-bar {
+	background: linear-gradient(90deg, #a855f7 0%, #d946ef 50%, #ec4899 100%) !important;
+	box-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 20px rgba(217, 70, 239, 0.4);
+	transition: width 0.1s linear;
+}
+
+/* Optional: Add glow effect on light theme */
+:root[data-theme="light"] .scroll-progress-bar .progress-bar {
+	box-shadow: 0 0 8px rgba(168, 85, 247, 0.8), 0 0 15px rgba(217, 70, 239, 0.6);
+}

@@ -1,17 +1,16 @@
-package com.gdevxy.blog.service.contentful.blogpost.converter;
-
-import java.text.NumberFormat;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import jakarta.annotation.Nullable;
-import jakarta.enterprise.context.ApplicationScoped;
+package com.gdevxy.blog.service.blogpost.converter;
 
 import com.gdevxy.blog.client.contentful.model.PageBlogPost;
 import com.gdevxy.blog.client.contentful.model.SeoFields;
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.BlogPostTag;
+import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import java.text.NumberFormat;
+import java.util.Comparator;
+import java.util.Optional;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class BlogPostConverter {
 			.rating(NumberFormat.getCompactNumberInstance().format(rating))
 			.image(Optional.ofNullable(p.getFeaturedImage()).map(imageConverter).orElse(null))
 			.seo(toSeo(p.getSeoFields()).orElse(null))
-			.tags(p.getTags().stream().map(BlogPostTag::new).collect(Collectors.toUnmodifiableSet()))
+			.tags(p.getTags().stream().map(BlogPostTag::new).sorted(Comparator.comparing(BlogPostTag::value)).toList())
 			.build();
 	}
 

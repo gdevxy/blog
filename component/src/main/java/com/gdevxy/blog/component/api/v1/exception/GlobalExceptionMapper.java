@@ -1,7 +1,9 @@
 package com.gdevxy.blog.component.api.v1.exception;
 
+import com.gdevxy.blog.model.UnauthorizedException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -14,27 +16,24 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
 
 	@Override
 	public Response toResponse(Exception exception) {
-		log.error("API Error: ", exception);
 
-		if (exception instanceof ConstraintViolationException) {
-			return handleValidationException((ConstraintViolationException) exception);
-		}
+		return switch(exception) {
+			case ConstraintViolationException ex -> toValidationErrorResponse(ex);
+			case NotFoundException ex -> toResponse(Response.Status.NOT_FOUND, ex);
+			case UnauthorizedException ex -> toResponse(Response.Status.UNAUTHORIZED, ex);
+			default -> toResponse(Response.Status.INTERNAL_SERVER_ERROR, exception);
+		};
+	}
 
-		if (exception instanceof NotFoundException) {
+	private Response toResponse(Response.Status status, Exception ex) {
 
-			return Response.status(Response.Status.NOT_FOUND)
-					.type(MediaType.APPLICATION_JSON)
-					.entity(ApiError.of(Response.Status.NOT_FOUND, "NOT_FOUND", exception.getMessage()))
-					.build();
-		}
-
-		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+		return Response.status(status)
 				.type(MediaType.APPLICATION_JSON)
-				.entity(ApiError.of(Response.Status.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", exception.getMessage()))
+				.entity(ApiError.of(status, status.name(), ex.getMessage()))
 				.build();
 	}
 
-	private Response handleValidationException(ConstraintViolationException e) {
+	private Response toValidationErrorResponse(ConstraintViolationException e) {
 
 		var message = e.getConstraintViolations()
 				.stream()
@@ -44,7 +43,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
 
 		return Response.status(Response.Status.BAD_REQUEST)
 				.type(MediaType.APPLICATION_JSON)
-				.entity(ApiError.of(Response.Status.BAD_REQUEST, "VALIDATION_ERROR", message))
+				.entity(ApiError.of(Response.Status.BAD_REQUEST, "BAD_REQUEST", message))
 				.build();
 	}
 

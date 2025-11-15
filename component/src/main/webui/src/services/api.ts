@@ -119,6 +119,54 @@ class BlogApiClient {
   }
 
   /**
+   * Update an existing comment
+   * @param commentId Comment ID to update
+   * @param commentAction Updated comment data
+   */
+  async updateComment(
+    commentId: number,
+    commentAction: BlogPostCommentAction
+  ): Promise<void> {
+    await this.client.put(`/comments/${commentId}`, commentAction);
+  }
+
+  /**
+   * Update an existing comment reply
+   * @param replyId Reply ID to update
+   * @param commentAction Updated reply data
+   */
+  async updateCommentReply(
+    replyId: number,
+    commentAction: BlogPostCommentAction
+  ): Promise<void> {
+    await this.client.put(`/comments/reply/${replyId}`, commentAction);
+  }
+
+  /**
+   * Delete an existing comment
+   * @param commentId Comment ID to delete
+   * @param deleteAction Delete action data with captcha verification
+   */
+  async deleteComment(
+    commentId: number,
+    deleteAction: any
+  ): Promise<void> {
+    await this.client.delete(`/comments/${commentId}`, { data: deleteAction });
+  }
+
+  /**
+   * Delete an existing comment reply
+   * @param replyId Reply ID to delete
+   * @param deleteAction Delete action data with captcha verification
+   */
+  async deleteCommentReply(
+    replyId: number,
+    deleteAction: any
+  ): Promise<void> {
+    await this.client.delete(`/comments/reply/${replyId}`, { data: deleteAction });
+  }
+
+  /**
    * Mark a blog post as liked with thumbs up
    * @param contentfulId Contentful blog post ID
    * @param likeAction Like action data with captcha verification

@@ -50,6 +50,7 @@ public class BlogPostDetail {
 
 		private final String node;
 		private final String value;
+		private final Image image;
 		@Builder.Default
 		private final Set<String> marks = Set.of();
 		@Builder.Default

@@ -1,11 +1,11 @@
 package com.gdevxy.blog.model;
 
-import java.time.ZonedDateTime;
-import java.util.Set;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -21,7 +21,7 @@ public class BlogPost {
 	private final Seo seo;
 	private final String rating;
 	@Builder.Default
-	private final Set<BlogPostTag> tags = Set.of();
+	private final List<BlogPostTag> tags = List.of();
 	@Builder.Default
 	private final Boolean liked = false;
 

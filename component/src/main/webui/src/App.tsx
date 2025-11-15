@@ -5,6 +5,7 @@ import HomePage from '@pages/HomePage';
 import BlogListPage from '@pages/BlogListPage';
 import BlogDetailPage from '@pages/BlogDetailPage';
 import AboutPage from '@pages/AboutPage';
+import NotFoundPage from '@pages/NotFoundPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Layout>
     </Router>

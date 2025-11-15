@@ -1,4 +1,4 @@
-package com.gdevxy.blog.service.contentful.blogpost.converter;
+package com.gdevxy.blog.service.blogpost.converter;
 
 import java.util.function.Function;
 

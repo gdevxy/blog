@@ -4,11 +4,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import com.gdevxy.blog.model.BlogPost;
 import com.gdevxy.blog.model.RssFeed;
-import com.gdevxy.blog.service.contentful.blogpost.BlogPostService;
+import com.gdevxy.blog.service.blogpost.BlogPostService;
 import io.quarkus.cache.CacheResult;
 import io.smallrye.mutiny.Uni;
 import lombok.RequiredArgsConstructor;
