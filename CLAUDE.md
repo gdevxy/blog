@@ -611,6 +611,8 @@ ctx.addEndHandler(routingContext -> PaginationContext.clear());
 
 ### Testing Standards
 
+#### Backend Tests (Java)
+
 - **Unit Tests**: Test one behavior per test; use descriptive test names (`testExtractPaginationHeadersWithValidOffset`)
 - **Integration Tests**: End-to-end flows; suffix with `IT`
 - **Test Naming**: Follow pattern `test{MethodName}{Scenario}{Expected}`
@@ -618,3 +620,80 @@ ctx.addEndHandler(routingContext -> PaginationContext.clear());
 - **Assertions**: Use AssertJ for fluent, readable assertions
 - **Mocking**: Use Mockito for external dependencies (Contentful API, Google API)
 - **No Test Comments**: Test code should also be self-explanatory; test name and assertions should make intent clear
+
+#### Frontend E2E Tests (Playwright/TypeScript)
+
+**BDD Style (Given-When-Then)**
+
+All Playwright E2E tests must follow BDD (Behavior-Driven Development) style with explicit Given-When-Then sections. This makes tests more readable and clearly separates test setup, execution, and verification.
+
+**Format:**
+```typescript
+test('should describe what behavior you are testing', async ({ page }) => {
+  // given - Set up test data and preconditions
+  const expectedValue = 'some value';
+  const selector = page.locator('.element');
+
+  // when - Execute the behavior being tested
+  await selector.click();
+  const result = await selector.getAttribute('data-value');
+
+  // then - Verify the expected outcome
+  expect(result).toBe(expectedValue);
+});
+```
+
+**Key Principles:**
+- **Given**: Define test data (expected values, selectors, constants) and establish preconditions. Move variable declarations here instead of spreading them throughout the test.
+- **When**: Perform user actions (click, type, navigation, API calls) and gather actual results. This is where the behavior is exercised.
+- **Then**: Assert that the outcome matches expectations. All `expect()` calls belong here.
+- Extract expected values as variables in the `given` section (e.g., `const expectedTitle = 'Blog Articles'`)
+- Keep variable names descriptive: `expectedUrl`, `datePattern`, `requiredProperties` instead of generic names
+- Use constants for test data (colors, patterns, widths): `const purpleRgbComponent = '139'`
+- Comment structure: `// given`, `// when`, `// then` or `// given & when` for simple tests
+
+**Test Naming:**
+- Use `should` format: `should display badges with correct styling`
+- Test names describe the behavior, not implementation: `should scroll horizontally on wheel event` (not `should call preventDefault`)
+
+**Example (Full BDD Test):**
+```typescript
+test('should display badges with correct styling', async ({page}) => {
+  // given
+  const purpleRgbComponent = '139';
+  const whiteRgbComponent = '255';
+  const boldFontWeight = '600';
+
+  // when
+  const badge = page.locator('.tags-container .badge').first();
+  await expect(badge).toBeVisible();
+
+  const computedStyle = await badge.evaluate((el) => {
+    const style = window.getComputedStyle(el);
+    return {
+      backgroundColor: style.backgroundColor,
+      color: style.color,
+      fontWeight: style.fontWeight
+    };
+  });
+
+  // then
+  expect(computedStyle.backgroundColor).toContain(purpleRgbComponent);
+  expect(computedStyle.color).toContain(whiteRgbComponent);
+  expect(computedStyle.fontWeight).toContain(boldFontWeight);
+});
+```
+
+**Test Organization:**
+- Frontend E2E test files: `e2e/**/*.spec.ts`
+- One `describe` block per page/component
+- Use `test.beforeEach()` for common setup (navigation, state)
+- Group related tests logically within the describe block
+
+**Best Practices:**
+- Avoid `console.log()` statements; assertions should speak for themselves
+- Extract regex patterns to variables: `const datePattern = /\d+\/\d+\/\d+/`
+- Extract magic numbers to constants: `const cardWidth = 380; const gap = 32`
+- Use meaningful locator names: `const expectedUrl`, not `href`
+- Keep tests independent; don't rely on test execution order
+- Wait for network/DOM state before assertions: `await page.waitForLoadState('networkidle')`

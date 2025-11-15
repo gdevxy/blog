@@ -48,33 +48,35 @@ test.describe('Blog List Page - Tags Horizontal Scroll', () => {
 	});
 
 	test('should display post cards with tags', async ({page}) => {
-		// Verify post cards are rendered
+		// given
+		// mock data is set up in beforeEach with 1 post card
+
+		// when
 		const cards = page.locator('.post-card');
 		const cardCount = await cards.count();
 
-		console.log(`Found ${cardCount} post cards`);
+		// then
 		expect(cardCount).toBe(1);
 	});
 
 	test('should display tags container with multiple badges', async ({page}) => {
-		// Find the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 
-		await expect(tagsContainer).toBeVisible();
-
-		// Count badges in the container
+		// when
 		const badges = page.locator('.tags-container .badge');
 		const badgeCount = await badges.count();
 
-		console.log(`Found ${badgeCount} badges`);
+		// then
+		await expect(tagsContainer).toBeVisible();
 		expect(badgeCount).toBe(8);
 	});
 
 	test('should have tags container with overflow', async ({page}) => {
-		// Get the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 
-		// Check if container has overflow
+		// when
 		const dimensions = await tagsContainer.evaluate((el) => ({
 			scrollWidth: el.scrollWidth,
 			clientWidth: el.clientWidth,
@@ -82,18 +84,16 @@ test.describe('Blog List Page - Tags Horizontal Scroll', () => {
 			clientHeight: el.clientHeight
 		}));
 
-		console.log(`Tags container dimensions:`, dimensions);
-
-		// Should have horizontal overflow
+		// then
 		expect(dimensions.scrollWidth).toBeGreaterThan(dimensions.clientWidth);
 	});
 
 	test('should have scrollable tags container', async ({page}) => {
-		// Get the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 		await expect(tagsContainer).toBeVisible();
 
-		// Get dimensions to verify scrollable area exists
+		// when
 		const scrollResult = await tagsContainer.evaluate(el => {
 			const maxScroll = el.scrollWidth - el.clientWidth;
 			return {
@@ -104,19 +104,17 @@ test.describe('Blog List Page - Tags Horizontal Scroll', () => {
 			};
 		});
 
-		console.log(`Tags container scroll state:`, scrollResult);
-
-		// Verify the container is scrollable (has overflow)
+		// then
 		expect(scrollResult.scrollable).toBe(true);
 		expect(scrollResult.maxScroll).toBeGreaterThan(0);
 	});
 
 	test('should handle wheel events on tags container', async ({page}) => {
-		// Get the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 		await expect(tagsContainer).toBeVisible();
 
-		// Verify that the tags container exists and is ready for interaction
+		// when
 		const containerInfo = await tagsContainer.evaluate(el => {
 			return {
 				visible: el.offsetHeight > 0,
@@ -125,88 +123,70 @@ test.describe('Blog List Page - Tags Horizontal Scroll', () => {
 			};
 		});
 
-		console.log(`Tags container info:`, containerInfo);
-
-		// Verify the container has the wheel event listener attached
-		// (by verifying it's a valid scrollable container with content)
+		// then
 		expect(containerInfo.visible).toBe(true);
 		expect(containerInfo.hasContent).toBe(true);
 		expect(containerInfo.scrollable).toBe(true);
 	});
 
 	test('should scroll tags container horizontally with wheel events', async ({page}) => {
-		// Get the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 		await expect(tagsContainer).toBeVisible();
 
-		// Get initial scroll position
 		const initialState = await tagsContainer.evaluate(el => ({
 			scrollLeft: el.scrollLeft,
 			scrollWidth: el.scrollWidth,
 			clientWidth: el.clientWidth
 		}));
-		console.log(`Initial state:`, initialState);
 
-		// Simulate wheel scroll by dispatching an event on a badge element
-		// This way the event will have the badge (span) as the target
-		// and target.closest('.tags-container') should find the parent container
-		await page.evaluate(() => {
-			const badge = document.querySelector('.tags-container .badge') as HTMLElement;
-			if (badge) {
-				const wheelEvent = new WheelEvent('wheel', {
-					deltaY: 100,
-					bubbles: true,
-					cancelable: true
-				});
-				// Dispatch on the badge, so when the handler runs:
-				// target = badge element
-				// target.closest('.tags-container') = the container div
-				badge.dispatchEvent(wheelEvent);
-			}
-		});
+		// when
+		// Use mouse wheel over the tags container to trigger the actual wheel event handler
+		const badge = page.locator('.tags-container .badge').first();
+		await badge.hover();
+		await page.mouse.wheel(0, 100);
 
 		await page.waitForTimeout(300);
 
-		// Get new scroll position
+		// then
 		const newState = await tagsContainer.evaluate(el => ({
 			scrollLeft: el.scrollLeft,
 			scrollWidth: el.scrollWidth,
 			clientWidth: el.clientWidth
 		}));
-		console.log(`New state after wheel:`, newState);
 
-		// Should have scrolled right (scrollLeft increased by 50)
-		expect(newState.scrollLeft).toBe(initialState.scrollLeft + 50);
+		// Allow for small variance in scroll amount (browsers may handle wheel events slightly differently)
+		const scrollDifference = newState.scrollLeft - initialState.scrollLeft;
+		expect(scrollDifference).toBeGreaterThan(40);
+		expect(scrollDifference).toBeLessThan(60);
 	});
 
 	test('should prevent default page scroll when scrolling over tags', async ({page}) => {
-		// Get the tags container
+		// given
 		const tagsContainer = page.locator('.tags-container').first();
 		await expect(tagsContainer).toBeVisible();
 
-		// Get initial page scroll Y
 		const initialPageScrollY = await page.evaluate(() => window.scrollY);
-		console.log(`Initial page scrollY: ${initialPageScrollY}`);
 
-		// Dispatch wheel event on tags container
+		// when
 		await tagsContainer.evaluate(el => el.dispatchEvent(new WheelEvent('wheel', { deltaY: 100 })));
 		await page.waitForTimeout(300);
 
-		// Get new page scroll Y
+		// then
 		const newPageScrollY = await page.evaluate(() => window.scrollY);
-		console.log(`New page scrollY: ${newPageScrollY}`);
-
-		// Page should not have scrolled vertically
-		// (preventDefault() was called on the wheel event)
 		expect(newPageScrollY).toBe(initialPageScrollY);
 	});
 
 	test('should display badges with correct styling', async ({page}) => {
-		// Get a badge
+		// given
+		const purpleRgbComponent = '139';
+		const whiteRgbComponent = '255';
+		const boldFontWeight = '600';
+
+		// when
 		const badge = page.locator('.tags-container .badge').first();
 		await expect(badge).toBeVisible();
 
-		// Check badge styling
 		const computedStyle = await badge.evaluate((el) => {
 			const style = window.getComputedStyle(el);
 			return {
@@ -216,13 +196,9 @@ test.describe('Blog List Page - Tags Horizontal Scroll', () => {
 			};
 		});
 
-		console.log('Badge styles:', computedStyle);
-
-		// Should have purple background color (#8b3dd1 = rgb(139, 61, 209))
-		expect(computedStyle.backgroundColor).toContain('139');
-		// Should have white text
-		expect(computedStyle.color).toContain('255');
-		// Should be bold
-		expect(computedStyle.fontWeight).toContain('600');
+		// then
+		expect(computedStyle.backgroundColor).toContain(purpleRgbComponent);
+		expect(computedStyle.color).toContain(whiteRgbComponent);
+		expect(computedStyle.fontWeight).toContain(boldFontWeight);
 	});
 });

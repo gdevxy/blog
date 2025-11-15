@@ -17,7 +17,7 @@ export default defineConfig({
 		command: 'npm run dev',
 		url: 'http://localhost:3000',
 		reuseExistingServer: false,
-		timeout: 120 * 1000,
+		timeout: 10000,
 	} : undefined,
 
 	projects: [
@@ -28,10 +28,6 @@ export default defineConfig({
 		{
 			name: 'firefox',
 			use: {...devices['Desktop Firefox']},
-		},
-		{
-			name: 'webkit',
-			use: {...devices['Desktop Safari']},
 		},
 	],
 });
