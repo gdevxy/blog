@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<lombok.version>1.18.42</lombok.version>
-		<quarkus.version>3.29.1</quarkus.version>
+		<quarkus.version>3.29.2</quarkus.version>
 
 		<assertj.version>3.27.6</assertj.version>
 		<quarkus-playwright.version>2.2.1</quarkus-playwright.version>
@@ -32,7 +32,7 @@
 		<quarkus-wiremock.version>1.5.1</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.14.1</compiler-plugin.version>
-		<jandex-plugin.version>3.5.1</jandex-plugin.version>
+		<jandex-plugin.version>3.5.2</jandex-plugin.version>
 		<surefire-plugin.version>3.5.4</surefire-plugin.version>
 
 		<skipITs>true</skipITs>
