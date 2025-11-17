@@ -57,10 +57,24 @@ public class CaptchaService {
 		return response.getHostname().endsWith(configuration.hostname());
 	}
 
+	/**
+	 * Configuration mapping for Google reCAPTCHA settings.
+	 */
 	@ConfigMapping(prefix = "google.captcha")
 	public interface CaptchaServiceConfiguration {
 
+		/**
+		 * The reCAPTCHA secret key.
+		 *
+		 * @return the secret key
+		 */
 		String secret();
+
+		/**
+		 * The hostname for reCAPTCHA verification.
+		 *
+		 * @return the hostname
+		 */
 		String hostname();
 
 	}

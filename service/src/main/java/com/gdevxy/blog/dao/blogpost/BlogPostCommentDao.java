@@ -1,22 +1,21 @@
 package com.gdevxy.blog.dao.blogpost;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import com.gdevxy.blog.dao.DaoSupport;
 import com.gdevxy.blog.dao.blogpost.model.BlogPostCommentEntity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
+import io.vertx.mutiny.sqlclient.Pool;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.Tuple;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class BlogPostCommentDao extends DaoSupport {
 
-	private final PgPool sql;
+	private final Pool sql;
 
 	public Uni<Long> count(Integer blogPostId) {
 
@@ -79,6 +78,32 @@ public class BlogPostCommentDao extends DaoSupport {
 				) values ($1, $2, $3, $4, $5) returning *
 				""")
 			.execute(Tuple.of(e.getBlogPostId(), e.getUserId(), e.getAuthor(), e.getComment(), toOffsetDateTimeUTC(e.getCreatedAt()))), r -> e.toBuilder().id(r.getInteger("id")).build());
+	}
+
+	public Uni<Boolean> update(Integer id, String userId, String author, String comment) {
+
+		return sql.preparedQuery("""
+				update blog_post_comment set
+					author = $1,
+					comment = $2
+				where
+					id = $3
+					and user_id = $4
+				""")
+			.execute(Tuple.of(author, comment, id, userId))
+			.onItem().transform(rowSet -> rowSet.rowCount() > 0);
+	}
+
+	public Uni<Boolean> delete(Integer id, String userId) {
+
+		return sql.preparedQuery("""
+				delete from blog_post_comment
+				where
+					id = $1
+					and user_id = $2
+				""")
+			.execute(Tuple.of(id, userId))
+			.onItem().transform(rowSet -> rowSet.rowCount() > 0);
 	}
 
 	private BlogPostCommentEntity toBlogPostCommentEntity(Row row) {

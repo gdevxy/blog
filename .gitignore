@@ -41,8 +41,14 @@ nb-configuration.xml
 
 # Plugin directory
 /.quarkus/cli/plugins/
+.quinoa
 # TLS Certificates
 .certs/
 
 # Web Bundler
 node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+.auth/

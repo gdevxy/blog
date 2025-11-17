@@ -9,10 +9,11 @@ This is a cloud-native Java blog application built on **Quarkus** with a headles
 **Tech Stack:**
 - Language: Java 25
 - Framework: Quarkus (cloud-native, containerized)
-- Frontend: Qute templates, Bootstrap 5, vanilla JS
+- Frontend: React 18 (SPA), Bootstrap 5, TypeScript, Vite
+- Frontend Dependencies: React Router, Axios, date-fns, highlight.js
 - Database: PostgreSQL (Aiven Cloud)
 - CMS: Contentful (GraphQL API)
-- Build: Apache Maven 3
+- Build: Apache Maven 3 (backend), Vite (frontend)
 - External APIs: Google reCAPTCHA, Gravatar
 
 ## Architecture
@@ -114,6 +115,89 @@ mvn clean package -Dnative -DskipTests \
     -Dquarkus.native.container-build=true
 ```
 
+## Frontend Development (React/Vite)
+
+The frontend is a React SPA located in `component/src/main/webui/`. Node.js and npm are **required for local development**.
+
+### Frontend Setup
+
+**Important**: Node.js and npm are installed in `./component/.quinoa/node/` directory. This is a local installation managed by the build system.
+
+To run frontend commands, add the .quinoa node directory to your PATH and use npm as usual:
+
+```bash
+# Add to PATH (from the project root directory)
+export PATH="$PWD/component/.quinoa/node:$PATH"
+
+# Then use npm normally
+npm run dev
+```
+
+### Frontend Commands
+
+Run these commands from `component/src/main/webui/` directory (after adding .quinoa/node to PATH):
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start Vite dev server (HMR enabled, runs on port 5173) |
+| `npm run build` | Build optimized production bundle |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint on TypeScript files |
+| `npm run test:e2e` | Run Playwright E2E tests (requires backend Quarkus server on 9000) |
+| `npm run test:e2e:ui` | Run Playwright tests with UI (requires backend Quarkus server on 9000) |
+
+**E2E Testing Prerequisites:**
+- Backend Quarkus server must be running on `http://localhost:9000`
+- Run `mvn compile quarkus:dev` from project root in a separate terminal
+- Then run E2E tests from `component/src/main/webui/` directory
+- The Playwright config will automatically detect the running backend and use it for tests
+- In CI/CD environments, the config will start its own dev server
+
+### Frontend Architecture
+
+**Key Frontend Technologies:**
+- **React 18**: UI library
+- **Vite**: Fast bundler and dev server
+- **TypeScript**: Static typing for React components
+- **React Router**: Client-side routing (pages: HomePage, BlogListPage, BlogDetailPage, AboutPage)
+- **React Bootstrap**: UI components (Cards, Spinners, Alerts, Pagination, Navbar)
+- **date-fns**: Date formatting and manipulation
+- **Axios**: HTTP client for API requests
+
+**Frontend Pages:**
+- `src/pages/HomePage.tsx` - Hero section with horizontal scrolling cards
+- `src/pages/BlogListPage.tsx` - Grid layout (3 columns) with blog posts and horizontal scrollable tags
+- `src/pages/BlogDetailPage.tsx` - Full blog post detail with content blocks
+- `src/pages/AboutPage.tsx` - About page information
+
+**Custom Hooks:**
+- `src/hooks/useBlogPosts.ts` - Fetch and paginate blog posts from API
+- `src/hooks/useBlogPost.ts` - Fetch single blog post by slug
+
+**Styling:**
+- Global theme: `src/index.css` (CSS variables for dark/light mode)
+- Layout: `src/components/Layout.tsx` with Bootstrap Navbar
+- Bootstrap 5 imported in `src/main.tsx` AFTER custom CSS to allow theme variable overrides
+- Page-specific CSS files alongside components
+
+**Important E2E Tests:**
+- `e2e/blog-list-tags-scroll.spec.ts` - Tests horizontal scroll on overflowing tag badges in blog list cards
+
+### Frontend Component Refactoring
+
+All frontend components have been refactored to use **Bootstrap 5 components** for consistency:
+- **Layout**: Bootstrap Navbar with responsive navigation
+- **HomePage**: Bootstrap Cards with horizontal scroll slider
+- **BlogListPage**: Bootstrap Cards in responsive grid (3 columns on desktop), horizontal scrollable tags with wheel event support
+- **BlogDetailPage**: Blockquote for description, Bootstrap badges for tags
+- **AboutPage**: Bootstrap Row/Col for responsive layout
+
+**Tags Horizontal Scroll Feature:**
+The tags container on BlogListPage cards supports mouse wheel scrolling:
+- When hovering over a tags container with overflowing badges, scrolling the mouse wheel will scroll the tags horizontally
+- Implementation: Wheel event listener converts vertical scroll (deltaY) to horizontal scroll (scrollLeft)
+- Prevents default page scroll when mouse is over the tags container
+
 ## Required Environment Variables
 
 Set these before running the application:
@@ -131,11 +215,20 @@ CONTENTFUL_CMA_TOKEN=<contentful-content-management-api>
 
 ```
 blog/
-├── component/                 # REST endpoints, templates, static assets
+├── component/                 # REST endpoints and React SPA
 │   ├── src/main/java/...     # HomeResource, BlogPostResource, etc.
-│   ├── src/main/resources/
-│   │   ├── templates/        # Qute HTML templates (base.html, blog pages)
-│   │   └── web/              # Static assets (CSS, JS, images, fonts)
+│   ├── src/main/resources/web/   # Static assets (CSS, JS, images, fonts)
+│   ├── src/main/webui/       # React SPA (Single Page Application)
+│   │   ├── src/
+│   │   │   ├── pages/        # Page components (BlogDetailPage, HomePage, etc.)
+│   │   │   ├── components/   # Reusable components (ContentBlockRenderer, ThemeToggle, etc.)
+│   │   │   ├── hooks/        # Custom React hooks (useBlogPost, etc.)
+│   │   │   ├── types/        # TypeScript interfaces (api.ts - BlogPost, BlogPostDetail, etc.)
+│   │   │   ├── App.tsx       # Root React component
+│   │   │   ├── main.tsx      # React entry point (imports Bootstrap CSS)
+│   │   │   └── index.css     # Global styles (dark/light theme)
+│   │   ├── package.json      # Frontend dependencies (React, Bootstrap, date-fns, etc.)
+│   │   └── vite.config.ts    # Vite bundler configuration
 │   └── src/test/             # Unit and integration tests
 │
 ├── service/                   # Business logic & data access
@@ -181,6 +274,21 @@ The application uses **Flyway** for database migrations. All schemas are auto-cr
 - No raw SQL queries in service layer
 - JPA entities (service/model/entity/*.java) define table schemas
 
+**DAO Patterns (Important):**
+- **SELECT queries**: Use `asUni()` helper method which expects rows. Convert rows to domain objects via mapper function.
+  - Returns `Uni<T>` where T is the domain object type
+  - Throws `NotFoundException` if no rows found
+  - Example: `asUni(sql.preparedQuery(...).execute(...), row -> converter.apply(row))`
+
+- **INSERT queries**: Use `RETURNING *` clause with `asUni()` to get generated IDs and return full entity
+  - Example: `insert into table (...) values (...) returning *`
+
+- **UPDATE/DELETE queries**: Do NOT use `asUni()`. Instead, directly handle `RowSet` and check `rowSet.rowCount()`
+  - Returns `Uni<Boolean>` indicating success
+  - Use `.onItem().transform(rowSet -> rowSet.rowCount() > 0)`
+  - Properly checks if any rows were actually modified
+  - Example: `sql.preparedQuery(...).execute(...).onItem().transform(rowSet -> rowSet.rowCount() > 0)`
+
 ## Important Coding Guidelines
 
 ### Adding New Features
@@ -205,21 +313,111 @@ The application uses **Flyway** for database migrations. All schemas are auto-cr
 
 ### REST Endpoints
 
-All REST endpoints are in the `component` module as Resource classes:
-- `HomeResource.java` - GET / (blog listing)
-- `BlogPostResource.java` - GET /blog/{slug} (detail page)
-- `AboutResource.java` - GET /about
-- `RssFeedResource.java` - GET /feed.xml
+**Resource classes are thin adapters that:**
+- Accept requests and extract parameters
+- Delegate to service layer for business logic
+- Return domain models directly (not `Response` objects)
+- Never include error handling or manual HTTP status codes
 
-Return responses wrapped in appropriate models from `model` module.
+**Return types:**
+- Return domain models directly: `Uni<BlogPostDetail>`, `Uni<Page<BlogPost>>`, etc.
+- Let `GlobalExceptionMapper` handle all exceptions
+- Empty/null results are automatically interpreted as 404 by the framework
 
-### Templates & Frontend
+**Example pattern:**
+```java
+@GET
+@Path("/{slug}")
+public Uni<BlogPostDetail> findBlogPost(
+    @PathParam("slug") String slug,
+    @QueryParam("previewToken") String previewToken,
+    @CookieParam("userId") String userId) {
 
-- **Base template**: `component/src/main/resources/templates/base.html`
-- **Page templates**: Located in resource-specific directories
-- **Static assets**: `component/src/main/resources/web/app/`
-- **CSS**: Custom fonts (Lora, Open Sans) and Bootstrap 5
-- **JS bundling**: Configured in parent pom.xml (bundles utils and blog-page modules)
+    return blogPostService.findBlogPost(userId, previewToken, slug);
+}
+```
+
+**All REST endpoints are in the `component` module as Resource classes:**
+- `BlogPostsResource.java` - Blog post endpoints (`/api/v1/blog-posts`)
+- Other resources follow the same pattern
+
+**Error Handling:**
+- Services throw specific exceptions (`NotFoundException`, validation errors, etc.)
+- `GlobalExceptionMapper` catches all exceptions and returns appropriate HTTP responses
+- Never use `Response.status()`, `onFailure()`, or manual error recovery in Resources
+
+**Logging:**
+- Minimize logging in Resource classes; it's not necessary for every endpoint
+- Add logging only when debugging complex flows or tracking business-critical events
+- Avoid verbose logging statements; let the application run silently unless there's a problem
+
+### React SPA Frontend
+
+Located in `component/src/main/webui/src/`:
+
+**Key Files & Directories:**
+- **`pages/`** - Top-level page components:
+  - `BlogDetailPage.tsx` - Blog post detail view with comments, tags (Bootstrap badges), and formatted dates
+  - `HomePage.tsx` - Blog listing page
+  - Other page components for different routes
+
+- **`components/`** - Reusable UI components:
+  - `ContentBlockRenderer.tsx` - Renders rich text blocks from Contentful
+  - `ThemeToggle.tsx` - Light/dark theme toggle
+  - Layout and other shared components
+
+- **`hooks/`** - Custom React hooks:
+  - `useBlogPost()` - Fetch individual blog post with comments
+  - Other data-fetching hooks
+
+- **`types/api.ts`** - TypeScript interfaces for API responses:
+  - `BlogPost` - Summary view of blog post
+  - `BlogPostDetail` - Full blog post with content blocks and comments
+  - `BlogPostTag` - Tag structure (`value`, `code`) - displayed as Bootstrap badges
+  - `BlogPostComment` - Comment structure with nested replies
+
+- **`index.css`** - Global styles:
+  - Dark and light theme definitions using CSS variables
+  - Supports system preference detection and manual `data-theme` attribute
+
+**Frontend Dependencies:**
+- **React 18** - UI library
+- **React Router** - Client-side routing
+- **React Bootstrap** - Bootstrap 5 components as React components (Card, Navbar, Pagination, Alert, Spinner, Row, Col, Container)
+- **Bootstrap 5** - CSS framework (imported in `main.tsx` before custom CSS)
+- **date-fns** - Date formatting (e.g., `format(date, 'yyyy-MM-dd \'at\' h:mm a')`)
+- **highlight.js** - Code syntax highlighting
+- **Axios** - HTTP client for API calls
+- **Vite** - Build tool and dev server
+
+**Frontend Development:**
+```bash
+cd component/src/main/webui
+npm install          # Install dependencies
+npm run dev          # Start Vite dev server (typically http://localhost:5173)
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run test:e2e     # Run Playwright E2E tests
+```
+
+**Bootstrap Component Usage:**
+- **Layout (Navbar)**: Uses `react-bootstrap` `Navbar`, `Nav`, `Container` components with custom styling
+- **BlogListPage**: Uses `Card`, `Pagination`, `Alert`, `Spinner` components; dates formatted with date-fns
+- **AboutPage**: Uses `Row`, `Col`, `Alert`, `Spinner` for responsive layout; blockquote for description
+- **BlogDetailPage**: Blockquote styling for post description with custom CSS override
+- All cards use theme-aware custom CSS (background: `var(--bg-secondary)`, border: `var(--border-color)`)
+- Tags/Badges: `className="badge text-bg-primary"` (Bootstrap 5 convention)
+
+**Important Implementation Notes:**
+- API calls use `/api/v1/*` endpoints (backend REST API)
+- TypeScript interfaces in `types/api.ts` must match backend API response structure
+- Tags structure: `{value: string, code: string}` (display as Bootstrap badges with `text-bg-primary`)
+- Dates are ISO 8601 strings from backend, formatted client-side using date-fns
+- Filter tags by `tag.value` to avoid rendering empty tags
+- Use `key={tag.code}` for React list keys
+- Bootstrap CSS utilities: `text-center`, `py-5`, `mt-2`, `ms-auto`, `gap-3`, `d-flex`, `justify-content-between`, etc.
+- Custom CSS import order: `index.css` then `bootstrap.min.css` so custom theme variables override Bootstrap defaults
+- Use CSS variables for all colors: `var(--bg-primary)`, `var(--text-primary)`, `var(--accent-primary)`, `var(--border-color)`
 
 ## CI/CD Pipeline
 
@@ -232,6 +430,8 @@ GitHub Actions workflows in `.github/workflows/`:
 ## Deployment
 
 ### Kubernetes
+
+Deployed on OCI infrastructure on a Oracle Linux 8.10
 
 Manifests in `.deploy/`:
 - `deployment.yaml` - 2-replica pod deployment
@@ -309,8 +509,206 @@ Build and deploy to Oracle Cloud Registry via Maven (see native image command ab
 
 ## Code Style & Conventions
 
-- **Java Version**: Java 25 (use modern features where applicable)
+### Core Principles
+
+**No Comments Allowed** - Code must be self-explanatory through clear naming, small focused methods, and established design patterns. If you feel the need to write a comment, refactor the code instead.
+
+**Domain-Driven Design (DDD)** - Organize code around business capabilities and domains:
+- Package structure reflects business domains, not layers (e.g., `contentful.blogpost`, not `contentful.service`)
+- Use ubiquitous language from domain experts in class and method names
+- Place domain logic in domain objects, not anemic DTOs
+- Separations of concerns: converters transform between domains, services orchestrate domain logic
+
+**Clean Code Principles**:
+- Single Responsibility Principle (SRP) - Each class and method has one reason to change
+- Methods should be small (typically < 15 lines)
+- Return early to reduce nesting depth
+- Extract meaningful methods rather than reusing generic helper methods
+- Use proper abstractions that reflect business intent
+
+### Java & Language Standards
+
+- **Java Version**: Java 25 (use modern features: records, sealed classes, pattern matching where applicable)
+- **Naming**: Full words, avoid abbreviations except for universally understood ones (e.g., `id`, `url`)
+  - Methods: Verb-noun pattern (`extractPaginationHeaders`, `parseHeader`, `validateOffset`)
+  - Variables: Descriptive and domain-aware (`pageOffset` not `pOffset`, `blogPost` not `bp`)
+  - Constants: UPPER_SNAKE_CASE (`MAX_SIZE`, `DEFAULT_PAGE_OFFSET`)
+  - Classes: PascalCase, noun-based reflecting what they are (`PaginationFilter`, `BlogPostService`)
+  - Booleans: Prefix with `is`, `has`, `can`, `should` (`isValid`, `hasContent`, `shouldRetry`)
+
 - **Build Tool**: Maven (all build operations via Maven, not IDE shortcuts)
-- **Dependency Injection**: Quarkus ARC - use `@Inject` for dependencies
-- **Database**: JPA entities with Hibernate; use DAOs for access
+- **Dependency Injection**: Quarkus ARC - use `@Inject` for dependencies; prefer constructor injection for clarity
+- **Database**: JPA entities with Hibernate; use DAOs for all data access; no raw SQL in service layer
 - **Testing**: JUnit 5, AssertJ for assertions, Mockito for mocking
+
+### Code Organization
+
+**Method Organization Within a Class**:
+1. Static fields and constants
+2. Instance fields
+3. Constructors
+4. Public methods (in logical grouping)
+5. Private/helper methods
+
+**Package Naming Conventions**:
+- Domain packages: `com.gdevxy.blog.{module}.{domain}`
+  - Example: `service.contentful.blogpost` for blog post domain logic
+  - Example: `component.pagination` for pagination cross-cutting concern
+- Service classes: `{DomainName}Service` (e.g., `BlogPostService`, `CaptchaService`)
+- Data access: `{DomainName}Dao` (e.g., `BlogPostDao`, `CommentDao`)
+- Converters: `{SourceName}To{TargetName}Converter` or package in `converter` subdirectory
+- DTOs and models: `model` or `dto` subdirectories with clear purpose names
+
+### Method Design Patterns
+
+**Keep Methods Focused**:
+```
+✓ extractPaginationHeaders(RoutingContext) - Single responsibility
+✗ processRequest(RoutingContext) - Too broad, multiple concerns
+```
+
+**Use Meaningful Variable Names**:
+```
+✓ int pageOffset = parseHeader(ctx, "X-Page-Offset", DEFAULT_PAGE_OFFSET)
+✗ int p = parseHeader(ctx, "X-Page-Offset", DEFAULT_PAGE_OFFSET)
+```
+
+**Extract Complex Logic**:
+```
+✓ if (pageSize > MAX_SIZE) pageSize = MAX_SIZE;  // Self-explanatory
+✓ PaginationContext.set(pagination);  // Clear intent via method name
+✗ ctx.put("pagination", new Pagination(o, s));  // Generic, unclear purpose
+```
+
+**Return Early, Avoid Deep Nesting**:
+```
+✓ if (headerValue == null || headerValue.isBlank()) return defaultValue;
+  return Integer.parseInt(headerValue);
+
+✗ if (headerValue != null && !headerValue.isBlank()) {
+    try {
+      return Integer.parseInt(headerValue);
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  } else {
+    return defaultValue;
+  }
+```
+
+### Handling ThreadLocal and Resources
+
+**Always Clean Up ThreadLocal**:
+- When using `ThreadLocal` (e.g., `PaginationContext`), provide cleanup mechanisms
+- Call `clear()` methods in filters or handlers after processing
+- For Quarkus filters, use try-finally or response end handlers to guarantee cleanup
+- This prevents memory leaks and context bleeding in thread pools and virtual threads
+
+**Example Pattern**:
+```java
+ctx.addEndHandler(routingContext -> PaginationContext.clear());
+```
+
+### Exception Handling
+
+- Use specific exception types; avoid generic `Exception`
+- Fail fast and validate input at entry points
+- Use meaningful exception messages that indicate what went wrong and context
+- Re-throw with context preservation when appropriate
+- Handle framework-level exceptions (e.g., NumberFormatException) gracefully with sensible defaults
+
+### Immutability & Data Objects
+
+- Use records for immutable DTOs and domain objects when possible (Java 25+)
+- Use Lombok `@Getter` and `@Builder` for clarity when records aren't suitable
+- Avoid mutable fields in DTOs; prefer builder pattern for construction
+- Domain objects should enforce business rules in constructors/factory methods
+
+### Testing Standards
+
+#### Backend Tests (Java)
+
+- **Unit Tests**: Test one behavior per test; use descriptive test names (`testExtractPaginationHeadersWithValidOffset`)
+- **Integration Tests**: End-to-end flows; suffix with `IT`
+- **Test Naming**: Follow pattern `test{MethodName}{Scenario}{Expected}`
+- **Test Data Builders**: Use "Mother" pattern classes (e.g., `BlogPostMother`, `ImageMother`) for consistent test fixtures
+- **Assertions**: Use AssertJ for fluent, readable assertions
+- **Mocking**: Use Mockito for external dependencies (Contentful API, Google API)
+- **No Test Comments**: Test code should also be self-explanatory; test name and assertions should make intent clear
+
+#### Frontend E2E Tests (Playwright/TypeScript)
+
+**BDD Style (Given-When-Then)**
+
+All Playwright E2E tests must follow BDD (Behavior-Driven Development) style with explicit Given-When-Then sections. This makes tests more readable and clearly separates test setup, execution, and verification.
+
+**Format:**
+```typescript
+test('should describe what behavior you are testing', async ({ page }) => {
+  // given - Set up test data and preconditions
+  const expectedValue = 'some value';
+  const selector = page.locator('.element');
+
+  // when - Execute the behavior being tested
+  await selector.click();
+  const result = await selector.getAttribute('data-value');
+
+  // then - Verify the expected outcome
+  expect(result).toBe(expectedValue);
+});
+```
+
+**Key Principles:**
+- **Given**: Define test data (expected values, selectors, constants) and establish preconditions. Move variable declarations here instead of spreading them throughout the test.
+- **When**: Perform user actions (click, type, navigation, API calls) and gather actual results. This is where the behavior is exercised.
+- **Then**: Assert that the outcome matches expectations. All `expect()` calls belong here.
+- Extract expected values as variables in the `given` section (e.g., `const expectedTitle = 'Blog Articles'`)
+- Keep variable names descriptive: `expectedUrl`, `datePattern`, `requiredProperties` instead of generic names
+- Use constants for test data (colors, patterns, widths): `const purpleRgbComponent = '139'`
+- Comment structure: `// given`, `// when`, `// then` or `// given & when` for simple tests
+
+**Test Naming:**
+- Use `should` format: `should display badges with correct styling`
+- Test names describe the behavior, not implementation: `should scroll horizontally on wheel event` (not `should call preventDefault`)
+
+**Example (Full BDD Test):**
+```typescript
+test('should display badges with correct styling', async ({page}) => {
+  // given
+  const purpleRgbComponent = '139';
+  const whiteRgbComponent = '255';
+  const boldFontWeight = '600';
+
+  // when
+  const badge = page.locator('.tags-container .badge').first();
+  await expect(badge).toBeVisible();
+
+  const computedStyle = await badge.evaluate((el) => {
+    const style = window.getComputedStyle(el);
+    return {
+      backgroundColor: style.backgroundColor,
+      color: style.color,
+      fontWeight: style.fontWeight
+    };
+  });
+
+  // then
+  expect(computedStyle.backgroundColor).toContain(purpleRgbComponent);
+  expect(computedStyle.color).toContain(whiteRgbComponent);
+  expect(computedStyle.fontWeight).toContain(boldFontWeight);
+});
+```
+
+**Test Organization:**
+- Frontend E2E test files: `e2e/**/*.spec.ts`
+- One `describe` block per page/component
+- Use `test.beforeEach()` for common setup (navigation, state)
+- Group related tests logically within the describe block
+
+**Best Practices:**
+- Avoid `console.log()` statements; assertions should speak for themselves
+- Extract regex patterns to variables: `const datePattern = /\d+\/\d+\/\d+/`
+- Extract magic numbers to constants: `const cardWidth = 380; const gap = 32`
+- Use meaningful locator names: `const expectedUrl`, not `href`
+- Keep tests independent; don't rely on test execution order
+- Wait for network/DOM state before assertions: `await page.waitForLoadState('networkidle')`

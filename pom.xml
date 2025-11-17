@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -23,18 +23,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<bootstrap.version>5.3.8</bootstrap.version>
-		<bootstrap-icons.version>1.13.1</bootstrap-icons.version>
-		<date-fns.version>4.1.0</date-fns.version>
-		<highlightjs.version>11.11.1</highlightjs.version>
-		<jquery.version>3.7.1</jquery.version>
 		<lombok.version>1.18.42</lombok.version>
 		<quarkus.version>3.29.2</quarkus.version>
-		<quarkus.qute-markdown.version>3.2.2</quarkus.qute-markdown.version>
-		<quarkus.web-bundler.version>1.9.3</quarkus.web-bundler.version>
 
 		<assertj.version>3.27.6</assertj.version>
 		<quarkus-playwright.version>2.2.1</quarkus-playwright.version>
+		<quarkus-quinoa.version>2.6.2</quarkus-quinoa.version>
 		<quarkus-wiremock.version>1.5.1</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.14.1</compiler-plugin.version>
@@ -125,11 +119,11 @@
 							<artifactId>lombok</artifactId>
 							<version>${lombok.version}</version>
 						</path>
-                        <path>
-                            <groupId>io.quarkus</groupId>
-                            <artifactId>quarkus-extension-processor</artifactId>
-                            <version>${quarkus.version}</version>
-                        </path>
+						<path>
+							<groupId>io.quarkus</groupId>
+							<artifactId>quarkus-extension-processor</artifactId>
+							<version>${quarkus.version}</version>
+						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
@@ -152,7 +146,8 @@
 				</executions>
 				<configuration>
 					<systemPropertyVariables>
-						<native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+						<native.image.path>${project.build.directory}/${project.build.finalName}-runner
+						</native.image.path>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

@@ -18,5 +18,7 @@ public class BlogPostComment {
 	private final Instant createdAt;
 	@Builder.Default
 	private final List<BlogPostComment> replies = List.of();
+	@Builder.Default
+	private final Boolean modifiable = false;
 
 }

@@ -1,17 +1,12 @@
 package com.gdevxy.blog.model;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.gdevxy.blog.model.contentful.Mark;
-import com.gdevxy.blog.model.contentful.Node;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -35,11 +30,7 @@ public class BlogPostDetail {
 	@Builder.Default
 	private final Boolean liked = false;
 	@Builder.Default
-	private final List<BlogPostComment> comments;
-
-	public boolean withIndexHeading() {
-		return blocks.stream().map(ContentBlock::getNode).anyMatch(Node::indexHeading);
-	}
+	private final List<BlogPostComment> comments = List.of();
 
 	@Getter
 	@Builder
@@ -57,33 +48,13 @@ public class BlogPostDetail {
 	@ToString
 	public static class ContentBlock {
 
-		private final Node node;
+		private final String node;
 		private final String value;
-		private final TextMark marks;
+		private final Image image;
+		@Builder.Default
+		private final Set<String> marks = Set.of();
 		@Builder.Default
 		private final List<ContentBlock> blocks = List.of();
-
-		public String toHtmlIdentifier() {
-			return value.replaceAll("\\s","-").toLowerCase();
-		}
-
-		@Getter
-		@Builder
-		@ToString
-		@RegisterForReflection
-		public static class TextMark {
-
-			private final Set<Mark> marks;
-
-			public Boolean code() {
-				return marks.contains(Mark.CODE);
-			}
-
-			public String styling() {
-				return marks.stream().map(Mark::getStyling).filter(Objects::nonNull).collect(Collectors.joining(" "));
-			}
-
-		}
 
 	}
 

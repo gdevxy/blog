@@ -1,9 +1,0 @@
-<div class="py-4">
-    {#with images.get(imageId)}
-        {#if fullWidth}
-            <img src="{url}" style="width: 100%; object-fit: cover; object-position: 50% 50%;" alt="{title}">
-        {#else}
-            <img src="{url}" alt="{title}" class="img-fluid">
-        {/if}
-    {/with}
-</div>

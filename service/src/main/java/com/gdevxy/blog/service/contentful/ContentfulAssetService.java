@@ -6,7 +6,7 @@ import jakarta.inject.Inject;
 
 import com.gdevxy.blog.client.contentful.ContentfulClient;
 import com.gdevxy.blog.model.Image;
-import com.gdevxy.blog.service.contentful.blogpost.converter.RichImageConverter;
+import com.gdevxy.blog.service.blogpost.converter.RichImageConverter;
 import io.smallrye.mutiny.Uni;
 
 @ApplicationScoped
