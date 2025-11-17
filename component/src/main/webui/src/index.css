@@ -5,13 +5,13 @@
   --bg-primary: #0f0f1e;
   --bg-secondary: #1a1a2e;
   --bg-tertiary: #242438;
-  --text-primary: #e8e8f0;
-  --text-secondary: rgba(232, 232, 240, 0.7);
-  --text-tertiary: rgba(232, 232, 240, 0.5);
+  --text-primary: #f5f5fd;
+  --text-secondary: rgba(245, 245, 253, 0.85);
+  --text-tertiary: rgba(245, 245, 253, 0.65);
   --accent-primary: #a855f7;
   --accent-secondary: #ec4899;
   --accent-light: #d946ef;
-  --border-color: rgba(168, 85, 247, 0.2);
+  --border-color: rgba(168, 85, 247, 0.3);
 
   color: var(--text-primary);
   background-color: var(--bg-primary);

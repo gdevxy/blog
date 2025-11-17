@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './FloatingTableOfContents.css';
 
 interface Heading {
@@ -10,6 +10,7 @@ interface Heading {
 function FloatingTableOfContents() {
 	const [headings, setHeadings] = useState<Heading[]>([]);
 	const [activeId, setActiveId] = useState<string>('');
+	const tocRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
 		const contentElement = document.querySelector('.blog-detail-page .content');
@@ -34,6 +35,8 @@ function FloatingTableOfContents() {
 
 	useEffect(() => {
 		const handleScroll = () => {
+			if (!tocRef.current) return;
+
 			const headingElements = headings.map(h => document.getElementById(h.id));
 			let currentActive = headings[0]?.id || '';
 
@@ -43,12 +46,38 @@ function FloatingTableOfContents() {
 				}
 			}
 
-			setActiveId(currentActive);
+			if (currentActive !== activeId) {
+				setActiveId(currentActive);
+			}
+
+			const postBody = document.querySelector('.post-body') as HTMLElement;
+
+			if (!postBody) return;
+
+			const postBodyRect = postBody.getBoundingClientRect();
+			const tocHeight = tocRef.current.offsetHeight;
+			const scrollY = window.scrollY;
+			const topGap = 48;
+
+			const postBodyTop = postBodyRect.top + scrollY;
+
+			let newTranslateY = 0;
+
+			if (scrollY + topGap > postBodyTop) {
+				newTranslateY = scrollY + topGap - postBodyTop;
+
+				const maxTranslate = postBodyRect.height - tocHeight - topGap;
+				if (newTranslateY > maxTranslate) {
+					newTranslateY = maxTranslate;
+				}
+			}
+
+			tocRef.current.style.transform = `translateY(${newTranslateY}px)`;
 		};
 
-		window.addEventListener('scroll', handleScroll);
+		window.addEventListener('scroll', handleScroll, { passive: true });
 		return () => window.removeEventListener('scroll', handleScroll);
-	}, [headings]);
+	}, [headings, activeId]);
 
 	const handleClick = (id: string) => {
 		const element = document.getElementById(id);
@@ -60,7 +89,7 @@ function FloatingTableOfContents() {
 	if (headings.length === 0) return null;
 
 	return (
-		<nav className="floating-toc">
+		<nav className="floating-toc" ref={tocRef}>
 			<div className="toc-content">
 				<h3 className="toc-title">On this page</h3>
 				<ul className="toc-list">

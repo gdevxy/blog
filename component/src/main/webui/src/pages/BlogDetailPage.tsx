@@ -144,7 +144,6 @@ function BlogDetailPage() {
 	return (
 		<>
 			<ScrollProgressBar />
-			<FloatingTableOfContents />
 			<article className="blog-detail-page">
 				<header className="post-header">
 					{post.image && (
@@ -189,6 +188,7 @@ function BlogDetailPage() {
 			</header>
 
 			<div className="post-body">
+				<FloatingTableOfContents />
 				{post.blocks && post.blocks.length > 0 && (
 					<div className="content">
 						{post.blocks.map((block, index) => (

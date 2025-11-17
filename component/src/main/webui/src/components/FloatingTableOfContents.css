@@ -1,10 +1,10 @@
 .floating-toc {
-	position: fixed;
-	right: 2rem;
-	top: 120px;
-	max-width: 250px;
-	max-height: calc(100vh - 150px);
-	overflow-y: auto;
+	position: absolute;
+	left: -15rem;
+	top: 3rem;
+	width: 200px;
+	max-height: none;
+	overflow-y: visible;
 	z-index: 100;
 	background-color: var(--bg-secondary);
 	border: 1px solid var(--border-color);
@@ -25,7 +25,7 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
-	color: var(--accent-primary);
+	color: var(--text-primary);
 	margin: 0;
 	padding-bottom: 0.75rem;
 	border-bottom: 2px solid var(--border-color);
@@ -52,13 +52,16 @@
 	position: relative;
 }
 
+:root[data-theme="light"] .toc-link {
+	background-color: transparent;
+}
+
 .toc-link:hover {
 	color: var(--accent-primary);
 }
 
 .toc-link.active {
 	color: var(--accent-primary);
-	font-weight: 600;
 }
 
 /* Scrollbar styling */
@@ -86,7 +89,7 @@
 }
 
 /* Responsive: Hide on small screens */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
 	.floating-toc {
 		display: none;
 	}
