@@ -146,33 +146,46 @@ function BlogDetailPage() {
 			<ScrollProgressBar />
 			<FloatingTableOfContents />
 			<article className="blog-detail-page">
-				<Link to="/blog" className="pt-3 back-link">
-					← Back to articles
-				</Link>
 				<header className="post-header">
-				<div className="header-content">
 					{post.image && (
-						<div className="header-image">
-							<img src={post.image.url} alt={post.title} className="featured-image"/>
+						<div className="hero-section" style={{ backgroundImage: `url(${post.image.url})` }}>
+							<div className="hero-overlay"></div>
+							<div className="hero-content">
+								<h1>{post.title}</h1>
+								{post.description && <p className="hero-description">{post.description}</p>}
+								<div className="post-meta">
+									<time>{format(new Date(post.publishedDate), 'yyyy-MM-dd \'at\' h:mm a')}</time>
+									{post.tags && post.tags.filter((tag) => tag.value).length > 0 && (
+										<div className="tags">
+											{post.tags
+												.filter((tag) => tag.value)
+												.map((tag) => (
+													<span key={tag.code} className="badge text-bg-primary">{tag.value}</span>
+												))}
+										</div>
+									)}
+								</div>
+							</div>
 						</div>
 					)}
-					<div className="header-text">
-						<h1>{post.title}</h1>
-						{post.description && <blockquote className="blockquote">{post.description}</blockquote>}
-						<div className="post-meta">
-							<time>{format(new Date(post.publishedDate), 'yyyy-MM-dd \'at\' h:mm a')}</time>
-							{post.tags && post.tags.filter((tag) => tag.value).length > 0 && (
-								<div className="tags">
-									{post.tags
-										.filter((tag) => tag.value)
-										.map((tag) => (
-											<span key={tag.code} className="badge text-bg-primary">{tag.value}</span>
-										))}
-								</div>
-							)}
+					{!post.image && (
+						<div className="post-header-fallback">
+							<h1>{post.title}</h1>
+							{post.description && <p className="hero-description">{post.description}</p>}
+							<div className="post-meta">
+								<time>{format(new Date(post.publishedDate), 'yyyy-MM-dd \'at\' h:mm a')}</time>
+								{post.tags && post.tags.filter((tag) => tag.value).length > 0 && (
+									<div className="tags">
+										{post.tags
+											.filter((tag) => tag.value)
+											.map((tag) => (
+												<span key={tag.code} className="badge text-bg-primary">{tag.value}</span>
+											))}
+									</div>
+								)}
+							</div>
 						</div>
-					</div>
-				</div>
+					)}
 			</header>
 
 			<div className="post-body">
