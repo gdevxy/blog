@@ -525,7 +525,7 @@
 
   .related-posts,
   .comments-section {
-    max-width: none;
+    margin: 2rem auto;
     padding: 0 1rem 1.5rem 1rem;
   }
 
