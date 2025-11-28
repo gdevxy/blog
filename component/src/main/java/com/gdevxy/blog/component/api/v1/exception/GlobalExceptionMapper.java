@@ -21,7 +21,10 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
 			case ConstraintViolationException ex -> toValidationErrorResponse(ex);
 			case NotFoundException ex -> toResponse(Response.Status.NOT_FOUND, ex);
 			case UnauthorizedException ex -> toResponse(Response.Status.UNAUTHORIZED, ex);
-			default -> toResponse(Response.Status.INTERNAL_SERVER_ERROR, exception);
+			default -> {
+				log.error("Internal Server Error: {}", exception.getMessage(), exception);
+				yield toResponse(Response.Status.INTERNAL_SERVER_ERROR, exception);
+			}
 		};
 	}
 
