@@ -8,7 +8,7 @@ interface UseProfileResult {
   error: Error | null;
 }
 
-export function useProfile(): UseProfileResult {
+export function useProfile(previewToken?: string): UseProfileResult {
   const [profile, setProfile] = useState<ProfileDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -18,7 +18,7 @@ export function useProfile(): UseProfileResult {
       try {
         setLoading(true);
         setError(null);
-        const result = await blogApi.getProfile();
+        const result = await blogApi.getProfile(previewToken);
         setProfile(result);
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
@@ -30,7 +30,7 @@ export function useProfile(): UseProfileResult {
     };
 
     fetchProfile();
-  }, []);
+  }, [previewToken]);
 
   return { profile, loading, error };
 }

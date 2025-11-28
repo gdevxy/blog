@@ -1,12 +1,13 @@
 import React from 'react';
 import {Alert, Spinner, Row, Col} from 'react-bootstrap';
-import {useBlogPosts} from '@hooks';
+import {useBlogPosts, usePreviewToken} from '@hooks';
 import BlogCard from '@components/BlogCard';
 import './BlogListPage.css';
 
 function BlogListPage() {
+	const previewToken = usePreviewToken();
 	const {posts, loading, error, currentPage, hasNextPage, totalCount, nextPage, previousPage} =
-		useBlogPosts(0, 12);
+		useBlogPosts(0, 12, previewToken);
 
 	return (
 		<div className="blog-list-page">

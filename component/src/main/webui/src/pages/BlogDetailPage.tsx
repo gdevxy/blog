@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {useParams, Link} from 'react-router-dom';
+import {usePreviewToken} from '@hooks';
 import {format} from 'date-fns';
 import {useBlogPost} from '@hooks';
 import {ContentBlockRenderer} from '@components/ContentBlockRenderer';
@@ -24,7 +25,8 @@ const RECAPTCHA_SITE_KEY = '6Lc7vagqAAAAAKi_E_E275yxYo_B80-RvOVmVaid';
 
 function BlogDetailPage() {
 	const {slug} = useParams<{ slug: string }>();
-	const {post, loading, error, refetch} = useBlogPost(slug || '', false);
+	const previewToken = usePreviewToken();
+	const {post, loading, error, refetch} = useBlogPost(slug || '', previewToken);
 	const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
 	const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 	const [editedCommentText, setEditedCommentText] = useState<string>('');

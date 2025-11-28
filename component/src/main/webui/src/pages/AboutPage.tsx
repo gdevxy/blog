@@ -1,10 +1,11 @@
 import React from 'react';
 import {Alert, Spinner, Row, Col} from 'react-bootstrap';
-import {useProfile} from '@hooks';
+import {useProfile, usePreviewToken} from '@hooks';
 import './AboutPage.css';
 
 function AboutPage() {
-	const {profile, loading, error} = useProfile();
+	const previewToken = usePreviewToken();
+	const {profile, loading, error} = useProfile(previewToken);
 
 	return (
 		<div className="about-page">

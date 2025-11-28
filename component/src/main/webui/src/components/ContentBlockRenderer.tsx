@@ -99,7 +99,6 @@ function renderParagraph(block: ContentBlock): React.ReactNode {
 				{block.blocks.map((child, index) => (
 					<React.Fragment key={index}>
 						{renderNodeContent(child)}
-						{index < block.blocks!.length - 1 && ' '}
 					</React.Fragment>
 				))}
 			</p>
@@ -120,7 +119,6 @@ function renderHeading(level: number, block: ContentBlock): React.ReactNode {
 			block.blocks.map((child, index) => (
 				<React.Fragment key={index}>
 					{renderNodeContent(child)}
-					{index < block.blocks!.length - 1 && ' '}
 				</React.Fragment>
 			))
 		);
@@ -155,7 +153,6 @@ function renderListItem(block: ContentBlock): React.ReactNode {
 				{block.blocks.map((child, index) => (
 					<React.Fragment key={index}>
 						{renderNodeContent(child)}
-						{index < block.blocks!.length - 1 && ' '}
 					</React.Fragment>
 				))}
 			</>
@@ -267,7 +264,6 @@ function renderTableCell(block: ContentBlock): React.ReactNode {
 				{block.blocks.map((child, index) => (
 					<React.Fragment key={index}>
 						{renderNodeContent(child)}
-						{index < block.blocks!.length - 1 && ' '}
 					</React.Fragment>
 				))}
 			</>
@@ -284,7 +280,6 @@ function renderHyperlink(block: ContentBlock): React.ReactNode {
 				{block.blocks.map((child, index) => (
 					<React.Fragment key={index}>
 						{renderNodeContent(child)}
-						{index < block.blocks!.length - 1 && ' '}
 					</React.Fragment>
 				))}
 			</a>

@@ -12,6 +12,7 @@
   font-family: 'Courier New', monospace;
   font-size: 0.9em;
   color: var(--accent-primary);
+  white-space: nowrap;
 }
 
 strong {
@@ -109,10 +110,12 @@ sub {
 .list-item {
   margin-bottom: 0.75rem;
   color: var(--text-secondary);
+  text-align: left;
 }
 
 .list-item .paragraph {
   margin-bottom: 0;
+  text-align: left;
 }
 
 .list-item:last-child {
@@ -276,6 +279,10 @@ sub {
 
 .table-cell {
   vertical-align: top;
+}
+
+.table-cell > .paragraph {
+    margin-bottom: 0;
 }
 
 /* Embedded content placeholder */

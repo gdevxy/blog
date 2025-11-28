@@ -9,7 +9,7 @@ interface UseBlogPostResult {
   refetch: () => Promise<void>;
 }
 
-export function useBlogPost(slug: string, preview: boolean = false): UseBlogPostResult {
+export function useBlogPost(slug: string, previewToken?: string): UseBlogPostResult {
   const [post, setPost] = useState<BlogPostDetailDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -23,7 +23,7 @@ export function useBlogPost(slug: string, preview: boolean = false): UseBlogPost
         setIsRefetching(true);
       }
       setError(null);
-      const result = await blogApi.getBlogPost(slug, preview);
+      const result = await blogApi.getBlogPost(slug, previewToken);
       setPost(result);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
@@ -36,7 +36,7 @@ export function useBlogPost(slug: string, preview: boolean = false): UseBlogPost
         setIsRefetching(false);
       }
     }
-  }, [slug, preview]);
+  }, [slug, previewToken]);
 
   useEffect(() => {
     fetchPost(false);

@@ -63,6 +63,17 @@ class BlogApiClient {
     return response.data;
   }
 
+  /**
+   * Get paginated list of blog posts (alias for backwards compatibility)
+   */
+  async getBlogPostsList(
+    previewToken?: string,
+    tags?: Set<string>,
+    pageSize: number = 10
+  ): Promise<Page<BlogPost>> {
+    return this.getBlogPosts(previewToken, tags, pageSize);
+  }
+
 
   /**
    * Get detailed blog post by slug
@@ -197,9 +208,14 @@ class BlogApiClient {
 
   /**
    * Get user profile information
+   * @param previewToken Optional preview token
    */
-  async getProfile(): Promise<ProfileDto> {
-    const response = await this.client.get('/profile');
+  async getProfile(previewToken?: string): Promise<ProfileDto> {
+    const params: Record<string, any> = {};
+    if (previewToken) {
+      params.previewToken = previewToken;
+    }
+    const response = await this.client.get('/profile', { params });
     return response.data;
   }
 }

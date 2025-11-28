@@ -16,7 +16,7 @@ interface UseBlogPostsResult {
   filterByTag: (tag: string) => Promise<void>;
 }
 
-export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): UseBlogPostsResult {
+export function useBlogPosts(initialPage: number = 0, pageSize: number = 10, previewToken?: string): UseBlogPostsResult {
   const [data, setData] = useState<Page<BlogPost> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -28,7 +28,7 @@ export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): Us
       try {
         setLoading(true);
         setError(null);
-        const result = await blogApi.getBlogPosts(undefined, tags, pageSize);
+        const result = await blogApi.getBlogPosts(previewToken, tags, pageSize);
         setData(result);
         setCurrentPage(page);
       } catch (err) {
@@ -39,7 +39,7 @@ export function useBlogPosts(initialPage: number = 0, pageSize: number = 10): Us
         setLoading(false);
       }
     },
-    [pageSize]
+    [pageSize, previewToken]
   );
 
   useEffect(() => {

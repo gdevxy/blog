@@ -1,13 +1,14 @@
 import React, {useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Spinner} from 'react-bootstrap';
-import {useBlogPosts} from '@hooks';
+import {useBlogPosts, usePreviewToken} from '@hooks';
 import BlogCard from '@components/BlogCard';
 import './HomePage.css';
 
 function HomePage() {
 	const pageSize = 7;
-	const {posts, loading, error, totalCount} = useBlogPosts(0, pageSize);
+	const previewToken = usePreviewToken();
+	const {posts, loading, error, totalCount} = useBlogPosts(0, pageSize, previewToken);
 	const sliderRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
