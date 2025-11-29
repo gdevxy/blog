@@ -12,7 +12,8 @@
   font-family: 'Courier New', monospace;
   font-size: 0.9em;
   color: var(--accent-primary);
-  white-space: nowrap;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 strong {
