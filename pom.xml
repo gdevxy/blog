@@ -164,7 +164,6 @@
 				</property>
 			</activation>
 			<properties>
-				<skipITs>false</skipITs>
 				<quarkus.native.enabled>true</quarkus.native.enabled>
 			</properties>
 		</profile>
