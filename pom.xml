@@ -28,7 +28,7 @@
 
 		<assertj.version>3.27.6</assertj.version>
 		<quarkus-playwright.version>2.3.0</quarkus-playwright.version>
-		<quarkus-quinoa.version>2.7.0</quarkus-quinoa.version>
+		<quarkus-quinoa.version>2.7.1</quarkus-quinoa.version>
 		<quarkus-wiremock.version>1.5.2</quarkus-wiremock.version>
 
 		<compiler-plugin.version>3.14.1</compiler-plugin.version>
