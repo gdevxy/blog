@@ -26,7 +26,7 @@
 		<lombok.version>1.18.42</lombok.version>
 		<quarkus.version>3.30.8</quarkus.version>
 
-		<assertj.version>3.27.6</assertj.version>
+		<assertj.version>3.27.7</assertj.version>
 		<quarkus-playwright.version>2.3.1</quarkus-playwright.version>
 		<quarkus-quinoa.version>2.7.1</quarkus-quinoa.version>
 		<quarkus-wiremock.version>1.5.3</quarkus-wiremock.version>
