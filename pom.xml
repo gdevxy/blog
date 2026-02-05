@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<lombok.version>1.18.42</lombok.version>
-		<quarkus.version>3.31.1</quarkus.version>
+		<quarkus.version>3.31.2</quarkus.version>
 
 		<assertj.version>3.27.7</assertj.version>
 		<quarkus-playwright.version>2.3.2</quarkus-playwright.version>
