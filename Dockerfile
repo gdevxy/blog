@@ -29,13 +29,18 @@ COPY --chown=quarkus:quarkus component/src /build/component/src
 RUN ./mvnw clean package -Dnative -DskipTests \
     -Dquarkus.http.host=0.0.0.0 \
     -Dquarkus.native.container-build=false \
-    -Dquarkus.native.builder-image=mandrel
+    -Dquarkus.native.builder-image=mandrel \
+    -Dquarkus.native.enable-https-url-handler=true \
+    -Dquarkus.native.enable-all-security-services=true \
+    -Dquarkus.ssl.native=true
 
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 WORKDIR /work/
 
-RUN chown 1001 /work \
+RUN microdnf install -y ca-certificates \
+    && microdnf clean all \
+    && chown 1001 /work \
     && chmod "g+rwX" /work \
     && chown 1001:root /work
 
