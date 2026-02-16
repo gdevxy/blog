@@ -1,0 +1,13 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = ""
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+healthcheckPath = "/q/health/live"
+healthcheckTimeout = 100
+
+[env]
+QUARKUS_HTTP_HOST = "0.0.0.0"

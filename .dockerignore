@@ -1,5 +1,37 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+# Build outputs (will be built inside container)
+**/target/
+**/node_modules/
+**/.quinoa/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Git
+.git/
+.github/
+.gitignore
+
+# Documentation
+*.md
+!CLAUDE.md
+doc/
+
+# Deployment configs
+.deploy/
+kubernetes/
+
+# CI/CD
+.github/
+
+# Local environment
+.env
+.env.local
+*.log
+
+# Docker itself
+Dockerfile*
+.dockerignore
